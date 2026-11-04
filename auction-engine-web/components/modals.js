@@ -198,18 +198,18 @@ function renderModals() {
 
             <!-- Tab 3: Khôi Phục / Quên Mật Khẩu (Bảo Mật OTP) -->
             <div id="auth-panel-forgot" style="display: none;">
-              <!-- BƯỚC 1: NHẬP GMAIL XÁC THỰC -->
+              <!-- BƯỚC 1: NHẬP EMAIL XÁC THỰC -->
               <div id="auth-forgot-step1">
-                <div style="background: rgba(5,150,105,0.06); border: 1px solid rgba(5,150,105,0.25); border-radius: 6px; padding: 10px 12px; margin-bottom: 14px; font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5;">
-                  <strong style="color: #059669;">Bảo mật danh tính 100%:</strong> Quý khách vui lòng nhập địa chỉ Gmail đã đăng ký. Hệ thống sẽ phát hành mã xác thực OTP 6 số để cấp lại mật khẩu mới mà tuyệt đối không để lộ mật khẩu cũ hay thông tin riêng tư.
+                <div style="background: rgba(5,150,105,0.08); border: 1px solid rgba(5,150,105,0.3); border-radius: 6px; padding: 12px 14px; margin-bottom: 14px; font-size: 0.8rem; color: var(--text-primary); line-height: 1.5;">
+                  <strong style="color: #059669;">💡 Chế độ Demo Trực Tiếp:</strong> Hệ thống tự động cấp mã OTP 6 số <strong>ngay trên màn hình</strong> và tự động điền sẵn (bạn <strong>KHÔNG CẦN</strong> mở Gmail thật để lấy mã).
                 </div>
                 <form id="auth-forgot-form-step1">
                   <div class="form-group">
-                    <label class="form-label" for="modal-forgot-email">Địa chỉ Gmail / Email đăng ký</label>
-                    <input type="email" id="modal-forgot-email" class="form-control" placeholder="thang.pn@aurelia.ch hoặc email của bạn..." required />
+                    <label class="form-label" for="modal-forgot-email">Tài khoản Email cần đặt lại mật khẩu</label>
+                    <input type="email" id="modal-forgot-email" class="form-control" value="thang.pn@aurelia.ch" placeholder="thang.pn@aurelia.ch" required />
                   </div>
-                  <button type="submit" class="btn btn--primary btn--md" id="btn-forgot-send-otp" style="width: 100%; margin-top: var(--space-2); font-weight: 600;">
-                    Gửi Mã Xác Thực OTP Đến Email
+                  <button type="submit" class="btn btn--primary btn--md" id="btn-forgot-send-otp" style="width: 100%; margin-top: var(--space-2); font-weight: 700; padding: 11px;">
+                    ⚡ LẤY MÃ OTP & ĐẶT MẬT KHẨU MỚI (TRỰC TIẾP)
                   </button>
                 </form>
               </div>
@@ -988,11 +988,15 @@ window.switchAuthTabTo = function(tabName) {
 
   if (tabName === 'forgot') {
     if (tabGroup) tabGroup.style.display = 'none';
-    if (modalTitle) modalTitle.textContent = 'Khôi Phục Mật Khẩu (Bảo Mật OTP)';
+    if (modalTitle) modalTitle.textContent = 'Đặt Lại Mật Khẩu (Mã OTP Trực Tiếp)';
     const s1 = document.getElementById('auth-forgot-step1');
     const s2 = document.getElementById('auth-forgot-step2');
     if (s1) s1.style.display = 'block';
     if (s2) s2.style.display = 'none';
+    const emailInput = document.getElementById('modal-forgot-email');
+    if (emailInput && !emailInput.value) {
+      emailInput.value = 'thang.pn@aurelia.ch';
+    }
   } else {
     if (tabGroup) tabGroup.style.display = 'flex';
     if (modalTitle) modalTitle.textContent = 'Đăng Nhập / Đăng Ký Tài Khoản';
