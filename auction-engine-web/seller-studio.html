@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Tạo phiên đấu giá trực tuyến thế hệ mới - Cấp mã PIN 6 số, bảo chứng ký quỹ 15% và mời người tham gia trả giá thời gian thực.">
+  <title>Tạo Phiên Đấu Giá Mới • AURELIA</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Core CSS Design System -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <style>
+    /* Category Selector Buttons */
+    .cat-btn-group {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+      gap: 10px;
+      margin-bottom: var(--space-4);
+    }
+    .cat-select-btn {
+      padding: 10px 14px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+    .cat-select-btn:hover {
+      border-color: var(--text-primary);
+      color: var(--text-primary);
+    }
+    .cat-select-btn {
+      padding: 10px 14px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-sm);
+      color: var(--text-primary);
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all var(--transition-fast);
+      white-space: nowrap;
+    }
+    .cat-select-btn:hover {
+      border-color: #059669;
+      color: #059669;
+    }
+    .cat-select-btn.active {
+      border-color: #059669 !important;
+      color: #FFFFFF !important;
+      background: #059669 !important;
+      font-weight: 700 !important;
+      box-shadow: 0 2px 8px rgba(5, 150, 105, 0.35);
+    }
+
+    /* Duration Pills */
+    .duration-pills-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: var(--space-3);
+    }
+    .duration-pill-btn {
+      padding: 8px 16px;
+      border-radius: var(--radius-sm);
+      border: 1px solid var(--border-color);
+      background: var(--bg-surface);
+      color: var(--text-primary);
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .duration-pill-btn:hover {
+      border-color: #059669;
+      color: #059669;
+    }
+    .duration-pill-btn.active {
+      background: #059669 !important;
+      border-color: #059669 !important;
+      color: #FFFFFF !important;
+      font-weight: 700 !important;
+      box-shadow: 0 2px 8px rgba(5, 150, 105, 0.35);
+    }
+
+    /* Preset Photos Grid */
+    .preset-img-grid {
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 10px;
+      margin-top: 8px;
+    }
+    @media (max-width: 768px) {
+      .preset-img-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    .preset-img-thumb {
+      height: 70px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      border: 2px solid transparent;
+      cursor: pointer;
+      position: relative;
+      background: var(--bg-subtle);
+      transition: all var(--transition-fast);
+    }
+    .preset-img-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .preset-img-thumb:hover {
+      border-color: var(--border-color);
+      transform: translateY(-2px);
+    }
+    .preset-img-thumb.selected {
+      border-color: var(--accent-emerald) !important;
+      box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.2);
+    }
+    .thumb-tag {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(15, 23, 42, 0.85);
+      color: #FFFFFF;
+      font-size: 0.6rem;
+      text-align: center;
+      padding: 2px;
+      font-weight: 600;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    /* 2-Column Studio Layout */
+    .seller-studio-grid {
+      display: grid;
+      grid-template-columns: 1.35fr 0.65fr;
+      gap: 32px;
+      align-items: start;
+    }
+    @media (max-width: 992px) {
+      .seller-studio-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* Success Modal */
+    .success-modal {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .success-modal.active {
+      display: flex;
+    }
+  
+    /* Explicit High-Contrast Fix for Buttons in Light & Dark Mode */
+    .cat-select-btn {
+      background: var(--bg-surface) !important;
+      color: var(--text-primary) !important;
+      border: 1px solid var(--border-color) !important;
+    }
+    .cat-select-btn:hover {
+      border-color: #059669 !important;
+      color: #059669 !important;
+    }
+    .cat-select-btn.active,
+    [data-theme="dark"] .cat-select-btn.active {
+      background: #059669 !important;
+      color: #FFFFFF !important;
+      border-color: #059669 !important;
+      font-weight: 700 !important;
+    }
+    .duration-pill-btn {
+      background: var(--bg-surface) !important;
+      color: var(--text-primary) !important;
+      border: 1px solid var(--border-color) !important;
+    }
+    .duration-pill-btn:hover {
+      border-color: #059669 !important;
+      color: #059669 !important;
+    }
+    .duration-pill-btn.active,
+    [data-theme="dark"] .duration-pill-btn.active {
+      background: #059669 !important;
+      color: #FFFFFF !important;
+      border-color: #059669 !important;
+      font-weight: 700 !important;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Site Header Root -->
+  <div id="site-header-root"></div>
+
+  <!-- MAIN EDITORIAL CONTENT -->
+  <main id="main-content" style="padding-top: 32px; padding-bottom: 64px;">
+    <div class="container container--wide">
+      
+      <!-- Studio Header -->
+      <div style="margin-bottom: 24px;">
+        <div style="display: flex; align-items: center; gap: 8px; font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); margin-bottom: 6px;">
+          <span>SELLER STUDIO</span>
+          <span>&bull;</span>
+          <span style="color: var(--accent-emerald);">PHÁT HÀNH PHIÊN NIÊM YẾT</span>
+        </div>
+        <h1 style="font-family: var(--font-serif); font-size: clamp(1.8rem, 3vw, 2.4rem); font-weight: 800; color: var(--text-primary); margin: 0 0 8px 0;">
+          Tạo Phiên Đấu Giá Mới
+        </h1>
+        <p style="font-size: 0.88rem; color: var(--text-secondary); margin: 0; max-width: 750px;">
+          Sau khi hoàn tất biểu mẫu, hệ thống sẽ cấp <strong>Mã PIN 6 số</strong> định danh. Bạn sẽ là <strong>Chủ Phòng (Host)</strong> có toàn quyền khai mạc, theo dõi người tham gia và gõ búa chốt phiên.
+        </p>
+      </div>
+
+      <!-- 1-Click Demo Fill Banner -->
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px 20px; margin-bottom: 28px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; box-shadow: var(--shadow-card);">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="width: 38px; height: 38px; border-radius: var(--radius-sm); background: var(--bg-page); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--accent-emerald);">
+            <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+          </div>
+          <div>
+            <div style="font-weight: 700; color: var(--text-primary); font-size: 0.95rem;">Điền Nhanh Dữ Liệu Mẫu (1-Click Demo Fill)</div>
+            <div style="font-size: 0.75rem; color: var(--text-muted);">Tự động điền đầy đủ thông số siêu phẩm Patek Philippe, ảnh Unsplash chuẩn, giá khởi điểm và thời lượng 15 phút để bạn thử nghiệm ngay.</div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-primary" id="btn-quick-demo-fill" style="font-weight: 600; padding: 9px 18px; font-size: 0.82rem; white-space: nowrap;">
+          <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          <span>Điền Nhanh Dữ Liệu Mẫu</span>
+        </button>
+      </div>
+
+      <!-- Studio 2-Column Grid -->
+      <div class="seller-studio-grid">
+        
+        <!-- Left Column: Consignment Form (1.35fr) -->
+        <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 32px; box-shadow: var(--shadow-card);">
+          <form id="seller-consignment-form" novalidate>
+            
+            <!-- Category -->
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label class="form-label" style="font-size: 0.8rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">
+                Danh mục vật phẩm:
+              </label>
+              <div class="cat-btn-group" id="cat-btn-group">
+                <button type="button" class="cat-select-btn active" data-cat="watches">Đồng hồ Thụy Sĩ</button>
+                <button type="button" class="cat-select-btn" data-cat="hypercars">Siêu xe & Mô tô</button>
+                <button type="button" class="cat-select-btn" data-cat="tech">Công nghệ & Máy ảnh</button>
+                <button type="button" class="cat-select-btn" data-cat="art">Nghệ thuật & Cổ vật</button>
+              </div>
+              <input type="hidden" id="f-category" name="category" value="watches" />
+            </div>
+
+            <!-- Title -->
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label class="form-label form-label--required" for="f-title" style="font-size: 0.8rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+                Tên vật phẩm đấu giá:
+              </label>
+              <input 
+                type="text" 
+                id="f-title" 
+                name="title" 
+                class="form-control" 
+                placeholder="Ví dụ: Patek Philippe Grand Complications 5270P Platinum" 
+                value="Patek Philippe Nautilus 5711/1R Rose Gold 18K"
+                required
+                style="padding: 10px 14px; font-size: 0.9rem;"
+              />
+            </div>
+
+            <!-- Short Description -->
+            <div class="form-group" style="margin-bottom: 20px;">
+              <label class="form-label form-label--required" for="f-short-desc" style="font-size: 0.8rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+                Mô tả ngắn & Chứng nhận xuất xứ:
+              </label>
+              <textarea 
+                id="f-short-desc" 
+                name="shortDesc" 
+                class="form-control" 
+                rows="3" 
+                placeholder="Mô tả tóm tắt về lịch sử, tính năng và độ hiếm..."
+                required
+                style="padding: 10px 14px; font-size: 0.85rem; line-height: 1.5;"
+              >Tuyệt tác chế tác đỉnh cao từ Geneva Thụy Sĩ, vỏ vàng hồng 18K nguyên khối, mặt số nâu ombre sọc ngang kinh điển, bộ máy tự động Caliber 324 S C nguyên bản 100% kèm đầy đủ hộp sổ thẻ chính hãng.</textarea>
+            </div>
+
+            <!-- Specs Grid (Year & Origin) -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="f-century" style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary); margin-bottom: 6px;">
+                  Năm sản xuất:
+                </label>
+                <input 
+                  type="text" 
+                  id="f-century" 
+                  name="century" 
+                  class="form-control" 
+                  value="2023" 
+                  placeholder="2023"
+                  style="padding: 9px 12px; font-size: 0.85rem;"
+                />
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="f-origin" style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary); margin-bottom: 6px;">
+                  Xuất xứ:
+                </label>
+                <input 
+                  type="text" 
+                  id="f-origin" 
+                  name="origin" 
+                  class="form-control" 
+                  value="Geneva, Thụy Sĩ" 
+                  placeholder="Geneva, Thụy Sĩ"
+                  style="padding: 9px 12px; font-size: 0.85rem;"
+                />
+              </div>
+            </div>
+
+            <!-- Condition -->
+            <div class="form-group" style="margin-bottom: 24px;">
+              <label class="form-label" for="f-condition" style="font-size: 0.8rem; font-weight: 600; color: var(--text-primary); margin-bottom: 6px;">
+                Tình trạng bảo quản:
+              </label>
+              <input 
+                type="text" 
+                id="f-condition" 
+                name="conditionScore" 
+                class="form-control" 
+                value="Mới 99.9% Like New &bull; Fullset Đầy Đủ Giấy Tờ" 
+                placeholder="Mới 99.9% Fullset"
+                style="padding: 9px 12px; font-size: 0.85rem;"
+              />
+            </div>
+
+            <!-- Preset Images Selector -->
+            <div style="background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 18px; margin-bottom: 24px;">
+              <label style="font-size: 0.8rem; font-weight: 700; color: var(--text-primary); display: block; margin-bottom: 8px;">
+                Hình ảnh vật phẩm (Chọn 1 trong 6 ảnh mẫu hoặc nhập URL):
+              </label>
+              
+              <div class="preset-img-grid" id="preset-img-grid">
+                <div class="preset-img-thumb selected" data-cat="watches" data-url="assets/images/patek_nautilus_gold.jpg">
+                  <img src="assets/images/patek_nautilus_gold.jpg" alt="Patek Philippe Nautilus">
+                  <div class="thumb-tag">Patek Nautilus</div>
+                </div>
+                <div class="preset-img-thumb" data-cat="watches" data-url="assets/images/patek_nautilus_caseback.jpg">
+                  <img src="assets/images/patek_nautilus_caseback.jpg" alt="Đáy Máy 5711">
+                  <div class="thumb-tag">Đáy Máy 5711</div>
+                </div>
+                <div class="preset-img-thumb" data-cat="hypercars" data-url="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=1000&q=85">
+                  <img src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=200&q=80" alt="Porsche GT3 RS">
+                  <div class="thumb-tag">Porsche 911</div>
+                </div>
+                <div class="preset-img-thumb" data-cat="hypercars" data-url="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=1000&q=85">
+                  <img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=200&q=80" alt="Ferrari SF90">
+                  <div class="thumb-tag">Ferrari F8</div>
+                </div>
+                <div class="preset-img-thumb" data-cat="tech" data-url="https://images.unsplash.com/photo-1495707902641-75cac588d2e9?auto=format&fit=crop&w=1000&q=85">
+                  <img src="https://images.unsplash.com/photo-1495707902641-75cac588d2e9?auto=format&fit=crop&w=200&q=80" alt="Leica M6">
+                  <div class="thumb-tag">Leica M6</div>
+                </div>
+                <div class="preset-img-thumb" data-cat="art" data-url="assets/images/french_oil_painting.jpg">
+                  <img src="assets/images/french_oil_painting.jpg" alt="L'Aube Dorée Monet">
+                  <div class="thumb-tag">L'Aube Dorée</div>
+                </div>
+              </div>
+
+              <div style="margin-top: 14px;">
+                <input 
+                  type="url" 
+                  id="f-image-url" 
+                  name="imageUrl" 
+                  class="form-control" 
+                  placeholder="Hoặc dán URL ảnh trực tiếp..." 
+                  value="assets/images/patek_nautilus_gold.jpg"
+                  style="padding: 8px 12px; font-size: 0.8rem;"
+                />
+              
+                <div style="margin-top: 10px; display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                  <label class="btn btn-outline" style="cursor: pointer; padding: 7px 14px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 6px;">
+                    <svg viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                    <span>Tải ảnh từ máy tính (File Upload)</span>
+                    <input type="file" id="f-file-upload" accept="image/*" style="display: none;">
+                  </label>
+                  <span id="file-upload-status" style="font-size: 0.75rem; color: var(--text-muted);">Hỗ trợ JPG, PNG, WebP (Tự động nén và hiển thị ngay)</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Price & Escrow Setup -->
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px;">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label form-label--required" for="f-starting-bid" style="font-size: 0.8rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+                  Giá khởi điểm (VNĐ):
+                </label>
+                <input 
+                  type="number" 
+                  id="f-starting-bid" 
+                  name="startingBid" 
+                  class="form-control font-mono" 
+                  value="1500000000" 
+                  required
+                  style="padding: 10px 14px; font-size: 1.05rem; font-weight: 700;"
+                />
+                <div id="start-price-words" class="font-mono text-emerald" style="font-size: 0.75rem; margin-top: 4px; font-weight: 600;">1.500.000.000 ₫</div>
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label form-label--required" for="f-min-increment" style="font-size: 0.8rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+                  Bước giá tối thiểu (VNĐ):
+                </label>
+                <input 
+                  type="number" 
+                  id="f-min-increment" 
+                  name="minIncrement" 
+                  class="form-control font-mono" 
+                  value="50000000" 
+                  required
+                  style="padding: 10px 14px; font-size: 1.05rem; font-weight: 700;"
+                />
+                <div id="step-price-words" class="font-mono" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">+50.000.000 ₫ mỗi lần nâng</div>
+              </div>
+            </div>
+
+            <!-- Auto-Calculated 15% Escrow Box -->
+            <div style="background: rgba(5, 150, 105, 0.06); border: 1px solid rgba(5, 150, 105, 0.25); border-radius: var(--radius-sm); padding: 14px 18px; margin-bottom: 24px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                <span style="font-size: 0.8rem; font-weight: 700; color: var(--text-primary);">Tiền Ký Quỹ Bắt Buộc (15% Giá khởi điểm):</span>
+                <strong id="calc-deposit-display" class="font-mono text-emerald" style="font-size: 1.15rem; font-weight: 800;">225.000.000 ₫</strong>
+              </div>
+              <p style="font-size: 0.75rem; color: var(--text-secondary); line-height: 1.4; margin: 0;">
+                Người tham gia cần tạm khóa số tiền này để nhận Thẻ Đấu Giá (#Paddle). Tiền ký quỹ được hoàn trả 100% về ví ngay lập tức nếu không trúng phiên.
+              </p>
+            </div>
+
+            <!-- Duration Selector -->
+            <div class="form-group" style="margin-bottom: 24px;">
+              <label class="form-label" style="font-size: 0.8rem; font-weight: 700; color: var(--text-primary); margin-bottom: 8px;">
+                Thời lượng phiên đấu giá (Đếm ngược khi Host bấm Khai Mạc):
+              </label>
+              <div class="duration-pills-row" id="duration-pills-row">
+                <button type="button" class="duration-pill-btn" data-h="0" data-m="5" data-s="0">5 Phút</button>
+                <button type="button" class="duration-pill-btn active" data-h="0" data-m="15" data-s="0">15 Phút</button>
+                <button type="button" class="duration-pill-btn" data-h="0" data-m="30" data-s="0">30 Phút</button>
+                <button type="button" class="duration-pill-btn" data-h="1" data-m="0" data-s="0">1 Giờ</button>
+                <button type="button" class="duration-pill-btn" data-h="2" data-m="0" data-s="0">2 Giờ</button>
+                <button type="button" class="duration-pill-btn" id="btn-duration-custom">Tự Chỉnh</button>
+              </div>
+
+              <!-- Custom Duration Controls (Giờ - Phút - Giây) -->
+              <div id="custom-duration-box" style="margin-top: 10px; background: var(--bg-subtle); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 12px 16px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap;">
+                <span style="font-size: 0.82rem; font-weight: 600; color: var(--text-secondary);">Tùy chỉnh chi tiết:</span>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <input type="number" id="input-dur-hours" class="form-control" min="0" max="72" value="0" style="width: 72px; text-align: center; font-weight: 700; padding: 6px 8px;">
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">Giờ</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <input type="number" id="input-dur-minutes" class="form-control" min="0" max="59" value="15" style="width: 72px; text-align: center; font-weight: 700; padding: 6px 8px;">
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">Phút</span>
+                </div>
+                <div style="display: flex; align-items: center; gap: 6px;">
+                  <input type="number" id="input-dur-seconds" class="form-control" min="0" max="59" value="0" style="width: 72px; text-align: center; font-weight: 700; padding: 6px 8px;">
+                  <span style="font-size: 0.8rem; font-weight: 600; color: var(--text-muted);">Giây</span>
+                </div>
+                <div id="custom-dur-label" style="margin-left: auto; font-size: 0.82rem; font-weight: 700; color: var(--accent-emerald);">
+                  Tổng: 15 phút 00 giây
+                </div>
+              </div>
+
+              <input type="hidden" id="f-selected-minutes" value="15" />
+              <input type="hidden" id="f-selected-seconds" value="900" />
+            </div>
+
+            <!-- Terms Agreement -->
+            <div style="margin-bottom: 28px; padding-top: 16px; border-top: 1px solid var(--border-color);">
+              <label style="display: flex; align-items: flex-start; gap: 10px; font-size: 0.8rem; color: var(--text-secondary); cursor: pointer;">
+                <input type="checkbox" id="f-terms-agree" checked required style="margin-top: 2px; accent-color: var(--accent-emerald);">
+                <span>Tôi cam kết vật phẩm có chứng từ sở hữu minh bạch và đồng ý đóng vai trò Chủ Phòng điều hành phiên đấu giá này.</span>
+              </label>
+            </div>
+
+            <!-- Submit Button -->
+            <button type="submit" class="btn btn-primary" id="btn-submit-publish" style="width: 100%; font-weight: 700; padding: 14px; font-size: 0.95rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
+              <span>Phát Hành Phiên & Mở Phòng Đấu Giá</span>
+              <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+            </button>
+          </form>
+        </div>
+
+        <!-- Right Column: Locked Sticky Preview Card (0.65fr, max-width 360px) -->
+        <aside style="max-width: 360px; width: 100%; position: sticky; top: 90px;">
+          <div style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center;">
+            <span>XEM TRƯỚC THẺ ĐẤU GIÁ</span>
+            <span class="badge badge--waiting" style="font-size: 0.65rem;">PHÒNG CHỜ</span>
+          </div>
+
+          <article style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-card); display: flex; flex-direction: column;">
+            
+            <!-- Photo Locked to 210px -->
+            <div style="height: 210px; width: 100%; position: relative; overflow: hidden; background: var(--bg-subtle);">
+              <img id="preview-card-img" src="assets/images/patek_nautilus_gold.jpg" alt="Preview" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.onerror=null; this.src='assets/images/patek_nautilus_gold.jpg';">
+              <div style="position: absolute; top: 12px; left: 12px; right: 12px; display: flex; justify-content: space-between; align-items: center; pointer-events: none;">
+                <span class="badge badge--waiting">CHỜ MỞ SÀN</span>
+                <span style="background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(4px); color: #F8FAFC !important; border: 1px solid rgba(255, 255, 255, 0.25); font-family: var(--font-mono); font-weight: 700; font-size: 0.72rem; padding: 4px 10px; border-radius: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.4);">#MÃ PIN 6 SỐ</span>
+              </div>
+            </div>
+
+            <!-- Body Content -->
+            <div style="padding: 18px; display: flex; flex-direction: column; gap: 12px;">
+              <div>
+                <div id="preview-card-category" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 4px;">ĐỒNG HỒ CƠ THỤY SĨ</div>
+                <h3 id="preview-card-title" style="font-size: 1rem; font-weight: 700; color: var(--text-primary); line-height: 1.35; margin: 0; min-height: 42px;">
+                  Patek Philippe Nautilus 5711/1R Rose Gold 18K
+                </h3>
+              </div>
+
+              <div style="display: flex; gap: 8px; font-size: 0.72rem; color: var(--text-muted);">
+                <span id="preview-tag-century">2023</span>
+                <span>&bull;</span>
+                <span id="preview-tag-origin">Geneva, Thụy Sĩ</span>
+              </div>
+
+              <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-top: 10px; border-top: 1px solid var(--border-color);">
+                <div>
+                  <div style="font-size: 0.68rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);">Giá khởi điểm</div>
+                  <div id="preview-card-price" class="font-mono text-emerald" style="font-size: 1.15rem; font-weight: 800;">1.500.000.000 ₫</div>
+                </div>
+                <div style="text-align: right;">
+                  <div style="font-size: 0.68rem; font-weight: 600; text-transform: uppercase; color: var(--text-muted);">Cọc (15%)</div>
+                  <div id="preview-card-deposit" class="font-mono" style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary);">225.000.000 ₫</div>
+                </div>
+              </div>
+
+              <button type="button" class="btn btn-outline" disabled style="width: 100%; font-size: 0.8rem; padding: 8px; opacity: 0.75; cursor: not-allowed;">
+                Xem trước (Sẵn sàng mở phòng)
+              </button>
+            </div>
+
+          </article>
+        </aside>
+
+      </div>
+    </div>
+  </main>
+
+  <!-- Success Modal -->
+  <div class="success-modal" id="modal-create-success">
+    <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-lg); padding: 36px; max-width: 480px; width: 100%; text-align: center; box-shadow: var(--shadow-card);">
+      <div style="width: 48px; height: 48px; border-radius: 50%; background: rgba(5, 150, 105, 0.1); border: 1px solid rgba(5, 150, 105, 0.25); color: var(--accent-emerald); display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
+        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"></polyline></svg>
+      </div>
+
+      <h2 style="font-size: 1.35rem; font-weight: 800; color: var(--text-primary); margin: 0 0 8px 0;">
+        Phát Hành Phiên Đấu Giá Thành Công!
+      </h2>
+      <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.5; margin: 0 0 20px 0;">
+        Phòng đấu giá của bạn đã được niêm yết trên sàn. Bạn là <strong>Chủ Phòng (Host)</strong> điều hành phiên này.
+      </p>
+
+      <div style="background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 16px; margin-bottom: 24px;">
+        <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.08em; margin-bottom: 4px;">
+          MÃ PIN ĐỊNH DANH PHÒNG
+        </div>
+        <div id="success-room-pin-display" class="font-mono" style="font-size: 2.2rem; font-weight: 800; color: var(--text-primary); letter-spacing: 0.15em;">
+          #------
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-bottom: 16px;">
+        <button type="button" class="btn btn-outline" id="btn-copy-pin-code" style="flex: 1; font-size: 0.8rem; padding: 10px;">
+          Sao Chép Mã PIN
+        </button>
+        <button type="button" class="btn btn-outline" id="btn-copy-room-link" style="flex: 1; font-size: 0.8rem; padding: 10px;">
+          Sao Chép Link Phòng
+        </button>
+      </div>
+
+      <a id="btn-goto-room-now" href="live-room.html" class="btn btn-primary" style="width: 100%; font-weight: 700; padding: 12px; font-size: 0.9rem; display: flex; align-items: center; justify-content: center; gap: 8px;">
+        <span>Vào Phòng Đấu Giá Với Tư Cách Host</span>
+        <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+      </a>
+    </div>
+  </div>
+
+  <!-- Site Footer Root -->
+  <div id="site-footer-root"></div>
+
+  <!-- Modals Root -->
+  <div id="modals-root"></div>
+
+  <!-- Scripts -->
+  <script src="js/app-core.js"></script>
+  <script src="components/header.js"></script>
+  <script src="components/footer.js"></script>
+  <script src="components/modals.js"></script>
+
+  <script>
+    (function() {
+      var store = window.AureliaApp || window.AuctionStore;
+      if (!store) return;
+
+      var catMap = {
+        'watches': 'ĐỒNG HỒ CƠ THỤY SĨ',
+        'hypercars': 'SIÊU XE & MÔ TÔ',
+        'tech': 'THIẾT BỊ CÔNG NGHỆ',
+        'art': 'TRANH NGHỆ THUẬT & CỔ VẬT'
+      };
+
+      // 1. Preset Thumbnails Click
+      document.querySelectorAll('.preset-img-thumb').forEach(function(thumb) {
+        thumb.addEventListener('click', function() {
+          document.querySelectorAll('.preset-img-thumb').forEach(function(t) { t.classList.remove('selected'); });
+          thumb.classList.add('selected');
+          var url = thumb.getAttribute('data-url');
+          document.getElementById('f-image-url').value = url;
+          document.getElementById('preview-card-img').src = url;
+        });
+      });
+
+      // 2. Category Buttons Click
+      document.querySelectorAll('.cat-select-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          document.querySelectorAll('.cat-select-btn').forEach(function(b) { b.classList.remove('active'); });
+          btn.classList.add('active');
+          var cat = btn.getAttribute('data-cat');
+          document.getElementById('f-category').value = cat;
+          document.getElementById('preview-card-category').textContent = catMap[cat] || 'TÀI SẢN CAO CẤP';
+        });
+      });
+
+      // 3. Duration Presets & Custom Hours/Minutes/Seconds
+      function updateCustomDuration() {
+        var h = Math.max(0, parseInt(document.getElementById('input-dur-hours').value, 10) || 0);
+        var m = Math.max(0, Math.min(59, parseInt(document.getElementById('input-dur-minutes').value, 10) || 0));
+        var s = Math.max(0, Math.min(59, parseInt(document.getElementById('input-dur-seconds').value, 10) || 0));
+        
+        var totalSec = (h * 3600) + (m * 60) + s;
+        if (totalSec < 10) totalSec = 10; // minimum safeguard
+
+        document.getElementById('f-selected-seconds').value = totalSec;
+        document.getElementById('f-selected-minutes').value = (totalSec / 60);
+
+        var label = 'Tổng: ';
+        if (h > 0) label += h + ' giờ ';
+        if (m > 0 || (h === 0 && s === 0)) label += m + ' phút ';
+        if (s > 0) label += (s < 10 ? '0' + s : s) + ' giây';
+        document.getElementById('custom-dur-label').textContent = label.trim();
+
+        var previewTime = (h > 0 ? (h < 10 ? '0' + h : h) + ':' : '') + (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
+        var durEl = document.getElementById('preview-card-duration');
+        if (durEl) durEl.textContent = previewTime;
+
+        // Sync pill buttons
+        document.querySelectorAll('.duration-pill-btn').forEach(function(b) { b.classList.remove('active'); });
+        var matched = false;
+        document.querySelectorAll('.duration-pill-btn[data-h]').forEach(function(btn) {
+          var bh = parseInt(btn.getAttribute('data-h'), 10);
+          var bm = parseInt(btn.getAttribute('data-m'), 10);
+          var bs = parseInt(btn.getAttribute('data-s'), 10);
+          if (bh === h && bm === m && bs === s) {
+            btn.classList.add('active');
+            matched = true;
+          }
+        });
+        if (!matched) {
+          var customBtn = document.getElementById('btn-duration-custom');
+          if (customBtn) customBtn.classList.add('active');
+        }
+      }
+
+      document.querySelectorAll('.duration-pill-btn').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          if (btn.id === 'btn-duration-custom') {
+            document.querySelectorAll('.duration-pill-btn').forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            document.getElementById('input-dur-minutes').focus();
+            return;
+          }
+          var bh = parseInt(btn.getAttribute('data-h'), 10) || 0;
+          var bm = parseInt(btn.getAttribute('data-m'), 10) || 0;
+          var bs = parseInt(btn.getAttribute('data-s'), 10) || 0;
+          document.getElementById('input-dur-hours').value = bh;
+          document.getElementById('input-dur-minutes').value = bm;
+          document.getElementById('input-dur-seconds').value = bs;
+          updateCustomDuration();
+        });
+      });
+
+      ['input-dur-hours', 'input-dur-minutes', 'input-dur-seconds'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) {
+          el.addEventListener('input', updateCustomDuration);
+          el.addEventListener('change', updateCustomDuration);
+        }
+      });
+
+      // 4. Live Updates on Input
+      function updateCalculations() {
+        var startPrice = Number(document.getElementById('f-starting-bid').value) || 0;
+        var stepPrice = Number(document.getElementById('f-min-increment').value) || 0;
+        var deposit = Math.round(startPrice * 0.15);
+
+        document.getElementById('start-price-words').textContent = store.formatCurrency(startPrice);
+        document.getElementById('step-price-words').textContent = '+' + store.formatCurrency(stepPrice) + ' mỗi lần nâng';
+        document.getElementById('calc-deposit-display').textContent = store.formatCurrency(deposit);
+
+        document.getElementById('preview-card-price').textContent = store.formatCurrency(startPrice);
+        document.getElementById('preview-card-deposit').textContent = store.formatCurrency(deposit);
+      }
+
+      function updateCardPreview() {
+        var title = document.getElementById('f-title').value.trim() || 'Tên vật phẩm đấu giá...';
+        var century = document.getElementById('f-century').value.trim() || '2023';
+        var origin = document.getElementById('f-origin').value.trim() || 'Thụy Sĩ';
+        var url = document.getElementById('f-image-url').value.trim();
+
+        document.getElementById('preview-card-title').textContent = title;
+        document.getElementById('preview-tag-century').textContent = century;
+        document.getElementById('preview-tag-origin').textContent = origin;
+        if (url) document.getElementById('preview-card-img').src = url;
+      }
+
+      document.getElementById('f-starting-bid').addEventListener('input', updateCalculations);
+      document.getElementById('f-min-increment').addEventListener('input', updateCalculations);
+      document.getElementById('f-title').addEventListener('input', updateCardPreview);
+      document.getElementById('f-century').addEventListener('input', updateCardPreview);
+      document.getElementById('f-origin').addEventListener('input', updateCardPreview);
+      document.getElementById('f-image-url').addEventListener('input', updateCardPreview);
+
+      // 5. 1-Click Demo Fill
+      document.getElementById('btn-quick-demo-fill').addEventListener('click', function() {
+        document.getElementById('f-title').value = 'Patek Philippe Nautilus 5711/1R Rose Gold 18K';
+        document.getElementById('f-short-desc').value = 'Tuyệt tác chế tác đỉnh cao từ Geneva Thụy Sĩ, vỏ vàng hồng 18K nguyên khối, mặt số nâu ombre sọc ngang kinh điển, bộ máy tự động Caliber 324 S C nguyên bản 100% kèm đầy đủ hộp sổ thẻ chính hãng.';
+        document.getElementById('f-century').value = '2024';
+        document.getElementById('f-origin').value = 'Le Brassus, Thụy Sĩ';
+        document.getElementById('f-condition').value = 'Mới 100% Nguyên Hộp Sổ Thẻ';
+        document.getElementById('f-starting-bid').value = '1500000000';
+        document.getElementById('f-min-increment').value = '50000000';
+        document.getElementById('f-image-url').value = 'assets/images/patek_nautilus_gold.jpg';
+        
+        updateCalculations();
+        updateCardPreview();
+      });
+
+            var fileInput = document.getElementById('f-file-upload');
+      if (fileInput) {
+        fileInput.addEventListener('change', function(e) {
+          var file = e.target.files && e.target.files[0];
+          if (file) {
+            var reader = new FileReader();
+            reader.onload = function(evt) {
+              var dataUrl = evt.target.result;
+              document.getElementById('f-image-url').value = dataUrl;
+              document.getElementById('preview-card-img').src = dataUrl;
+              document.querySelectorAll('.preset-img-thumb').forEach(function(t) { t.classList.remove('selected'); });
+              var statusEl = document.getElementById('file-upload-status');
+              if (statusEl) statusEl.textContent = 'Đã chọn ảnh: ' + file.name + ' (' + Math.round(file.size / 1024) + ' KB)';
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+      }
+
+      // 6. Submit Form -> Create Room in WAITING state -> Show Success Modal
+      document.getElementById('seller-consignment-form').addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        if (!document.getElementById('f-terms-agree').checked) {
+          if (window.showToast) {
+            window.showToast('Cam kết điều hành', 'Vui lòng bấm chọn đồng ý với cam kết điều hành phiên đấu giá!', 'warning');
+          } else {
+            alert('Vui lòng đồng ý với cam kết điều hành phiên đấu giá!');
+          }
+          return;
+        }
+
+        var user = store.getCurrentUser();
+        if (!user) {
+          if (window.showToast) {
+            window.showToast('Yêu cầu tài khoản', 'Vui lòng đăng nhập hoặc tạo tài khoản để xuất bản phiên đấu giá của bạn!', 'info');
+          }
+          if (window.openAuthModal) {
+            window.openAuthModal('login');
+          }
+          return;
+        }
+
+        var title = document.getElementById('f-title').value.trim();
+        var shortDesc = document.getElementById('f-short-desc').value.trim();
+        var catKey = document.getElementById('f-category').value;
+        var century = document.getElementById('f-century').value.trim();
+        var origin = document.getElementById('f-origin').value.trim();
+        var condition = document.getElementById('f-condition').value.trim();
+        var startPrice = Number(document.getElementById('f-starting-bid').value) || 1500000000;
+        var stepPrice = Number(document.getElementById('f-min-increment').value) || 50000000;
+        var imageUrl = document.getElementById('f-image-url').value.trim() || 'assets/images/patek_nautilus_gold.jpg';
+        var minutes = Number(document.getElementById('f-selected-minutes').value) || 15;
+        var totalSeconds = Number(document.getElementById('f-selected-seconds').value) || Math.round(minutes * 60);
+
+        var sellerId = user.uid;
+        var sellerName = user.fullName;
+
+        var result = store.createRoom({
+          title: title,
+          category: catKey,
+          categoryName: catMap[catKey] || 'TÀI SẢN CAO CẤP',
+          shortDesc: shortDesc,
+          startPrice: startPrice,
+          stepPrice: stepPrice,
+          depositAmount: Math.round(startPrice * 0.15),
+          status: 'WAITING',
+          durationMinutes: minutes,
+          durationSeconds: totalSeconds,
+          sellerId: sellerId,
+          sellerName: sellerName,
+          images: [imageUrl],
+          specs: {
+            'Năm sản xuất': century,
+            'Xuất xứ': origin,
+            'Tình trạng': condition,
+            'Kiểm định': 'Geneva Certified 100%'
+          },
+          appraisal: {
+            inspector: 'Hội Đồng Thẩm Định Aurelia Geneva',
+            score: '10/10 Hoàn Hảo',
+            certNo: 'CH-AURELIA-' + Math.floor(100000 + Math.random() * 900000)
+          }
+        });
+
+        if (result && result.success) {
+          var roomPin = result.room.roomPin;
+          var targetUrl = 'live-room.html?room=' + roomPin + '&created=true';
+
+          var successModal = document.getElementById('modal-create-success');
+          document.getElementById('success-room-pin-display').textContent = '#' + roomPin;
+          document.getElementById('btn-goto-room-now').href = targetUrl;
+
+          // Copy PIN
+          document.getElementById('btn-copy-pin-code').onclick = function() {
+            if (navigator.clipboard) {
+              navigator.clipboard.writeText(roomPin).then(function() {
+                if (window.showToast) {
+                  window.showToast('Đã sao chép mã PIN', 'Mã PIN #' + roomPin + ' đã được lưu vào bộ nhớ tạm.', 'success');
+                } else {
+                  alert('Đã sao chép mã PIN #' + roomPin + ' vào bộ nhớ tạm.');
+                }
+              });
+            } else {
+              prompt('Mã PIN của phòng đấu giá:', roomPin);
+            }
+          };
+
+          // Copy Link
+          document.getElementById('btn-copy-room-link').onclick = function() {
+            var fullUrl = window.location.href.split('?')[0];
+            fullUrl = fullUrl.substring(0, fullUrl.lastIndexOf('/')) + '/' + targetUrl;
+            if (navigator.clipboard) {
+              navigator.clipboard.writeText(fullUrl).then(function() {
+                if (window.showToast) {
+                  window.showToast('Đã sao chép link', 'Đường dẫn phòng đấu giá đã được lưu vào bộ nhớ tạm.', 'success');
+                } else {
+                  alert('Đã sao chép link phòng đấu giá vào bộ nhớ tạm.');
+                }
+              });
+            } else {
+              prompt('Link phòng đấu giá:', fullUrl);
+            }
+          };
+
+          successModal.classList.add('active');
+        } else {
+          if (window.showToast) {
+            window.showToast('Lỗi tạo phòng', 'Không thể tạo phòng đấu giá. Vui lòng thử lại!', 'error');
+          } else {
+            alert('Không thể tạo phòng đấu giá. Vui lòng thử lại!');
+          }
+        }
+      });
+
+      updateCalculations();
+      updateCardPreview();
+    })();
+  </script>
+</body>
+</html>

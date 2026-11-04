@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Cổng Đăng Nhập & Đăng Ký - AURELIA GENÈVE. Sàn đấu giá trực tuyến thế hệ mới cho vật phẩm siêu sang và công nghệ hiếm.">
+  <title>Đăng Nhập & Đăng Ký • AURELIA</title>
+
+  <!-- Google Fonts: Syne, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700;800&family=Syne:wght@700;800&display=swap" rel="stylesheet">
+
+  <!-- Core Design Tokens & Stylesheets -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <style>
+    /* Styling chuyên biệt cho trang Auth Portal */
+    .auth-page {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: var(--bg-canvas);
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .auth-page__topbar {
+      padding: var(--space-4) var(--space-6);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-bottom: 1px solid var(--border-hairline);
+      background: var(--bg-surface);
+      backdrop-filter: var(--backdrop-blur-md);
+      -webkit-backdrop-filter: var(--backdrop-blur-md);
+    }
+
+    .auth-page__body {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-6) var(--space-4);
+    }
+
+    .auth-card {
+      width: 100%;
+      max-width: 520px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 20px 40px -15px rgba(0, 0, 0, 0.7), 0 0 30px rgba(245, 158, 11, 0.1);
+      overflow: hidden;
+      animation: fadeInScale 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    @keyframes fadeInScale {
+      from {
+        opacity: 0;
+        transform: scale(0.96) translateY(12px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .auth-card__header {
+      padding: var(--space-6) var(--space-6) var(--space-4);
+      text-align: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .auth-tabs-nav {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4px;
+      background: rgba(0, 0, 0, 0.4);
+      padding: 4px;
+      border-radius: var(--radius-md);
+      margin: var(--space-4) var(--space-6);
+    }
+
+    .auth-tab-trigger {
+      padding: 10px 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      background: transparent;
+      border: 1px solid transparent;
+      border-radius: var(--radius-sm);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+    }
+
+    .auth-tab-trigger:hover {
+      color: #FFF;
+      background: rgba(255, 255, 255, 0.04);
+    }
+
+    .auth-tab-trigger--active {
+      background: var(--color-brand-gold) !important;
+      color: #0B0F17 !important;
+      font-weight: 800 !important;
+      box-shadow: 0 4px 12px rgba(245, 158, 11, 0.35) !important;
+    }
+
+    .auth-card__body {
+      padding: 0 var(--space-6) var(--space-6);
+    }
+
+    .auth-panel {
+      display: none;
+    }
+
+    .auth-panel--active {
+      display: block;
+      animation: fadeIn 0.25s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .demo-collector-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: var(--space-3) var(--space-4);
+      background: var(--color-bg-primary);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-md);
+      transition: all var(--transition-fast);
+      cursor: pointer;
+      margin-bottom: var(--space-3);
+    }
+
+    .demo-collector-card:hover {
+      border-color: var(--color-brand-gold);
+      background: rgba(245, 158, 11, 0.06);
+      transform: translateX(4px);
+    }
+  </style>
+</head>
+<body class="auth-page">
+
+  <!-- TOP BAR: Logo & Nút về Trang Chủ -->
+  <header class="auth-page__topbar">
+    <a href="index.html" class="flex items-center gap-2" style="text-decoration: none;">
+      <div style="width: 34px; height: 34px; border-radius: 8px; background: var(--color-brand-gold); display: flex; align-items: center; justify-content: center; color: #000; font-weight: 900; font-size: 1.1rem;"></div>
+      <div>
+        <div style="font-family: var(--font-heading); font-size: 1.2rem; font-weight: 800; color: #FFF; letter-spacing: -0.02em;">AUCTION<span style="color: var(--color-brand-gold);">ENGINE</span></div>
+        <div style="font-size: 0.65rem; color: var(--color-text-muted); letter-spacing: 0.1em; text-transform: uppercase;">Live Luxury & Tech Bidding</div>
+      </div>
+    </a>
+
+    <a href="index.html" class="btn btn--outline btn--sm flex items-center gap-1" style="font-size: 0.8rem; border-color: rgba(255,255,255,0.25); text-decoration: none;">
+      <span>←</span>
+      <span>Trở Về Trang Chủ</span>
+    </a>
+  </header>
+
+  <!-- MAIN BODY: Auth Card -->
+  <main class="auth-page__body">
+    <div class="auth-card">
+      
+      <!-- Card Header -->
+      <div class="auth-card__header">
+        <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--color-brand-gold); font-weight: 700; margin-bottom: var(--space-1);">
+          SÀN ĐẤU GIÁ QUỐC TẾ • CỔNG ĐỊNH DANH
+        </div>
+        <h1 style="font-size: 1.5rem; font-weight: 800; color: #FFF; margin: 0;">
+          Chào Mừng Đến AURELIA GENÈVE
+        </h1>
+        <p style="font-size: var(--font-size-xs); color: var(--color-text-secondary); margin-top: 6px; margin-bottom: 0;">
+          Đăng nhập để nhận Mã Thẻ Đấu Giá cá nhân & tham gia trả giá trực tiếp.
+        </p>
+      </div>
+
+      <!-- Thông báo đăng xuất nếu có query param ?logout=true -->
+      <div id="auth-alert-box" style="display: none; margin: var(--space-4) var(--space-6) 0; padding: var(--space-3) var(--space-4); border-radius: var(--radius-sm); font-size: var(--font-size-xs);">
+        <!-- Injected via JS -->
+      </div>
+
+      <!-- Khung hiển thị nếu người dùng ĐANG ĐĂNG NHẬP -->
+      <div id="already-logged-banner" style="display: none; background: rgba(245, 158, 11, 0.1); border: 1px solid var(--color-border-gold); border-radius: var(--radius-md); padding: var(--space-4); margin: var(--space-4) var(--space-6) 0; text-align: center;">
+        <div style="font-size: 0.85rem; color: #FFF; margin-bottom: var(--space-2);">
+          Bạn đang đăng nhập: <strong id="logged-user-name" style="color: var(--color-brand-gold);">---</strong>
+        </div>
+        <div class="flex items-center justify-center gap-2" style="flex-wrap: wrap;">
+          <button class="btn btn--gold btn--sm" id="btn-continue-redirect" onclick="window.location.href = getRedirectUrl()">
+             Tiếp Tục Truy Cập &rarr;
+          </button>
+          <a href="seller-studio.html" class="btn btn--secondary btn--sm" style="text-decoration: none;">
+             Tạo Phiên Mới
+          </a>
+          <button class="btn btn--outline btn--sm" onclick="logoutCurrentFromLogin()">
+             Đăng Xuất
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs: 2 Tabs Rõ Ràng (Đăng Nhập / Đăng Ký) -->
+      <div class="auth-tabs-nav">
+        <button type="button" class="auth-tab-trigger auth-tab-trigger--active" id="tab-btn-login" onclick="switchAuthTab('login')">
+          <span></span>
+          <span>Đăng Nhập</span>
+        </button>
+        <button type="button" class="auth-tab-trigger" id="tab-btn-register" onclick="switchAuthTab('register')">
+          <span></span>
+          <span>Đăng Ký Mới</span>
+        </button>
+      </div>
+
+      <!-- Card Body: 2 Panels -->
+      <div class="auth-card__body">
+
+        <!-- =================================================================
+             PANEL 1: ĐĂNG NHẬP (LOGIN)
+             ================================================================= -->
+        <div class="auth-panel auth-panel--active" id="auth-panel-login">
+          <form id="form-login" style="display: flex; flex-direction: column; gap: var(--space-4);">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="login-email">Địa chỉ Email:</label>
+              <input 
+                type="email" 
+                id="login-email" 
+                class="form-control" 
+                placeholder="Nhập email của bạn..." 
+                required 
+              />
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 4px;">
+                <label class="form-label" for="login-password" style="margin-bottom: 0;">Địa chỉ Mật khẩu:</label>
+                <a href="javascript:void(0)" onclick="switchAuthTab('forgot')" style="font-size: 0.75rem; color: var(--color-brand-gold); font-weight: 600; text-decoration: underline;">Quên mật khẩu?</a>
+              </div>
+              <input 
+                type="password" 
+                id="login-password" 
+                class="form-control" 
+                placeholder="Nhập mật khẩu của bạn..." 
+                required 
+              />
+            </div>
+
+            <div class="flex items-center justify-between" style="font-size: 0.75rem; color: var(--color-text-secondary);">
+              <label class="flex items-center gap-2" style="cursor: pointer;">
+                <input type="checkbox" id="chk-remember" checked style="accent-color: var(--color-brand-gold);">
+                <span>Ghi nhớ phiên đăng nhập</span>
+              </label>
+              <span class="text-muted">Lưu bảo mật trên thiết bị</span>
+            </div>
+
+            <button type="submit" class="btn btn--gold btn--lg" style="width: 100%; font-size: 0.95rem; font-weight: 800; height: 48px; margin-top: var(--space-1);">
+               ĐĂNG NHẬP VÀO HỆ THỐNG
+            </button>
+
+            <!-- Quick Demo Login Buttons -->
+            <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid var(--color-border-gold); border-radius: var(--radius-md); padding: 12px; margin-top: var(--space-2);">
+              <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--color-brand-gold); font-weight: 700; margin-bottom: 8px; text-align: center;">
+                 ĐĂNG NHẬP NHANH 1-CHẠM (DÀNH CHO GIẢNG VIÊN & DEMO)
+              </div>
+              <div style="display: flex; flex-direction: column; gap: 6px;">
+                <button type="button" class="btn btn-outline" style="text-align: left; justify-content: space-between; font-size: 0.78rem; padding: 8px 12px;" onclick="quickLoginDemo('usr-thang-6651')">
+                   <span><strong>Phạm Ngọc Thắng</strong> (Quản Trị Viên / Admin)</span>
+                   <span class="font-mono text-emerald">#PD-6651</span>
+                </button>
+                <button type="button" class="btn btn-outline" style="text-align: left; justify-content: space-between; font-size: 0.78rem; padding: 8px 12px;" onclick="quickLoginDemo('usr-quan-8821')">
+                   <span><strong>Nguyễn Minh Quân</strong> (Đấu Giá)</span>
+                   <span class="font-mono text-emerald">#PD-8821</span>
+                </button>
+                <button type="button" class="btn btn-outline" style="text-align: left; justify-content: space-between; font-size: 0.78rem; padding: 8px 12px;" onclick="quickLoginDemo('usr-bao-3390')">
+                   <span><strong>Trần Hoàng Bảo</strong> (Sưu Tầm)</span>
+                   <span class="font-mono text-emerald">#PD-3390</span>
+                </button>
+              </div>
+            </div>
+
+            <div style="text-align: center; font-size: 0.8rem; color: var(--color-text-secondary); margin-top: var(--space-2);">
+              Chưa có tài khoản đấu giá? 
+              <a href="javascript:void(0)" onclick="switchAuthTab('register')" style="color: var(--color-brand-gold); font-weight: 700; text-decoration: underline;">
+                Đăng ký tài khoản mới ngay
+              </a>
+            </div>
+          </form>
+        </div>
+
+        <!-- =================================================================
+             PANEL 2: ĐĂNG KÝ MỚI (REGISTER)
+             ================================================================= -->
+        <div class="auth-panel" id="auth-panel-register">
+          <form id="form-register" style="display: flex; flex-direction: column; gap: var(--space-3);">
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="reg-fullname">Họ và Tên Của Bạn:</label>
+              <input 
+                type="text" 
+                id="reg-fullname" 
+                class="form-control" 
+                placeholder="Ví dụ: Hoàng Long" 
+                required 
+              />
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="reg-email">Email Đăng Ký:</label>
+              <input 
+                type="email" 
+                id="reg-email" 
+                class="form-control" 
+                placeholder="hoanglong@collector.io" 
+                required 
+              />
+            </div>
+
+            <div class="form-group" style="margin-bottom: 0;">
+              <label class="form-label" for="reg-password">Mật Khẩu:</label>
+              <input 
+                type="password" 
+                id="reg-password" 
+                class="form-control" 
+                placeholder="Tối thiểu 6 ký tự..." 
+                required 
+              />
+            </div>
+
+            <!-- Registration Notice Banner -->
+            <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid var(--color-border-gold); border-radius: var(--radius-sm); padding: var(--space-3); font-size: 0.75rem; color: var(--color-text-primary); line-height: 1.4;">
+              ️ <strong>Cấp Mã Thẻ Đấu Giá Độc Quyền (#PD-XXXX)</strong> ngay khi đăng ký thành công.<br>
+               Tài khoản được lưu vĩnh viễn trên cơ sở dữ liệu. Bữa sau bạn chỉ cần nhập Email & Mật khẩu là đăng nhập được ngay!
+            </div>
+
+            <button type="submit" class="btn btn--gold btn--lg" style="width: 100%; font-size: 0.95rem; font-weight: 800; height: 48px; margin-top: var(--space-1);">
+               ĐĂNG KÝ TÀI KHOẢN NGAY
+            </button>
+
+            <div style="text-align: center; font-size: 0.8rem; color: var(--color-text-secondary); margin-top: var(--space-1);">
+              Đã có tài khoản? 
+              <a href="javascript:void(0)" onclick="switchAuthTab('login')" style="color: var(--color-brand-gold); font-weight: 700; text-decoration: underline;">
+                Đăng nhập tại đây
+              </a>
+            </div>
+          </form>
+        </div>
+
+        <!-- =================================================================
+             PANEL 3: KHÔI PHỤC MẬT KHẨU (FORGOT PASSWORD / SECURE OTP)
+             ================================================================= -->
+        <div class="auth-panel" id="auth-panel-forgot">
+          
+          <!-- BƯỚC 1: NHẬP GMAIL XÁC MINH -->
+          <div id="login-forgot-step1">
+            <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: var(--space-4); font-size: 0.82rem; color: #065F46; line-height: 1.5;">
+              <strong style="color: #047857;">Bảo mật tuyệt đối:</strong> Quý khách vui lòng nhập địa chỉ Gmail đã đăng ký tài khoản. Hệ thống AURELIA sẽ phát hành mã xác thực OTP 6 số để thiết lập mật khẩu mới mà không để lộ mật khẩu cũ hay thông tin riêng tư.
+            </div>
+
+            <form id="form-forgot-step1" style="display: flex; flex-direction: column; gap: var(--space-4);">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="forgot-login-email">Địa chỉ Gmail đã đăng ký:</label>
+                <input 
+                  type="email" 
+                  id="forgot-login-email" 
+                  class="form-control" 
+                  placeholder="thang.pn@aurelia.ch hoặc email của bạn..." 
+                  required 
+                />
+              </div>
+
+              <button type="submit" class="btn btn--gold btn--lg" style="width: 100%; font-size: 0.95rem; font-weight: 800; height: 48px; margin-top: var(--space-1);">
+                 GỬI MÃ XÁC THỰC OTP ĐẾN EMAIL
+              </button>
+            </form>
+          </div>
+
+          <!-- BƯỚC 2: NHẬP MÃ OTP & MẬT KHẨU MỚI -->
+          <div id="login-forgot-step2" style="display: none;">
+            <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.35); border-radius: var(--radius-md); padding: 12px 14px; margin-bottom: var(--space-4); font-size: 0.82rem; color: #065F46; line-height: 1.5;">
+              <div>Mã xác thực OTP đã được gửi đến: <strong id="login-forgot-masked-email" class="font-mono text-emerald" style="color: #047857;">...</strong></div>
+              <div style="font-size: 0.72rem; color: #047857; margin-top: 3px; opacity: 0.85;">(Mã có hiệu lực trong 5 phút. Vui lòng kiểm tra chuông thông báo hệ thống hoặc hòm thư)</div>
+            </div>
+
+            <form id="form-forgot-step2" style="display: flex; flex-direction: column; gap: var(--space-3);">
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="forgot-login-otp">Mã xác thực OTP (6 chữ số):</label>
+                <input 
+                  type="text" 
+                  id="forgot-login-otp" 
+                  class="form-control font-mono" 
+                  maxlength="6" 
+                  placeholder="Nhập 6 số OTP" 
+                  required 
+                  style="letter-spacing: 6px; font-size: 1.2rem; text-align: center;"
+                />
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="forgot-login-newpass">Mật khẩu mới:</label>
+                <input 
+                  type="password" 
+                  id="forgot-login-newpass" 
+                  class="form-control" 
+                  placeholder="Tối thiểu 6 ký tự..." 
+                  required 
+                />
+              </div>
+
+              <div class="form-group" style="margin-bottom: 0;">
+                <label class="form-label" for="forgot-login-confirmpass">Xác nhận mật khẩu mới:</label>
+                <input 
+                  type="password" 
+                  id="forgot-login-confirmpass" 
+                  class="form-control" 
+                  placeholder="Nhập lại mật khẩu mới..." 
+                  required 
+                />
+              </div>
+
+              <button type="submit" class="btn btn--gold btn--lg" style="width: 100%; font-size: 0.95rem; font-weight: 800; height: 48px; margin-top: var(--space-1);">
+                 XÁC NHẬN & CẬP NHẬT MẬT KHẨU
+              </button>
+            </form>
+          </div>
+
+          <div style="text-align: center; font-size: 0.8rem; color: var(--color-text-secondary); margin-top: var(--space-4); border-top: 1px solid rgba(255,255,255,0.06); padding-top: var(--space-3);">
+            <a href="javascript:void(0)" onclick="switchAuthTab('login')" style="color: var(--color-brand-gold); font-weight: 700; text-decoration: underline;">
+              &larr; Quay lại Đăng Nhập
+            </a>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Card Footer -->
+      <div style="background: rgba(0,0,0,0.3); border-top: 1px solid rgba(255,255,255,0.06); padding: var(--space-4) var(--space-6); text-align: center; font-size: 0.75rem; color: var(--color-text-muted);">
+        ️ Cơ chế bảo mật Escrow • Ký quỹ minh bạch • Không spam quảng cáo
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Core Scripts -->
+  <script src="js/app-core.js"></script>
+
+  <script>
+    // 0. Quick Login Demo Accounts
+    function quickLoginDemo(key) {
+      var store = window.AureliaApp || window.AuctionStore;
+      if (store) {
+        store.quickLogin(key);
+      }
+      window.location.href = getRedirectUrl();
+    }
+    // 1. Quản lý chuyển đổi Tabs
+    function switchAuthTab(tabName) {
+      document.querySelectorAll('.auth-tab-trigger').forEach(btn => {
+        btn.classList.remove('auth-tab-trigger--active');
+      });
+      document.querySelectorAll('.auth-panel').forEach(panel => {
+        panel.classList.remove('auth-panel--active');
+      });
+
+      const btn = document.getElementById(`tab-btn-${tabName}`);
+      const panel = document.getElementById(`auth-panel-${tabName}`);
+      if (btn) btn.classList.add('auth-tab-trigger--active');
+      if (panel) panel.classList.add('auth-panel--active');
+
+      if (tabName === 'forgot') {
+        const s1 = document.getElementById('login-forgot-step1');
+        const s2 = document.getElementById('login-forgot-step2');
+        if (s1) s1.style.display = 'block';
+        if (s2) s2.style.display = 'none';
+      }
+    }
+
+    // 2. Lấy URL redirect nếu có (VD: vào phòng cụ thể trước khi đăng nhập)
+    function getRedirectUrl() {
+      const params = new URLSearchParams(window.location.search);
+      return params.get('redirect') || 'index.html';
+    }
+
+    // 3. Hiển thị thông báo đăng xuất nếu URL có ?logout=true
+    window.addEventListener('DOMContentLoaded', () => {
+      const params = new URLSearchParams(window.location.search);
+      const alertBox = document.getElementById('auth-alert-box');
+      const alreadyBanner = document.getElementById('already-logged-banner');
+      const store = window.AuctionStore || window.dbService;
+      const curr = store ? store.getCurrentUser() : null;
+      
+      if (params.get('logout') === 'true') {
+        alertBox.style.display = 'block';
+        alertBox.style.background = 'rgba(239, 68, 68, 0.1)';
+        alertBox.style.border = '1px solid rgba(239, 68, 68, 0.3)';
+        alertBox.style.color = '#FCA5A5';
+        alertBox.innerHTML = `
+          <strong> Đã đăng xuất an toàn!</strong><br>
+          Bạn đã đăng xuất tài khoản. Vui lòng đăng nhập hoặc đăng ký tài khoản mới để tiếp tục.
+        `;
+      } else if (params.get('tab') === 'register') {
+        switchAuthTab('register');
+      } else if (params.get('tab') === 'forgot') {
+        switchAuthTab('forgot');
+      } else if (curr) {
+        // Đã có tài khoản đang đăng nhập
+        if (alreadyBanner) {
+          alreadyBanner.style.display = 'block';
+          document.getElementById('logged-user-name').textContent = `${curr.fullName} (${curr.paddleId})`;
+          
+          const redirectUrl = getRedirectUrl();
+          const continueBtn = document.getElementById('btn-continue-redirect');
+          if (continueBtn) {
+            if (redirectUrl.includes('seller-studio')) {
+              continueBtn.innerHTML = ' Tiếp Tục Vào Trang Tạo Phiên &rarr;';
+            } else if (redirectUrl.includes('live-room')) {
+              continueBtn.innerHTML = ' Vào Phòng Đấu Giá &rarr;';
+            } else {
+              continueBtn.innerHTML = ' Vào Sàn Đấu Giá Ngay &rarr;';
+            }
+          }
+        }
+      }
+    });
+
+    function logoutCurrentFromLogin() {
+      if (window.dbService) {
+        window.dbService.logout();
+        window.location.href = 'login.html?logout=true';
+      }
+    }
+
+    // 4. Xử lý Form Đăng Nhập
+    document.getElementById('form-login').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('login-email').value.trim();
+      const pass = document.getElementById('login-password').value.trim();
+
+      const store = window.AureliaApp || window.AuctionStore || window.dbService;
+      if (!store) return;
+      const res = store.login(email, pass);
+      if (res && res.success) {
+        if (window.showToast) {
+          window.showToast('Đăng nhập thành công', `Chào mừng ${res.user.fullName} (${res.user.paddleId})!`, 'success');
+        }
+        setTimeout(() => { window.location.href = getRedirectUrl(); }, 400);
+      } else {
+        if (window.showToast) {
+          window.showToast('Đăng nhập thất bại', (res && res.message) || 'Thông tin tài khoản không chính xác.', 'error');
+        } else {
+          alert((res && res.message) || 'Đăng nhập thất bại');
+        }
+      }
+    });
+
+    // 5. Xử lý Form Đăng Ký
+    document.getElementById('form-register').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const name = document.getElementById('reg-fullname').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const pass = document.getElementById('reg-password').value.trim();
+
+      const store = window.AureliaApp || window.AuctionStore || window.dbService;
+      if (!store) return;
+      const res = store.register(name, email, pass, 5000000000);
+      if (res && res.success) {
+        if (window.showToast) {
+          window.showToast('Cấp thẻ thành công', `Chào mừng ${res.user.fullName}! Mã thẻ: ${res.user.paddleId}`, 'success');
+        }
+        setTimeout(() => { window.location.href = getRedirectUrl(); }, 500);
+      } else {
+        if (window.showToast) {
+          window.showToast('Đăng ký thất bại', (res && res.message) || 'Không thể tạo tài khoản.', 'error');
+        } else {
+          alert((res && res.message) || 'Đăng ký thất bại');
+        }
+      }
+    });
+
+    // 6. Xử lý Form Quên Mật Khẩu (Bước 1: Gửi OTP)
+    const forgotForm1 = document.getElementById('form-forgot-step1');
+    if (forgotForm1) {
+      forgotForm1.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('forgot-login-email').value.trim();
+        const store = window.AureliaApp || window.AuctionStore || window.dbService;
+        if (!store) return;
+
+        const res = store.requestPasswordReset 
+          ? store.requestPasswordReset(email) 
+          : { success: false, message: 'Tính năng đang khởi động...' };
+
+        if (res && res.success) {
+          if (window.showToast) {
+            window.showToast('Đã Gửi Mã Xác Thực OTP', res.message, 'success', 5000);
+          }
+          const s1 = document.getElementById('login-forgot-step1');
+          const s2 = document.getElementById('login-forgot-step2');
+          const masked = document.getElementById('login-forgot-masked-email');
+          if (masked) masked.textContent = res.maskedEmail || email;
+          if (s1) s1.style.display = 'none';
+          if (s2) s2.style.display = 'block';
+
+          // Demo hint
+          const otpInput = document.getElementById('forgot-login-otp');
+          if (otpInput && res.otp) {
+            otpInput.placeholder = `Mã OTP demo: ${res.otp}`;
+            otpInput.value = res.otp;
+          }
+        } else {
+          if (window.showToast) {
+            window.showToast('Không Thể Cấp Mã', (res && res.message) || 'Email không hợp lệ.', 'error');
+          } else {
+            alert((res && res.message) || 'Email không hợp lệ.');
+          }
+        }
+      });
+    }
+
+    // 7. Xử lý Form Quên Mật Khẩu (Bước 2: Xác Nhận OTP & Đổi Mật Khẩu)
+    const forgotForm2 = document.getElementById('form-forgot-step2');
+    if (forgotForm2) {
+      forgotForm2.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const email = document.getElementById('forgot-login-email').value.trim();
+        const otp = document.getElementById('forgot-login-otp').value.trim();
+        const newPass = document.getElementById('forgot-login-newpass').value.trim();
+        const confirmPass = document.getElementById('forgot-login-confirmpass').value.trim();
+
+        const store = window.AureliaApp || window.AuctionStore || window.dbService;
+        if (!store) return;
+
+        const res = store.verifyAndResetPassword 
+          ? store.verifyAndResetPassword(email, otp, newPass, confirmPass) 
+          : { success: false, message: 'Tính năng đang khởi động...' };
+
+        if (res && res.success) {
+          if (window.showToast) {
+            window.showToast('Cấp Lại Mật Khẩu Thành Công', res.message, 'success', 4000);
+          }
+          // Chuyển lại tab login với email và mật khẩu mới điền sẵn
+          switchAuthTab('login');
+          const loginEmail = document.getElementById('login-email');
+          if (loginEmail) loginEmail.value = email;
+          const loginPass = document.getElementById('login-password');
+          if (loginPass) {
+            loginPass.value = newPass;
+            loginPass.focus();
+          }
+        } else {
+          if (window.showToast) {
+            window.showToast('Xác Thực Thất Bại', (res && res.message) || 'Mã OTP không đúng.', 'error');
+          } else {
+            alert((res && res.message) || 'Xác thực thất bại.');
+          }
+        }
+      });
+    }
+  </script>
+</body>
+</html>

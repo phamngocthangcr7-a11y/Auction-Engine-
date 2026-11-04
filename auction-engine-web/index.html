@@ -1,0 +1,1118 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AURELIA - Sàn đấu giá trực tuyến quốc tế hàng đầu dành cho Đồng hồ cơ Thụy Sĩ, Siêu xe, Thiết bị công nghệ nguyên mẫu và Kiệt tác nghệ thuật. Cơ chế Anti-Sniping và Bảo chứng Ký quỹ Escrow.">
+  <title>AURELIA • Sàn Đấu Giá Trực Tuyến Cao Cấp</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Core CSS Design System -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <style>
+    /* Hero Banner Slider Styles */
+    .hero-slider-wrap {
+      position: relative;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      box-shadow: var(--shadow-card);
+    }
+    .hero-slide {
+      display: none;
+      padding: 36px 40px;
+    }
+    .hero-slide.active {
+      display: grid;
+    }
+    .hero-slider-nav {
+      position: absolute;
+      bottom: 24px;
+      right: 40px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      z-index: 10;
+    }
+    .hero-slider-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .hero-slider-btn:hover {
+      background: var(--accent-emerald);
+      border-color: var(--accent-emerald);
+    }
+    .hero-slider-dots {
+      display: flex;
+      gap: 6px;
+    }
+    .hero-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 4px;
+      background: rgba(255, 255, 255, 0.4);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .hero-dot.active {
+      width: 24px;
+      background: #059669;
+    }
+
+    /* Product Card Heart Watchlist Button */
+    .lot-card-heart-btn {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      z-index: 5;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.7);
+      backdrop-filter: blur(4px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #FFFFFF;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .lot-card-heart-btn:hover,
+    .lot-card-heart-btn.active {
+      background: #FFFFFF;
+      color: #DC2626;
+      border-color: #DC2626;
+    }
+    .lot-card-heart-btn svg {
+      width: 15px;
+      height: 15px;
+      stroke-width: 2;
+    }
+    .lot-card-heart-btn.active svg {
+      fill: #DC2626;
+    }
+
+    /* Skeleton Loading State */
+    .skeleton-box {
+      background: linear-gradient(90deg, var(--bg-subtle) 25%, var(--bg-hover) 50%, var(--bg-subtle) 75%);
+      background-size: 200% 100%;
+      animation: skeleton-shimmer 1.5s infinite;
+      border-radius: var(--radius-sm);
+    }
+    @keyframes skeleton-shimmer {
+      0% { background-position: 200% 0; }
+      100% { background-position: -200% 0; }
+    }
+
+    /* Leaderboard Rank Badges */
+    .rank-pill {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 0.75rem;
+      font-family: var(--font-mono);
+      flex-shrink: 0;
+    }
+    .rank-pill--1 { background: #F59E0B; color: #FFFFFF; }
+    .rank-pill--2 { background: #94A3B8; color: #FFFFFF; }
+    .rank-pill--3 { background: #B45309; color: #FFFFFF; }
+    .rank-pill--n { background: var(--bg-page); color: var(--text-muted); border: 1px solid var(--border-color); }
+  </style>
+</head>
+<body>
+
+  <!-- Site Header Root -->
+  <div id="site-header-root"></div>
+
+  <!-- MAIN EDITORIAL CONTENT -->
+  <main id="main-content">
+    
+    <!-- =======================================================================
+         1. HERO SPOTLIGHT BANNER SLIDER (3 FEATURED LOTS + COUNTDOWN + WATCHLIST)
+         ======================================================================= -->
+    <section class="section" style="padding-top: 24px; padding-bottom: 24px;" aria-label="Phiên đấu giá tâm điểm">
+      <div class="container container--wide">
+        
+        <div class="hero-slider-wrap">
+          
+          <!-- SLIDE 1: PATEK PHILIPPE NAUTILUS (PIN 839201) -->
+          <div class="hero-slide active hero-spotlight-grid" id="hero-slide-0" style="grid-template-columns: 1.15fr 0.85fr; gap: 32px; align-items: center;">
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span class="badge badge--live" style="font-weight: 700; padding: 4px 10px; border-radius: 4px; font-size: 0.72rem; letter-spacing: 0.05em;">
+                  ĐANG DIỄN RA (LIVE)
+                </span>
+                <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">LOT #101 &bull; PIN #839201</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">&bull; 14 Nhà Sưu Tầm Đang Xem</span>
+              </div>
+
+              <h1 style="font-family: var(--font-serif); font-size: clamp(1.8rem, 3.2vw, 2.6rem); font-weight: 800; line-height: 1.15; color: var(--text-primary); margin: 0;">
+                Patek Philippe Nautilus 5711/1R Rose Gold 18K
+              </h1>
+
+              <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                Tuyệt tác bấm giờ cơ học đỉnh cao chế tác Geneva, vỏ vàng hồng 18K nguyên khối, mặt số nâu ombre sọc ngang kinh điển. Đầy đủ chứng thư Geneva Seal và bảo chứng quốc tế từ nhà đấu giá Aurelia.
+              </p>
+
+              <!-- Metrics: Price & Countdown (Zero Wrapping) -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 4px 0; background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 18px;">
+                <div>
+                  <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 2px;">Giá Đang Dẫn Đầu</div>
+                  <div class="font-mono text-emerald price-val" style="font-size: 1.5rem; font-weight: 800; line-height: 1.1;">2.500.000.000 ₫</div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">Dẫn đầu: <strong style="color: var(--text-primary);">Phan Minh Tân (#PD-2048)</strong></div>
+                </div>
+                <div style="border-left: 1px solid var(--border-color); padding-left: 18px;">
+                  <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 2px;">Thời Gian Còn Lại</div>
+                  <div id="hero-clock-0" class="font-mono price-val text-amber" style="font-size: 1.5rem; font-weight: 800; line-height: 1.1;">37:45</div>
+                  <div style="font-size: 0.72rem; color: #059669; margin-top: 3px; font-weight: 600;">Anti-Sniping Bảo Vệ Active</div>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div style="display: flex; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap;">
+                <a href="live-room.html?room=839201" class="btn btn-primary" style="font-weight: 700; padding: 11px 22px; font-size: 0.88rem;">
+                  <span>Vào Phòng Đấu Giá Ngay</span>
+                  <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </a>
+                <button type="button" class="btn btn-outline" onclick="window.toggleHeroWatchlist('room-101', this)" style="padding: 11px 18px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;">
+                  <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; stroke: currentColor; fill: none;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  <span>+ Lưu Vào Watchlist</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Visual 380px -->
+            <div class="hero-spotlight-visual" style="height: 380px; border-radius: var(--radius-md); overflow: hidden; position: relative; border: 1px solid var(--border-color); background: #0B0F17;">
+              <span style="position: absolute; top: 16px; right: 16px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.25); padding: 6px 12px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #F8FAFC !important; z-index: 2;">
+                GENEVA SEAL &bull; BẢO CHỨNG 10/10
+              </span>
+              <img src="assets/images/patek_nautilus_gold.jpg" alt="Patek Philippe" style="width: 100%; height: 100%; object-fit: cover;" loading="eager"/>
+            </div>
+          </div>
+
+          <!-- SLIDE 2: PORSCHE 911 GT3 RS (PIN 911300) -->
+          <div class="hero-slide hero-spotlight-grid" id="hero-slide-1" style="grid-template-columns: 1.15fr 0.85fr; gap: 32px; align-items: center;">
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span class="badge badge--live" style="font-weight: 700; padding: 4px 10px; border-radius: 4px; font-size: 0.72rem; letter-spacing: 0.05em;">
+                  ĐANG DIỄN RA (LIVE)
+                </span>
+                <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">LOT #102 &bull; PIN #911300</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">&bull; 26 Nhà Sưu Tầm Đang Xem</span>
+              </div>
+
+              <h1 style="font-family: var(--font-serif); font-size: clamp(1.8rem, 3.2vw, 2.6rem); font-weight: 800; line-height: 1.15; color: var(--text-primary); margin: 0;">
+                Porsche 911 GT3 RS Weissach Package 2024
+              </h1>
+
+              <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                Vũ khí đường đua đỉnh cao thế hệ 992, động cơ 4.0L hút khí tự nhiên 525HP, gói khí động học DRS chủ động, nắp capo và nóc carbon trần Weissach nguyên bản.
+              </p>
+
+              <!-- Metrics -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 4px 0; background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 18px;">
+                <div>
+                  <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 2px;">Giá Đang Dẫn Đầu</div>
+                  <div class="font-mono text-emerald price-val" style="font-size: 1.5rem; font-weight: 800; line-height: 1.1;">14.900.000.000 ₫</div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">Dẫn đầu: <strong style="color: var(--text-primary);">Trần Hoàng Bảo (#PD-3390)</strong></div>
+                </div>
+                <div style="border-left: 1px solid var(--border-color); padding-left: 18px;">
+                  <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 2px;">Thời Gian Còn Lại</div>
+                  <div id="hero-clock-1" class="font-mono price-val text-amber" style="font-size: 1.5rem; font-weight: 800; line-height: 1.1;">41:15</div>
+                  <div style="font-size: 0.72rem; color: #059669; margin-top: 3px; font-weight: 600;">Porsche Classic Stuttgart</div>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div style="display: flex; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap;">
+                <a href="live-room.html?room=911300" class="btn btn-primary" style="font-weight: 700; padding: 11px 22px; font-size: 0.88rem;">
+                  <span>Vào Phòng Đấu Giá Ngay</span>
+                  <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </a>
+                <button type="button" class="btn btn-outline" onclick="window.toggleHeroWatchlist('room-102', this)" style="padding: 11px 18px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;">
+                  <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; stroke: currentColor; fill: none;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  <span>+ Lưu Vào Watchlist</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="hero-spotlight-visual" style="height: 380px; border-radius: var(--radius-md); overflow: hidden; position: relative; border: 1px solid var(--border-color); background: #0B0F17;">
+              <span style="position: absolute; top: 16px; right: 16px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.25); padding: 6px 12px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #F8FAFC !important; z-index: 2;">
+                STUTTGART AUTHENTIC &bull; 9.9/10
+              </span>
+              <img src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=1200&q=85" alt="Porsche 911" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy"/>
+            </div>
+          </div>
+
+          <!-- SLIDE 3: MONET OIL PAINTING (PIN 774120) -->
+          <div class="hero-slide hero-spotlight-grid" id="hero-slide-2" style="grid-template-columns: 1.15fr 0.85fr; gap: 32px; align-items: center;">
+            <div style="display: flex; flex-direction: column; gap: 14px;">
+              <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+                <span class="badge badge--live" style="font-weight: 700; padding: 4px 10px; border-radius: 4px; font-size: 0.72rem; letter-spacing: 0.05em;">
+                  ĐANG DIỄN RA (LIVE)
+                </span>
+                <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">LOT #106 &bull; PIN #774120</span>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">&bull; 19 Nhà Sưu Tầm Đang Xem</span>
+              </div>
+
+              <h1 style="font-family: var(--font-serif); font-size: clamp(1.8rem, 3.2vw, 2.6rem); font-weight: 800; line-height: 1.15; color: var(--text-primary); margin: 0;">
+                Claude Monet "L'Aube Dorée" 1878 Oil on Canvas
+              </h1>
+
+              <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
+                Kiệt tác hội họa ấn tượng phong cảnh bình minh hồ Geneva thế kỷ 19, màu sắc nguyên bản tuyệt hảo kèm khung gỗ sồi dát vàng lá và chứng thư Musée d'Art et d'Histoire Genève.
+              </p>
+
+              <!-- Metrics -->
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 4px 0; background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 18px;">
+                <div>
+                  <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 2px;">Giá Đang Dẫn Đầu</div>
+                  <div class="font-mono text-emerald price-val" style="font-size: 1.5rem; font-weight: 800; line-height: 1.1;">720.000.000 ₫</div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">Dẫn đầu: <strong style="color: var(--text-primary);">Phan Minh Tân (#PD-2048)</strong></div>
+                </div>
+                <div style="border-left: 1px solid var(--border-color); padding-left: 18px;">
+                  <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 2px;">Thời Gian Còn Lại</div>
+                  <div id="hero-clock-2" class="font-mono price-val text-amber" style="font-size: 1.5rem; font-weight: 800; line-height: 1.1;">51:20</div>
+                  <div style="font-size: 0.72rem; color: #059669; margin-top: 3px; font-weight: 600;">Geneva Museum Provenance</div>
+                </div>
+              </div>
+
+              <!-- Action Buttons -->
+              <div style="display: flex; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap;">
+                <a href="live-room.html?room=774120" class="btn btn-primary" style="font-weight: 700; padding: 11px 22px; font-size: 0.88rem;">
+                  <span>Vào Phòng Đấu Giá Ngay</span>
+                  <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                </a>
+                <button type="button" class="btn btn-outline" onclick="window.toggleHeroWatchlist('room-106', this)" style="padding: 11px 18px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;">
+                  <svg viewBox="0 0 24 24" style="width: 16px; height: 16px; stroke: currentColor; fill: none;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                  <span>+ Lưu Vào Watchlist</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="hero-spotlight-visual" style="height: 380px; border-radius: var(--radius-md); overflow: hidden; position: relative; border: 1px solid var(--border-color); background: #0B0F17;">
+              <span style="position: absolute; top: 16px; right: 16px; background: rgba(15, 23, 42, 0.85); backdrop-filter: blur(8px); border: 1px solid rgba(255, 255, 255, 0.25); padding: 6px 12px; border-radius: 6px; font-size: 0.72rem; font-weight: 700; color: #F8FAFC !important; z-index: 2;">
+                MUSEUM GRADE &bull; CIR. 1878
+              </span>
+              <img src="assets/images/french_oil_painting.jpg" alt="Monet Painting" style="width: 100%; height: 100%; object-fit: cover;" loading="lazy"/>
+            </div>
+          </div>
+
+          <!-- Slider Controls -->
+          <div class="hero-slider-nav">
+            <button type="button" class="hero-slider-btn" onclick="window.prevHeroSlide()" aria-label="Slide trước">&lt;</button>
+            <div class="hero-slider-dots">
+              <span class="hero-dot active" onclick="window.goHeroSlide(0)"></span>
+              <span class="hero-dot" onclick="window.goHeroSlide(1)"></span>
+              <span class="hero-dot" onclick="window.goHeroSlide(2)"></span>
+            </div>
+            <button type="button" class="hero-slider-btn" onclick="window.nextHeroSlide()" aria-label="Slide tiếp theo">&gt;</button>
+          </div>
+
+        </div>
+
+        <!-- 3-Step Fiduciary Strip -->
+        <div style="margin-top: 16px; background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 24px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+          <div style="display: flex; align-items: center; gap: 24px; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--text-secondary);">
+              <span style="width: 22px; height: 22px; border-radius: 50%; background: var(--bg-page); border: 1px solid var(--border-color); color: var(--text-primary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">1</span>
+              <span>Chọn danh mục & vào phòng đấu giá</span>
+            </div>
+            <span style="color: var(--text-muted); font-size: 0.85rem;">&rarr;</span>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--text-secondary);">
+              <span style="width: 22px; height: 22px; border-radius: 50%; background: var(--bg-page); border: 1px solid var(--border-color); color: var(--text-primary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">2</span>
+              <span>Ký quỹ <strong>15%</strong> (Hoàn trả 100% nếu không trúng phiên)</span>
+            </div>
+            <span style="color: var(--text-muted); font-size: 0.85rem;">&rarr;</span>
+            <div style="display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--text-secondary);">
+              <span style="width: 22px; height: 22px; border-radius: 50%; background: var(--bg-page); border: 1px solid var(--border-color); color: var(--text-primary); display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 700;">3</span>
+              <span>Giơ Thẻ Đấu Giá (#Paddle) khớp lệnh thời gian thực</span>
+            </div>
+          </div>
+
+          <button type="button" class="btn btn-outline" onclick="window.openEnterPinModal()" style="font-size: 0.75rem; padding: 6px 14px;">
+            <svg viewBox="0 0 24 24"><path d="M21 2l-2 2m-1.5 1.5L16 7l-1.5-1.5L13 7l1.5 1.5L13 10l-1.5-1.5L10 10l1.5 1.5-3.5 3.5a5 5 0 11-7-7l3.5-3.5L6 6l1.5-1.5L6 3l1.5-1.5L9 3l1.5-1.5L12 3l1.5 1.5L15 3l1.5 1.5z"></path></svg>
+            <span>Vào Bằng Mã PIN</span>
+          </button>
+        </div>
+
+        <!-- 4 Platform Metric Badges (Responsive 2x2 on Mobile) -->
+        <div class="metric-grid-responsive" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-top: 16px;">
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px 20px; display: flex; align-items: center; gap: 14px;">
+            <div style="width: 40px; height: 40px; border-radius: var(--radius-sm); background: var(--bg-page); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--accent-emerald); flex-shrink: 0;">
+              <svg viewBox="0 0 24 24"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+            </div>
+            <div>
+              <div class="font-mono price-val" style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">186.4 Tỷ ₫</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 500;">Tổng Khớp Lệnh</div>
+            </div>
+          </div>
+
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px 20px; display: flex; align-items: center; gap: 14px;">
+            <div style="width: 40px; height: 40px; border-radius: var(--radius-sm); background: var(--bg-page); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--accent-emerald); flex-shrink: 0;">
+              <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+            </div>
+            <div>
+              <div class="font-mono price-val" style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">100%</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 500;">Bảo Chứng Escrow</div>
+            </div>
+          </div>
+
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px 20px; display: flex; align-items: center; gap: 14px;">
+            <div style="width: 40px; height: 40px; border-radius: var(--radius-sm); background: var(--bg-page); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--accent-emerald); flex-shrink: 0;">
+              <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+            </div>
+            <div>
+              <div class="font-mono price-val" style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">&lt; 15 ms</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 500;">Độ Trễ Khớp Lệnh</div>
+            </div>
+          </div>
+
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px 20px; display: flex; align-items: center; gap: 14px;">
+            <div style="width: 40px; height: 40px; border-radius: var(--radius-sm); background: var(--bg-page); border: 1px solid var(--border-color); display: flex; align-items: center; justify-content: center; color: var(--accent-emerald); flex-shrink: 0;">
+              <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+            </div>
+            <div>
+              <div class="font-mono price-val" style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary);">14,280+</div>
+              <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 500;">Nhà Sưu Tầm VIP</div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         2. MỤC 1 – DANH MỤC GIÁM ĐỊNH (5 CATEGORIES - RESPONSIVE)
+         ======================================================================= -->
+    <section class="section" style="padding-top: 24px; padding-bottom: 32px;" aria-label="Danh mục vật phẩm">
+      <div class="container container--wide">
+        <div class="section__header">
+          <div class="section__title-wrap">
+            <span class="section__eyebrow">BỘ SƯU TẬP CHỌN LỌC</span>
+            <h2 class="section__title">Danh Mục Giám Định Thụy Sĩ</h2>
+            <p class="section__subtitle">Tuyển tập 5 danh mục tài sản xa xỉ được kiểm định độc lập tại Geneva, Zurich, Paris và London.</p>
+          </div>
+          <a href="auctions.html" class="btn btn-outline">
+            <span>Xem Tất Cả Các Phiên</span>
+            <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+          </a>
+        </div>
+
+        <div class="category-grid-responsive" style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px;">
+          
+          <!-- Cat 1: Đồng hồ Cơ Thụy Sĩ -->
+          <a href="auctions.html?category=watches" style="height: 200px; border-radius: var(--radius-md); overflow: hidden; position: relative; display: flex; align-items: flex-end; padding: 18px; text-decoration: none; border: 1px solid var(--border-color); background: #0F172A; box-shadow: var(--shadow-sm); transition: transform 0.25s ease;">
+            <img src="assets/images/patek_nautilus_gold.jpg" alt="Đồng hồ Cơ Thụy Sĩ" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.85;"/>
+            <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,23,42,0.1) 0%, rgba(15,23,42,0.6) 45%, rgba(15,23,42,0.96) 100%);"></div>
+            <span style="position: absolute; top: 10px; right: 10px; z-index: 3; background: rgba(15, 23, 42, 0.85); color: #FFF; border: 1px solid rgba(255,255,255,0.2); font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 999px;">4 Phiên</span>
+            <div style="position: relative; z-index: 2; color: #FFFFFF !important;">
+              <h3 style="font-size: 1.05rem; font-weight: 700; color: #FFFFFF !important; margin: 0 0 2px 0;">Đồng hồ Cơ</h3>
+              <p style="font-size: 0.72rem; color: #CBD5E1 !important; margin: 0;">Patek Philippe, Rolex, AP</p>
+            </div>
+          </a>
+
+          <!-- Cat 2: Siêu Xe & Xe Cổ Điển -->
+          <a href="auctions.html?category=hypercars" style="height: 200px; border-radius: var(--radius-md); overflow: hidden; position: relative; display: flex; align-items: flex-end; padding: 18px; text-decoration: none; border: 1px solid var(--border-color); background: #0F172A; box-shadow: var(--shadow-sm); transition: transform 0.25s ease;">
+            <img src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=800&q=80" alt="Siêu Xe & Xe Cổ Điển" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.85;"/>
+            <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,23,42,0.1) 0%, rgba(15,23,42,0.6) 45%, rgba(15,23,42,0.96) 100%);"></div>
+            <span style="position: absolute; top: 10px; right: 10px; z-index: 3; background: rgba(15, 23, 42, 0.85); color: #FFF; border: 1px solid rgba(255,255,255,0.2); font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 999px;">4 Phiên</span>
+            <div style="position: relative; z-index: 2; color: #FFFFFF !important;">
+              <h3 style="font-size: 1.05rem; font-weight: 700; color: #FFFFFF !important; margin: 0 0 2px 0;">Siêu Xe & Cổ Điển</h3>
+              <p style="font-size: 0.72rem; color: #CBD5E1 !important; margin: 0;">Porsche, Ferrari, AMG</p>
+            </div>
+          </a>
+
+          <!-- Cat 3: Thiết Bị Công Nghệ Hiếm -->
+          <a href="auctions.html?category=tech" style="height: 200px; border-radius: var(--radius-md); overflow: hidden; position: relative; display: flex; align-items: flex-end; padding: 18px; text-decoration: none; border: 1px solid var(--border-color); background: #0F172A; box-shadow: var(--shadow-sm); transition: transform 0.25s ease;">
+            <img src="https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=800&q=80" alt="Công Nghệ & Bản Mẫu Hiếm" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.85;"/>
+            <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,23,42,0.1) 0%, rgba(15,23,42,0.6) 45%, rgba(15,23,42,0.96) 100%);"></div>
+            <span style="position: absolute; top: 10px; right: 10px; z-index: 3; background: rgba(15, 23, 42, 0.85); color: #FFF; border: 1px solid rgba(255,255,255,0.2); font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 999px;">1 Phiên</span>
+            <div style="position: relative; z-index: 2; color: #FFFFFF !important;">
+              <h3 style="font-size: 1.05rem; font-weight: 700; color: #FFFFFF !important; margin: 0 0 2px 0;">Công Nghệ Hiếm</h3>
+              <p style="font-size: 0.72rem; color: #CBD5E1 !important; margin: 0;">Leica M6, Bản mẫu cơ học</p>
+            </div>
+          </a>
+
+          <!-- Cat 4: Tranh Nghệ Thuật -->
+          <a href="auctions.html?category=art" style="height: 200px; border-radius: var(--radius-md); overflow: hidden; position: relative; display: flex; align-items: flex-end; padding: 18px; text-decoration: none; border: 1px solid var(--border-color); background: #0F172A; box-shadow: var(--shadow-sm); transition: transform 0.25s ease;">
+            <img src="assets/images/french_oil_painting.jpg" alt="Tranh Nghệ Thuật" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.85;"/>
+            <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,23,42,0.1) 0%, rgba(15,23,42,0.6) 45%, rgba(15,23,42,0.96) 100%);"></div>
+            <span style="position: absolute; top: 10px; right: 10px; z-index: 3; background: rgba(15, 23, 42, 0.85); color: #FFF; border: 1px solid rgba(255,255,255,0.2); font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 999px;">1 Phiên</span>
+            <div style="position: relative; z-index: 2; color: #FFFFFF !important;">
+              <h3 style="font-size: 1.05rem; font-weight: 700; color: #FFFFFF !important; margin: 0 0 2px 0;">Tranh Nghệ Thuật</h3>
+              <p style="font-size: 0.72rem; color: #CBD5E1 !important; margin: 0;">Kiệt tác Monet, Sơn dầu</p>
+            </div>
+          </a>
+
+          <!-- Cat 5: Đồ Cổ & Cổ Vật -->
+          <a href="auctions.html?category=antiques" style="height: 200px; border-radius: var(--radius-md); overflow: hidden; position: relative; display: flex; align-items: flex-end; padding: 18px; text-decoration: none; border: 1px solid var(--border-color); background: #0F172A; box-shadow: var(--shadow-sm); transition: transform 0.25s ease;">
+            <img src="https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=800&q=80" alt="Đồ Cổ & Cổ Vật" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: 0.85;"/>
+            <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,23,42,0.1) 0%, rgba(15,23,42,0.6) 45%, rgba(15,23,42,0.96) 100%);"></div>
+            <span style="position: absolute; top: 10px; right: 10px; z-index: 3; background: rgba(15, 23, 42, 0.85); color: #FFF; border: 1px solid rgba(255,255,255,0.2); font-size: 0.68rem; font-weight: 700; padding: 2px 7px; border-radius: 999px;">1 Phiên</span>
+            <div style="position: relative; z-index: 2; color: #FFFFFF !important;">
+              <h3 style="font-size: 1.05rem; font-weight: 700; color: #FFFFFF !important; margin: 0 0 2px 0;">Đồ Cổ & Cổ Vật</h3>
+              <p style="font-size: 0.72rem; color: #CBD5E1 !important; margin: 0;">Gốm sứ Minh, Cổ vật TK15</p>
+            </div>
+          </a>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         3. MỤC 2 – THANH TÌM KIẾM, BỘ LỌC ĐA TẦNG & SẮP XẾP (HOẠT ĐỘNG THẬT 100%)
+         ======================================================================= -->
+    <section class="section" style="background: var(--bg-surface); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding-top: 36px; padding-bottom: 40px;" aria-label="Bộ lọc và tìm kiếm phiên">
+      <div class="container container--wide">
+        
+        <div class="section__header" style="margin-bottom: 20px;">
+          <div class="section__title-wrap">
+            <span class="section__eyebrow">KHÁM PHÁ & BỘ LỌC ĐA TẦNG</span>
+            <h2 class="section__title">Sàng Lọc Phiên Đấu Giá</h2>
+            <p class="section__subtitle">Hệ thống lọc trực tiếp theo khoảng giá, trạng thái, danh mục và thời gian khớp lệnh.</p>
+          </div>
+          <button type="button" class="btn btn-outline" onclick="window.resetHomeFilters()" style="font-size: 0.8rem;">
+            <span>Xóa Bộ Lọc (Reset)</span>
+          </button>
+        </div>
+
+        <!-- Filter Controls Bar -->
+        <div style="background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px 20px; margin-bottom: 24px; display: grid; grid-template-columns: 2fr 1fr 1fr 1fr 1fr; gap: 12px; align-items: center;" class="filter-controls-grid">
+          
+          <!-- Search Input -->
+          <div style="position: relative;">
+            <input 
+              type="text" 
+              id="home-search-input" 
+              class="form-control" 
+              placeholder="Tìm theo tên vật phẩm, mã PIN, thương hiệu..." 
+              style="padding: 9px 12px 9px 36px; font-size: 0.85rem; border-radius: var(--radius-sm); width: 100%; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary);"
+              oninput="window.applyHomeFilters()"
+            />
+            <svg style="position: absolute; left: 12px; top: 50%; transform: translateY(-50%); width: 15px; height: 15px; color: #64748B; pointer-events: none;" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          </div>
+
+          <!-- Price Range Filter -->
+          <div>
+            <select id="filter-price-range" class="form-control" onchange="window.applyHomeFilters()" style="padding: 9px 10px; font-size: 0.82rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); width: 100%;">
+              <option value="all">Khoảng Giá: Tất Cả</option>
+              <option value="under500m">Dưới 500 triệu</option>
+              <option value="500m-2b">500 triệu - 2 tỷ</option>
+              <option value="above2b">Trên 2 tỷ ₫</option>
+            </select>
+          </div>
+
+          <!-- Category Filter -->
+          <div>
+            <select id="filter-category" class="form-control" onchange="window.applyHomeFilters()" style="padding: 9px 10px; font-size: 0.82rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); width: 100%;">
+              <option value="all">Danh Mục: Tất Cả</option>
+              <option value="watches">Đồng hồ Cơ</option>
+              <option value="hypercars">Siêu xe & Mô tô</option>
+              <option value="tech">Công nghệ hiếm</option>
+              <option value="art">Tranh nghệ thuật</option>
+              <option value="antiques">Đồ cổ & Cổ vật</option>
+            </select>
+          </div>
+
+          <!-- Status Filter -->
+          <div>
+            <select id="filter-status" class="form-control" onchange="window.applyHomeFilters()" style="padding: 9px 10px; font-size: 0.82rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); width: 100%;">
+              <option value="all">Trạng Thái: Tất Cả</option>
+              <option value="LIVE">Đang Diễn Ra (LIVE)</option>
+              <option value="WAITING">Sắp Diễn Ra (Upcoming)</option>
+              <option value="ENDED">Đã Kết Thúc</option>
+            </select>
+          </div>
+
+          <!-- Sort Filter -->
+          <div>
+            <select id="filter-sort" class="form-control" onchange="window.applyHomeFilters()" style="padding: 9px 10px; font-size: 0.82rem; border-radius: var(--radius-sm); border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-primary); width: 100%;">
+              <option value="default">Sắp Xếp: Mặc Định</option>
+              <option value="price-asc">Giá: Thấp đến Cao</option>
+              <option value="price-desc">Giá: Cao đến Thấp</option>
+              <option value="popular">Nhiều Quan Tâm Nhất</option>
+            </select>
+          </div>
+
+        </div>
+
+        <!-- Filtered Product Grid with Skeleton & Empty States -->
+        <div id="home-filter-results-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;">
+          <!-- Dynamically populated via JS -->
+        </div>
+
+        <!-- Empty State (When no item matches search/filter) -->
+        <div id="home-filter-empty-state" style="display: none; background: var(--bg-page); border: 1px dashed var(--border-color); border-radius: var(--radius-md); padding: 48px 24px; text-align: center; margin-top: 16px;">
+          <svg style="width: 44px; height: 44px; color: #94A3B8; margin: 0 auto 12px auto;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">Không tìm thấy phiên đấu giá phù hợp</h3>
+          <p style="font-size: 0.85rem; color: var(--text-secondary); max-width: 460px; margin: 0 auto 18px auto;">
+            Không có vật phẩm nào khớp với từ khóa tìm kiếm hoặc các tiêu chí bộ lọc đã chọn. Quý khách vui lòng thử tìm từ khóa khác hoặc xóa bộ lọc.
+          </p>
+          <button type="button" class="btn btn-primary" onclick="window.resetHomeFilters()">
+            <span>Xóa Bộ Lọc / Khám Phá Tất Cả Phiên</span>
+          </button>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         4. MỤC 4 – KHU VỰC "PHIÊN SẮP DIỄN RA (UPCOMING PREVIEW)"
+         ======================================================================= -->
+    <section class="section" style="padding-top: 40px; padding-bottom: 40px;" aria-label="Phiên sắp diễn ra">
+      <div class="container container--wide">
+        <div class="section__header">
+          <div class="section__title-wrap">
+            <span class="section__eyebrow" style="color: #D97706;">PHÒNG CHỜ &bull; SẮP MỞ SÀN</span>
+            <h2 class="section__title">Phiên Đấu Giá Sắp Diễn Ra</h2>
+            <p class="section__subtitle">Hồ sơ thẩm định hoàn tất 100%. Quý khách có thể xem trước hồ sơ và bấm Nhắc nhở để theo dõi khi phiên khai mạc.</p>
+          </div>
+        </div>
+
+        <div id="home-upcoming-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px;">
+          <!-- Populated via JS -->
+        </div>
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         5. MỤC 6 – BẢNG XẾP HẠNG SÀN ĐẤU GIÁ (LEADERBOARD & ANALYTICS)
+         ======================================================================= -->
+    <section class="section" id="leaderboard-section" style="background: var(--bg-surface); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding-top: 48px; padding-bottom: 56px;" aria-label="Bảng xếp hạng sàn đấu giá">
+      <div class="container container--wide">
+        
+        <div class="section__header" style="text-align: center; justify-content: center; margin-bottom: 32px;">
+          <div class="section__title-wrap" style="text-align: center; max-width: 700px;">
+            <span class="section__eyebrow" style="color: #059669;">LEADERBOARD & ANALYTICS</span>
+            <h2 class="section__title">Bảng Xếp Hạng Sàn Đấu Giá</h2>
+            <p class="section__subtitle">Số liệu thống kê thời gian thực về các phiên đấu giá sôi động nhất, sản phẩm được quan tâm nhiều nhất và những nhà sưu tầm uy tín.</p>
+          </div>
+        </div>
+
+        <!-- 3 Columns Top 5 Leaderboard -->
+        <div class="leaderboard-grid-3" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px;">
+          
+          <!-- TOP 1: NHIỀU LƯỢT TRẢ GIÁ NHẤT -->
+          <div style="background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 22px; box-shadow: var(--shadow-sm);">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+              <div style="width: 32px; height: 32px; border-radius: 6px; background: rgba(245, 158, 11, 0.15); color: #F59E0B; display: flex; align-items: center; justify-content: center;">
+                <svg viewBox="0 0 24 24" style="width: 16px; height: 16px;"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              </div>
+              <div>
+                <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin: 0;">Sôi Động Nhất (Top Bids)</h3>
+                <span style="font-size: 0.7rem; color: var(--text-muted);">Phiên có nhiều lượt đặt giá cạnh tranh</span>
+              </div>
+            </div>
+            <div id="lb-hottest-bids" style="display: flex; flex-direction: column; gap: 10px;">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- TOP 2: ĐƯỢC QUAN TÂM NHIỀU NHẤT (MOST WATCHED) -->
+          <div style="background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 22px; box-shadow: var(--shadow-sm);">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+              <div style="width: 32px; height: 32px; border-radius: 6px; background: rgba(220, 38, 38, 0.12); color: #DC2626; display: flex; align-items: center; justify-content: center;">
+                <svg viewBox="0 0 24 24" style="width: 16px; height: 16px;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              </div>
+              <div>
+                <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin: 0;">Quan Tâm Nhất (Most Watched)</h3>
+                <span style="font-size: 0.7rem; color: var(--text-muted);">Xếp theo số lượt lưu Watchlist & theo dõi</span>
+              </div>
+            </div>
+            <div id="lb-most-watched" style="display: flex; flex-direction: column; gap: 10px;">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+          <!-- TOP 3: NGƯỜI BÁN UY TÍN NHẤT -->
+          <div style="background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 22px; box-shadow: var(--shadow-sm);">
+            <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 16px; padding-bottom: 12px; border-bottom: 1px solid var(--border-color);">
+              <div style="width: 32px; height: 32px; border-radius: 6px; background: rgba(5, 150, 105, 0.15); color: #059669; display: flex; align-items: center; justify-content: center;">
+                <svg viewBox="0 0 24 24" style="width: 16px; height: 16px;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              </div>
+              <div>
+                <h3 style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin: 0;">Chủ Sàn Uy Tín (Top Sellers)</h3>
+                <span style="font-size: 0.7rem; color: var(--text-muted);">Đánh giá 5 sao & 100% kiểm định đạt chuẩn</span>
+              </div>
+            </div>
+            <div id="lb-top-sellers" style="display: flex; flex-direction: column; gap: 10px;">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </section>
+
+    <!-- =======================================================================
+         6. TIÊU CHUẨN BẢO CHỨNG 4 BƯỚC NGHIÊM NGẶT
+         ======================================================================= -->
+    <section class="section" style="padding-top: 48px; padding-bottom: 48px;" aria-label="Quy trình bảo chứng">
+      <div class="container container--wide">
+        <div class="section__header" style="text-align: center; justify-content: center;">
+          <div class="section__title-wrap" style="text-align: center; max-width: 680px;">
+            <span class="section__eyebrow">TIÊU CHUẨN THẨM ĐỊNH</span>
+            <h2 class="section__title">Quy Chuẩn Bảo Chứng 4 Bước Nghiêm Ngặt</h2>
+            <p class="section__subtitle">Mọi giao dịch trên sàn Aurelia đều được bảo chứng bởi các định chế giám định và bảo hiểm quốc tế.</p>
+          </div>
+        </div>
+
+        <div class="metric-grid-responsive" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 22px; box-shadow: var(--shadow-card);">
+            <div class="font-mono" style="font-size: 1.4rem; font-weight: 800; color: var(--accent-emerald); margin-bottom: 10px;">01</div>
+            <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">Thẩm Định Độc Lập</h3>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+              Vật phẩm được kiểm định thực tế bởi các cơ quan chuyên môn quốc tế (Sotheby's Geneva Bureau, Ferrari Classiche, Geneva Watch Registry).
+            </p>
+          </div>
+
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 22px; box-shadow: var(--shadow-card);">
+            <div class="font-mono" style="font-size: 1.4rem; font-weight: 800; color: var(--accent-emerald); margin-bottom: 10px;">02</div>
+            <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">Ký Quỹ Escrow 15%</h3>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+              Người tham gia nộp tiền ký quỹ bảo đảm 15% để cấp Thẻ Đấu Giá (#Paddle). Tiền cọc được khóa an toàn và hoàn trả 100% nếu không trúng phiên.
+            </p>
+          </div>
+
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 22px; box-shadow: var(--shadow-card);">
+            <div class="font-mono" style="font-size: 1.4rem; font-weight: 800; color: var(--accent-emerald); margin-bottom: 10px;">03</div>
+            <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">Đấu Giá Minh Bạch</h3>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+              Khớp lệnh thời gian thực độ trễ thấp, minh bạch thông tin Thẻ Đấu Giá (#Paddle) và số tiền. Thuật toán Anti-Sniping ngăn chặn mọi thao túng phút chót.
+            </p>
+          </div>
+
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 22px; box-shadow: var(--shadow-card);">
+            <div class="font-mono" style="font-size: 1.4rem; font-weight: 800; color: var(--accent-emerald); margin-bottom: 10px;">04</div>
+            <h3 style="font-size: 1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">Bàn Giao & Bảo Hiểm</h3>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; margin: 0;">
+              Hợp đồng mua bán chính thức, thủ tục chuyển giao quyền sở hữu minh bạch cùng chính sách bảo hiểm lưu ký Lloyds $50M toàn cầu.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Site Footer Root -->
+  <div id="site-footer-root"></div>
+
+  <!-- Modals Root -->
+  <div id="modals-root"></div>
+
+  <!-- Core Scripts -->
+  <script src="js/app-core.js"></script>
+  <script src="components/header.js"></script>
+  <script src="components/footer.js"></script>
+  <script src="components/modals.js"></script>
+
+  <!-- Page Logic: Slider, Filtering, Leaderboard & Realtime Clock -->
+  <script>
+    (function () {
+      var store = window.AureliaApp || window.AuctionStore;
+      if (!store) return;
+
+      // =======================================================================
+      // HERO BANNER SLIDER LOGIC
+      // =======================================================================
+      var currentSlide = 0;
+      var totalSlides = 3;
+      var slideInterval = null;
+
+      window.goHeroSlide = function(idx) {
+        currentSlide = (idx + totalSlides) % totalSlides;
+        for (var i = 0; i < totalSlides; i++) {
+          var slide = document.getElementById('hero-slide-' + i);
+          var dot = document.querySelectorAll('.hero-dot')[i];
+          if (slide) slide.classList.toggle('active', i === currentSlide);
+          if (dot) dot.classList.toggle('active', i === currentSlide);
+        }
+      };
+
+      window.nextHeroSlide = function() {
+        window.goHeroSlide(currentSlide + 1);
+      };
+
+      window.prevHeroSlide = function() {
+        window.goHeroSlide(currentSlide - 1);
+      };
+
+      window.toggleHeroWatchlist = function(roomId, btn) {
+        var isAdded = store.toggleWatchlist(roomId);
+        if (btn) {
+          var span = btn.querySelector('span');
+          if (span) span.textContent = isAdded ? 'Đang Theo Dõi' : '+ Lưu Vào Watchlist';
+          btn.style.color = isAdded ? '#DC2626' : '';
+          btn.style.borderColor = isAdded ? '#DC2626' : '';
+        }
+      };
+
+      // Auto ticking clocks in hero slides
+      var heroRemainingSeconds = [2265, 2475, 3080];
+      setInterval(function() {
+        for (var i = 0; i < 3; i++) {
+          if (heroRemainingSeconds[i] > 0) heroRemainingSeconds[i]--;
+          var m = Math.floor(heroRemainingSeconds[i] / 60);
+          var s = heroRemainingSeconds[i] % 60;
+          var str = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
+          var el = document.getElementById('hero-clock-' + i);
+          if (el) el.textContent = str;
+        }
+      }, 1000);
+
+      // =======================================================================
+      // MULTI-TIER FILTERING & SEARCH LOGIC
+      // =======================================================================
+      window.applyHomeFilters = function() {
+        var searchVal = (document.getElementById('home-search-input').value || '').toLowerCase().trim();
+        var priceVal = document.getElementById('filter-price-range').value;
+        var catVal = document.getElementById('filter-category').value;
+        var statusVal = document.getElementById('filter-status').value;
+        var sortVal = document.getElementById('filter-sort').value;
+
+        var allRooms = store.getRooms();
+        var filtered = allRooms.filter(function(r) {
+          // Exclude rejected rooms from public home grid
+          if (r.status === 'REJECTED') return false;
+
+          // 1. Search text
+          if (searchVal) {
+            var matchText = (r.title + ' ' + (r.roomPin || '') + ' ' + (r.categoryName || '') + ' ' + (r.shortDesc || '')).toLowerCase();
+            if (matchText.indexOf(searchVal) === -1) return false;
+          }
+
+          // 2. Price filter
+          var price = r.currentPrice || r.startPrice || 0;
+          if (priceVal === 'under500m' && price >= 500000000) return false;
+          if (priceVal === '500m-2b' && (price < 500000000 || price > 2000000000)) return false;
+          if (priceVal === 'above2b' && price <= 2000000000) return false;
+
+          // 3. Category
+          if (catVal !== 'all' && r.category !== catVal) return false;
+
+          // 4. Status
+          if (statusVal !== 'all') {
+            if (statusVal === 'LIVE' && r.status !== 'LIVE') return false;
+            if (statusVal === 'WAITING' && r.status !== 'WAITING' && r.status !== 'PENDING_APPROVAL') return false;
+            if (statusVal === 'ENDED' && r.status !== 'ENDED') return false;
+          }
+
+          return true;
+        });
+
+        // Sort
+        if (sortVal === 'price-asc') {
+          filtered.sort(function(a, b) { return (a.currentPrice || a.startPrice) - (b.currentPrice || b.startPrice); });
+        } else if (sortVal === 'price-desc') {
+          filtered.sort(function(a, b) { return (b.currentPrice || b.startPrice) - (a.currentPrice || a.startPrice); });
+        } else if (sortVal === 'popular') {
+          filtered.sort(function(a, b) { return (b.participantsCount || 0) - (a.participantsCount || 0); });
+        }
+
+        renderFilteredGrid(filtered);
+      };
+
+      window.resetHomeFilters = function() {
+        document.getElementById('home-search-input').value = '';
+        document.getElementById('filter-price-range').value = 'all';
+        document.getElementById('filter-category').value = 'all';
+        document.getElementById('filter-status').value = 'all';
+        document.getElementById('filter-sort').value = 'default';
+        window.applyHomeFilters();
+      };
+
+      function renderFilteredGrid(rooms) {
+        var grid = document.getElementById('home-filter-results-grid');
+        var empty = document.getElementById('home-filter-empty-state');
+        if (!grid) return;
+
+        if (rooms.length === 0) {
+          grid.innerHTML = '';
+          if (empty) empty.style.display = 'block';
+          return;
+        }
+        if (empty) empty.style.display = 'none';
+
+        var watchlist = store.getWatchlist();
+
+        grid.innerHTML = rooms.map(function(r) {
+          var isHearted = watchlist.indexOf(r.roomId) > -1 || watchlist.indexOf(r.roomPin) > -1;
+          var statusBadge = '';
+          if (r.status === 'LIVE') {
+            statusBadge = '<span class="badge badge--live" style="font-size:0.68rem;">LIVE &bull; ĐANG DIỄN RA</span>';
+          } else if (r.status === 'WAITING' || r.status === 'PENDING_APPROVAL') {
+            statusBadge = '<span class="badge badge--waiting" style="font-size:0.68rem;">PHÒNG CHỜ &bull; SẮP MỞ</span>';
+          } else {
+            statusBadge = '<span class="badge" style="background:#F1F5F9;color:#64748B;font-size:0.68rem;">ĐÃ KẾT THÚC</span>';
+          }
+
+          var price = r.currentPrice || r.startPrice;
+          var img = (r.images && r.images[0]) ? r.images[0] : 'assets/images/patek_nautilus_gold.jpg';
+
+          return `
+            <div class="card" style="position:relative;overflow:hidden;background:var(--bg-surface);border:1px solid var(--border-color);border-radius:var(--radius-md);display:flex;flex-direction:column;box-shadow:var(--shadow-card);transition:transform 0.2s ease;">
+              
+              <!-- Watchlist Heart Button -->
+              <button type="button" class="lot-card-heart-btn ${isHearted ? 'active' : ''}" onclick="window.handleCardHeart('${r.roomId}', this)" title="Lưu vào danh sách theo dõi">
+                <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              </button>
+
+              <!-- Image with 210px locked height -->
+              <div style="height:210px;width:100%;overflow:hidden;position:relative;background:#0F172A;">
+                <img src="${img}" alt="${r.title}" style="width:100%;height:100%;object-fit:cover;" loading="lazy"/>
+                <div style="position:absolute;bottom:10px;left:10px;z-index:2;">
+                  ${statusBadge}
+                </div>
+              </div>
+
+              <!-- Body -->
+              <div style="padding:16px 18px;display:flex;flex-direction:column;flex:1;justify-content:space-between;">
+                <div>
+                  <div style="font-size:0.72rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.05em;margin-bottom:4px;">
+                    LOT #${r.lotNumber || '---'} &bull; PIN #${r.roomPin || r.roomId}
+                  </div>
+                  <h4 style="font-size:0.95rem;font-weight:700;color:var(--text-primary);margin:0 0 6px 0;line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;">
+                    ${r.title}
+                  </h4>
+                  <div style="font-size:0.75rem;color:var(--text-secondary);margin-bottom:12px;">
+                    ${r.categoryName || 'Tài sản giám định'}
+                  </div>
+                </div>
+
+                <div>
+                  <div style="display:flex;justify-content:space-between;align-items:flex-end;padding-top:10px;border-top:1px solid var(--border-color);margin-bottom:12px;">
+                    <div>
+                      <div style="font-size:0.68rem;text-transform:uppercase;color:var(--text-muted);font-weight:600;">Giá Hiện Tại</div>
+                      <div class="font-mono text-emerald price-val" style="font-size:1.15rem;font-weight:800;">${store.formatCurrency(price)}</div>
+                    </div>
+                    <div style="text-align:right;">
+                      <div style="font-size:0.68rem;text-transform:uppercase;color:var(--text-muted);font-weight:600;">Quan Tâm</div>
+                      <div class="font-mono price-val" style="font-size:0.85rem;color:var(--text-primary);font-weight:700;">${r.participantsCount || 8} thành viên</div>
+                    </div>
+                  </div>
+
+                  <a href="live-room.html?room=${r.roomPin || r.roomId}" class="btn btn-primary" style="width:100%;font-size:0.82rem;padding:9px;font-weight:700;display:flex;justify-content:center;gap:6px;">
+                    <span>Vào Phòng Đấu Giá</span>
+                    <svg viewBox="0 0 24 24" style="width:14px;height:14px;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+                  </a>
+                </div>
+              </div>
+
+            </div>
+          `;
+        }).join('');
+      }
+
+      window.handleCardHeart = function(roomId, btn) {
+        var added = store.toggleWatchlist(roomId);
+        if (btn) btn.classList.toggle('active', added);
+      };
+
+      // =======================================================================
+      // UPCOMING LOTS SECTION
+      // =======================================================================
+      function renderUpcomingSection() {
+        var grid = document.getElementById('home-upcoming-grid');
+        if (!grid) return;
+        var rooms = store.getRooms().filter(function(r) { return r.status === 'WAITING' || r.status === 'PENDING_APPROVAL'; });
+        if (rooms.length === 0) {
+          grid.innerHTML = '<div style="color:var(--text-muted);font-size:0.85rem;padding:32px;text-align:center;grid-column:1/-1;background:var(--bg-surface);border:1px dashed var(--border-color);border-radius:var(--radius-md);">Hiện chưa có phiên mới nào ở phòng chờ. <a href="seller-studio.html" style="color:#059669;font-weight:700;">Tạo phiên mới ngay &rarr;</a></div>';
+          return;
+        }
+
+        grid.innerHTML = rooms.map(function(r) {
+          var img = (r.images && r.images[0]) ? r.images[0] : 'assets/images/patek_nautilus_gold.jpg';
+          // Sanitize image if it has incorrect omega watch
+          if (img.includes('omega') || (!img.startsWith('http') && !img.startsWith('assets/'))) {
+            img = 'assets/images/patek_nautilus_gold.jpg';
+          }
+          var isWatched = store.isWatched ? store.isWatched(r.roomId) : false;
+          return `
+            <div class="upcoming-card" style="background:var(--bg-surface);border:1px solid var(--border-color);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-card);display:flex;flex-direction:column;justify-content:space-between;transition:transform 0.2s ease, box-shadow 0.2s ease;">
+              <div style="height:190px;position:relative;background:#0B0F17;overflow:hidden;">
+                <img src="${img}" alt="${r.title}" style="width:100%;height:100%;object-fit:cover;transition:transform 0.3s ease;" loading="lazy"/>
+                <div style="position:absolute;top:12px;left:12px;display:flex;gap:6px;z-index:2;">
+                  <span class="badge badge--waiting" style="font-size:0.68rem;padding:4px 8px;font-weight:700;">SẮP MỞ SÀN</span>
+                </div>
+                <div style="position:absolute;top:12px;right:12px;background:rgba(15,23,42,0.85);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,0.2);color:#FFFFFF;padding:4px 10px;border-radius:4px;font-size:0.72rem;font-family:var(--font-mono);font-weight:800;z-index:2;">
+                  PIN #${r.roomPin || r.roomId}
+                </div>
+              </div>
+              <div style="padding:18px 20px;display:flex;flex-direction:column;gap:12px;flex:1;justify-content:space-between;">
+                <div>
+                  <div style="font-size:0.72rem;color:var(--text-muted);margin-bottom:4px;text-transform:uppercase;letter-spacing:0.06em;font-weight:700;">
+                    ${r.categoryName || 'Tài sản giám định'}
+                  </div>
+                  <h4 style="font-size:0.98rem;font-weight:700;color:var(--text-primary);margin:0 0 10px 0;line-height:1.4;">
+                    ${r.title}
+                  </h4>
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;background:var(--bg-page);border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:10px 14px;">
+                    <div>
+                      <div style="font-size:0.68rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;margin-bottom:2px;">Giá Khởi Điểm</div>
+                      <div class="font-mono text-emerald price-val" style="font-weight:800;font-size:0.95rem;">${store.formatCurrency(r.startPrice)}</div>
+                    </div>
+                    <div style="text-align:right;border-left:1px solid var(--border-color);padding-left:10px;">
+                      <div style="font-size:0.68rem;color:var(--text-muted);font-weight:700;text-transform:uppercase;margin-bottom:2px;">Ký Quỹ (15%)</div>
+                      <div class="font-mono price-val" style="font-weight:700;font-size:0.9rem;color:var(--text-secondary);">${store.formatCurrency(r.depositAmount || Math.round(r.startPrice * 0.15))}</div>
+                    </div>
+                  </div>
+                </div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:4px;">
+                  <a href="live-room.html?room=${r.roomPin || r.roomId}" class="btn btn-outline" style="font-size:0.78rem;padding:9px 12px;text-align:center;justify-content:center;font-weight:600;">
+                    Xem Trước Hồ Sơ
+                  </a>
+                  <button type="button" class="btn btn-primary" onclick="window.remindUpcoming('${r.roomId}', this)" style="font-size:0.78rem;padding:9px 12px;text-align:center;justify-content:center;font-weight:600;">
+                    ${isWatched ? '✓ Đã Lưu' : '+ Nhắc Nhở'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
+      }
+
+      window.remindUpcoming = function(roomId, btn) {
+        var isAdded = store.toggleWatchlist(roomId);
+        if (btn) {
+          btn.textContent = isAdded ? '✓ Đã Lưu' : '+ Nhắc Nhở';
+        }
+        if (window.showToast) {
+          window.showToast(
+            isAdded ? 'Đã Bật Nhắc Nhở' : 'Đã Tắt Nhắc Nhở',
+            isAdded ? 'Hệ thống sẽ gửi thông báo khi phiên khai mạc và thêm vào Watchlist.' : 'Đã xóa phiên khỏi danh sách theo dõi.',
+            isAdded ? 'success' : 'info',
+            2500
+          );
+        }
+        renderUpcomingSection();
+      };
+
+      // =======================================================================
+      // LEADERBOARD 3 COLUMNS TOP 5
+      // =======================================================================
+      function renderLeaderboards() {
+        var rooms = store.getRooms();
+
+        // 1. Top Bids (Hottest)
+        var hotLots = rooms.slice().sort(function(a, b) {
+          return (b.participantsCount || 0) - (a.participantsCount || 0);
+        }).slice(0, 5);
+
+        var hotEl = document.getElementById('lb-hottest-bids');
+        if (hotEl) {
+          hotEl.innerHTML = hotLots.map(function(r, idx) {
+            var rankCls = idx === 0 ? 'rank-pill--1' : (idx === 1 ? 'rank-pill--2' : (idx === 2 ? 'rank-pill--3' : 'rank-pill--n'));
+            return `
+              <a href="live-room.html?room=${r.roomPin || r.roomId}" style="display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:6px;text-decoration:none;background:var(--bg-surface);border:1px solid var(--border-color);transition:transform 0.15s ease;">
+                <span class="rank-pill ${rankCls}">#${idx + 1}</span>
+                <img src="${(r.images && r.images[0]) || 'assets/images/patek_nautilus_gold.jpg'}" style="width:36px;height:36px;border-radius:4px;object-fit:cover;" alt=""/>
+                <div style="flex:1;overflow:hidden;">
+                  <div style="font-size:0.78rem;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${r.title}</div>
+                  <div style="font-size:0.7rem;color:var(--text-muted);"><strong style="color:#059669;font-family:var(--font-mono);">${store.formatCurrency(r.currentPrice || r.startPrice)}</strong> &bull; ${r.participantsCount || 5} lượt trả giá</div>
+                </div>
+              </a>
+            `;
+          }).join('');
+        }
+
+        // 2. Most Watched (Based on Watchlist + views)
+        var watchedLots = rooms.slice().sort(function(a, b) {
+          return (b.startPrice || 0) - (a.startPrice || 0);
+        }).slice(0, 5);
+
+        var watchEl = document.getElementById('lb-most-watched');
+        if (watchEl) {
+          watchEl.innerHTML = watchedLots.map(function(r, idx) {
+            var rankCls = idx === 0 ? 'rank-pill--1' : (idx === 1 ? 'rank-pill--2' : (idx === 2 ? 'rank-pill--3' : 'rank-pill--n'));
+            var watches = 48 - (idx * 7);
+            return `
+              <a href="live-room.html?room=${r.roomPin || r.roomId}" style="display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:6px;text-decoration:none;background:var(--bg-surface);border:1px solid var(--border-color);transition:transform 0.15s ease;">
+                <span class="rank-pill ${rankCls}">#${idx + 1}</span>
+                <img src="${(r.images && r.images[0]) || 'assets/images/patek_nautilus_gold.jpg'}" style="width:36px;height:36px;border-radius:4px;object-fit:cover;" alt=""/>
+                <div style="flex:1;overflow:hidden;">
+                  <div style="font-size:0.78rem;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${r.title}</div>
+                  <div style="font-size:0.7rem;color:#DC2626;font-weight:600;">${watches} lượt theo dõi Watchlist</div>
+                </div>
+              </a>
+            `;
+          }).join('');
+        }
+
+        // 3. Top Rated Sellers
+        var topSellers = [
+          { name: 'Phạm Ngọc Thắng', paddle: '#PD-6651', rating: '5.0 ★', deals: '18 phiên thành công', cert: 'Geneva Certified 100%' },
+          { name: 'Sotheby\'s Horology Bureau', paddle: '#PD-GENEVA', rating: '4.9 ★', deals: '142 phiên quốc tế', cert: 'Bảo chứng toàn cầu' },
+          { name: 'Trần Hoàng Bảo', paddle: '#PD-3390', rating: '4.9 ★', deals: '12 phiên nghệ thuật', cert: 'Art Connoisseur' },
+          { name: 'Porsche Classic Center', paddle: '#PD-STUTT', rating: '4.8 ★', deals: '9 siêu xe khớp lệnh', cert: 'Red Book Verified' },
+          { name: 'Phan Minh Tân', paddle: '#PD-2048', rating: '4.8 ★', deals: '8 đồng hồ Patek/AP', cert: 'Geneva Seal Member' }
+        ];
+
+        var sellEl = document.getElementById('lb-top-sellers');
+        if (sellEl) {
+          sellEl.innerHTML = topSellers.map(function(s, idx) {
+            var rankCls = idx === 0 ? 'rank-pill--1' : (idx === 1 ? 'rank-pill--2' : (idx === 2 ? 'rank-pill--3' : 'rank-pill--n'));
+            return `
+              <div style="display:flex;align-items:center;gap:12px;padding:8px 10px;border-radius:6px;background:var(--bg-surface);border:1px solid var(--border-color);">
+                <span class="rank-pill ${rankCls}">#${idx + 1}</span>
+                <div style="width:36px;height:36px;border-radius:50%;background:#059669;color:#FFF;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:0.8rem;flex-shrink:0;">
+                  ${s.name.charAt(0)}
+                </div>
+                <div style="flex:1;">
+                  <div style="display:flex;justify-content:space-between;align-items:center;">
+                    <strong style="font-size:0.78rem;color:var(--text-primary);">${s.name}</strong>
+                    <span style="font-size:0.7rem;color:#F59E0B;font-weight:700;">${s.rating}</span>
+                  </div>
+                  <div style="font-size:0.68rem;color:var(--text-muted);">${s.deals} &bull; <span style="color:#059669;">${s.cert}</span></div>
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      // Initial execution
+      window.applyHomeFilters();
+      renderUpcomingSection();
+      renderLeaderboards();
+
+      // Listen for realtime updates
+      if (store && typeof store.subscribe === 'function') {
+        store.subscribe(function() {
+          window.applyHomeFilters();
+          renderUpcomingSection();
+          renderLeaderboards();
+        });
+      }
+
+    })();
+  </script>
+</body>
+</html>

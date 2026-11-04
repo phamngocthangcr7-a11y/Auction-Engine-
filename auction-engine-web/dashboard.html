@@ -1,0 +1,944 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Không Gian Cá Nhân - Trung tâm quản lý hồ sơ nhà sưu tầm, ví ký quỹ Escrow, lịch sử đặt cọc, watchlist và kho tài sản cá nhân.">
+  <title>Không Gian Cá Nhân • AURELIA</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Core CSS Design System -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <style>
+    .dash-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .dash-sidebar {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: var(--shadow-card);
+      position: sticky;
+      top: 86px;
+    }
+    .dash-menu-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      font-weight: 600;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      margin-bottom: 2px;
+    }
+    .dash-menu-item:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+    .dash-menu-item.active {
+      background: var(--accent-navy);
+      color: #FFFFFF !important;
+    }
+    .dash-menu-item.active svg {
+      stroke: #FFFFFF !important;
+    }
+    .dash-menu-item svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 1.75;
+      fill: none;
+      flex-shrink: 0;
+    }
+    .dash-menu-badge {
+      background: rgba(255,255,255,0.2);
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 999px;
+    }
+    .dash-menu-item:not(.active) .dash-menu-badge {
+      background: var(--bg-page);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+    }
+    .dash-panel {
+      display: none;
+    }
+    .dash-panel.active {
+      display: block;
+    }
+    @media (max-width: 900px) {
+      .dash-layout {
+        grid-template-columns: 1fr;
+      }
+      .dash-sidebar {
+        position: static;
+        overflow-x: auto;
+        display: flex;
+        gap: 6px;
+        padding: 10px;
+      }
+      .dash-menu-item {
+        white-space: nowrap;
+        width: auto;
+        padding: 8px 12px;
+        font-size: 0.78rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site Header Root -->
+  <div id="site-header-root"></div>
+
+  <!-- MAIN PERSONAL HUB -->
+  <main style="padding-top: 24px; padding-bottom: 64px;">
+    <div class="container container--wide">
+      
+      <!-- User Profile Header Banner -->
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 22px 28px; margin-bottom: 24px; box-shadow: var(--shadow-card); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
+        <div style="display: flex; align-items: center; gap: 18px;">
+          <img 
+            id="dash-user-avatar"
+            src="assets/images/user_thang.jpg" 
+            alt="Phạm Ngọc Thắng" 
+            style="width: 68px; height: 68px; border-radius: 50%; border: 2px solid #059669; object-fit: cover; box-shadow: 0 4px 12px rgba(5,150,105,0.25);"
+            onerror="this.onerror=null; this.src='assets/images/user_avatar.jpg';"
+          />
+          <div>
+            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+              <h1 id="dash-user-name" style="font-family: var(--font-serif); font-size: 1.55rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+                Phạm Ngọc Thắng
+              </h1>
+              <span id="dash-user-role-badge" class="badge badge--live" style="font-size: 0.7rem; font-weight: 700; background: #059669; color: #FFFFFF; display: inline-flex; align-items: center; gap: 4px;">
+                <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; stroke: #FFF; fill: none; stroke-width: 2.2;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                QUẢN TRỊ VIÊN HỆ THỐNG (SUPER ADMIN) &bull; VIP COLLECTOR
+              </span>
+            </div>
+            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 4px 0 0 0;">
+              Thẻ Đấu Giá: <strong class="font-mono text-emerald" id="dash-user-paddle">#PD-6651</strong> &bull; 
+              MSSV: <strong class="font-mono" id="dash-user-mssv">6651071071</strong> &bull; 
+              Bảo chứng hạn mức tín nhiệm: <span class="font-mono price-val text-emerald">50.000.000.000 ₫</span>
+            </p>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+          <a href="admin.html" class="btn btn-outline" style="font-size: 0.82rem; padding: 9px 14px; border-color: #059669; color: #059669; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;" title="Chuyển sang bảng điều khiển quản trị sàn đấu giá">
+            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2;"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+            <span>Vào Quản Trị (Admin Portal)</span>
+          </a>
+          <button type="button" class="btn btn-primary" onclick="window.openWalletModal()" style="font-size: 0.82rem; padding: 9px 16px;">
+            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+            <span>Nạp Thêm Vào Ví</span>
+          </button>
+          <button type="button" class="btn btn-outline" onclick="window.openWithdrawModal()" style="font-size: 0.82rem; padding: 9px 16px;">
+            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px;"><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+            <span>Rút Về Ngân Hàng</span>
+          </button>
+          <button type="button" class="btn btn-outline" onclick="window.openAuthModal()" style="font-size: 0.82rem; padding: 9px 14px;">
+            <span>Đổi Tài Khoản</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- 9 TABS CONTENT LAYOUT: SIDEBAR + MAIN -->
+      <div class="dash-layout">
+        
+        <!-- SIDEBAR: 9 MANDATORY TABS -->
+        <aside class="dash-sidebar" aria-label="Menu chức năng cá nhân">
+          <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); padding: 4px 10px 8px 10px;">
+            Hồ Sơ & Tài Chính
+          </div>
+          <button type="button" class="dash-menu-item active" data-tab="tab-profile">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+              <span>1. Hồ Sơ Cá Nhân</span>
+            </div>
+          </button>
+          <button type="button" class="dash-menu-item" data-tab="tab-wallet">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+              <span>2. Quản Lý Ví Escrow</span>
+            </div>
+          </button>
+          <button type="button" class="dash-menu-item" data-tab="tab-topup-history">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+              <span>3. Lịch Sử Nạp Tiền</span>
+            </div>
+          </button>
+          <button type="button" class="dash-menu-item" data-tab="tab-escrow-history">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+              <span>4. Đặt Cọc & Hoàn Tiền</span>
+            </div>
+            <span class="dash-menu-badge" id="badge-escrow-count">1</span>
+          </button>
+
+          <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); padding: 14px 10px 8px 10px;">
+            Đấu Giá & Tài Sản
+          </div>
+          <button type="button" class="dash-menu-item" data-tab="tab-active-auctions">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              <span>5. Phiên Đang Tham Gia</span>
+            </div>
+            <span class="dash-menu-badge" id="badge-active-count">2</span>
+          </button>
+          <button type="button" class="dash-menu-item" data-tab="tab-watchlist">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24" style="stroke: #DC2626;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              <span>6. Watchlist (Theo Dõi)</span>
+            </div>
+            <span class="dash-menu-badge" id="badge-watchlist-count">2</span>
+          </button>
+          <button type="button" class="dash-menu-item" data-tab="tab-won-lots">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24" style="stroke: #F59E0B;"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+              <span>7. Các Phiên Đã Thắng</span>
+            </div>
+            <span class="dash-menu-badge" id="badge-won-count">1</span>
+          </button>
+          <button type="button" class="dash-menu-item" data-tab="tab-vault">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+              <span>8. Kho Đồ Cá Nhân (Vault)</span>
+            </div>
+          </button>
+          <button type="button" class="dash-menu-item" data-tab="tab-buy-sell-history">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              <span>9. Lịch Sử Mua & Bán</span>
+            </div>
+          </button>
+        </aside>
+
+                <!-- MAIN CONTENT: 9 PANELS -->
+        <div class="dash-content-area">
+          
+          <!-- ===================================================================
+               PANEL 1: HỒ SƠ CÁ NHÂN (PROFILE)
+               =================================================================== -->
+          <div class="dash-panel active" id="tab-profile">
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 28px; box-shadow: var(--shadow-card);">
+              <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 20px;">
+                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #059669; font-weight: 700; margin-bottom: 4px;">Hồ Sơ & Danh Tính Thụy Sĩ</div>
+                <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0 0 4px 0;">Hồ Sơ Thành Viên & Chứng Thực KYC</h3>
+                <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">Thông tin pháp lý được lưu ký bảo mật vĩnh viễn theo quy chuẩn sàn đấu giá Aurelia Geneva.</p>
+              </div>
+
+              <form id="form-user-profile" onsubmit="window.saveUserProfile(event)">
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                  <div class="form-group">
+                    <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 6px;">Họ và Tên</label>
+                    <input type="text" id="prof-input-name" class="form-control" value="Phạm Ngọc Thắng" required style="width: 100%; padding: 9px 12px; font-size: 0.88rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-page); color: var(--text-primary);" />
+                  </div>
+                  <div class="form-group">
+                    <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 6px;">Mã Số Sinh Viên (MSSV)</label>
+                    <input type="text" id="prof-input-mssv" class="form-control font-mono" value="6651071071" readonly style="width: 100%; padding: 9px 12px; font-size: 0.88rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-muted);" />
+                  </div>
+                </div>
+
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                  <div class="form-group">
+                    <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 6px;">Email Liên Hệ</label>
+                    <input type="email" id="prof-input-email" class="form-control" value="thang.pn@aurelia.ch" required style="width: 100%; padding: 9px 12px; font-size: 0.88rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-page); color: var(--text-primary);" />
+                  </div>
+                  <div class="form-group">
+                    <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 6px;">Số Điện Thoại</label>
+                    <input type="tel" id="prof-input-phone" class="form-control font-mono" value="0908 665 107" required style="width: 100%; padding: 9px 12px; font-size: 0.88rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-page); color: var(--text-primary);" />
+                  </div>
+                </div>
+
+                <div class="form-group" style="margin-bottom: 20px;">
+                  <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 6px;">Địa Chỉ Bàn Giao Tài Sản & Ký Hợp Đồng</label>
+                  <input type="text" id="prof-input-address" class="form-control" value="Tòa nhà Landmark 81, Phường 22, Quận Bình Thạnh, TP. Hồ Chí Minh" style="width: 100%; padding: 9px 12px; font-size: 0.88rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-page); color: var(--text-primary);" />
+                </div>
+
+                <div style="display: flex; justify-content: flex-end; gap: 10px; border-top: 1px solid var(--border-color); padding-top: 16px;">
+                  <button type="submit" class="btn btn-primary" style="font-size: 0.84rem; padding: 8px 20px;">
+                    Lưu Thay Đổi Hồ Sơ
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+
+          <!-- ===================================================================
+               PANEL 2: QUẢN LÝ VÍ ESCROW
+               =================================================================== -->
+          <div class="dash-panel" id="tab-wallet">
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 28px; box-shadow: var(--shadow-card); margin-bottom: 24px;">
+              <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); font-weight: 700; margin-bottom: 4px;">
+                TÀI KHOẢN VÍ KÝ QUỸ LƯU KÝ (ESCROW CUSTODY ACCOUNT)
+              </div>
+              <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0 0 16px 0;">Tổng Quan Tài Sản & Hạn Mức Tín Nhiệm</h3>
+
+              <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 24px;">
+                <div style="background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 16px;">
+                  <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 4px;">Tổng Tài Sản Ví</div>
+                  <div class="font-mono price-val" id="wallet-val-total" style="font-size: 1.45rem; font-weight: 800; color: var(--text-primary);">25.360.000.000 ₫</div>
+                  <div style="font-size: 0.72rem; color: #059669; margin-top: 4px;">Bảo chứng bởi UBS Geneva</div>
+                </div>
+                <div style="background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 16px; border-left: 3px solid #059669;">
+                  <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 4px;">Số Dư Khả Dụng (Đặt Giá)</div>
+                  <div class="font-mono text-emerald price-val" id="wallet-val-available" style="font-size: 1.45rem; font-weight: 800;">25.000.000.000 ₫</div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">Sẵn sàng ký quỹ bất kỳ phiên nào</div>
+                </div>
+                <div style="background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 16px; border-left: 3px solid #D97706;">
+                  <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 4px;">Đang Tạm Khóa Ký Quỹ</div>
+                  <div class="font-mono text-amber price-val" id="wallet-val-locked" style="font-size: 1.45rem; font-weight: 800;">360.000.000 ₫</div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">Tự động hoàn trả khi kết thúc</div>
+                </div>
+              </div>
+
+              <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <button type="button" class="btn btn-primary" onclick="window.openWalletModal()" style="display: inline-flex; align-items: center; gap: 6px;">
+                  <svg viewBox="0 0 24 24" style="width: 15px; height: 15px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                  <span>Nạp Thêm Hạn Mức Vào Ví</span>
+                </button>
+                <button type="button" class="btn btn-outline" onclick="window.openWithdrawModal()" style="display: inline-flex; align-items: center; gap: 6px;">
+                  <svg viewBox="0 0 24 24" style="width: 15px; height: 15px;"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                  <span>Rút Tiền Về Ngân Hàng</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===================================================================
+               PANEL 3: LỊCH SỬ NẠP TIỀN
+               =================================================================== -->
+          <div class="dash-panel" id="tab-topup-history">
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-card);">
+              <div style="padding: 18px 24px; border-bottom: 1px solid var(--border-color);">
+                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #059669; font-weight: 700; margin-bottom: 2px;">Sổ Cái Dòng Tiền</div>
+                <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0;">Lịch Sử Nạp Hạn Mức Ví (Top-up Ledger)</h3>
+              </div>
+              <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.84rem;">
+                  <thead>
+                    <tr style="background: var(--bg-subtle); border-bottom: 1px solid var(--border-color); text-align: left;">
+                      <th style="padding: 12px 18px; font-weight: 700; color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase;">MÃ GIAO DỊCH</th>
+                      <th style="padding: 12px 18px; font-weight: 700; color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase;">PHƯƠNG THỨC</th>
+                      <th style="padding: 12px 18px; font-weight: 700; color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; text-align: right;">SỐ TIỀN</th>
+                      <th style="padding: 12px 18px; font-weight: 700; color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase;">THỜI GIAN</th>
+                      <th style="padding: 12px 18px; font-weight: 700; color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; text-align: center;">TRẠNG THÁI</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dash-topup-tbody">
+                    <!-- Populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===================================================================
+               PANEL 4: ĐẶT CỌC & HOÀN TIỀN
+               =================================================================== -->
+          <div class="dash-panel" id="tab-escrow-history">
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-card);">
+              <div style="padding: 18px 24px; border-bottom: 1px solid var(--border-color);">
+                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #059669; font-weight: 700; margin-bottom: 2px;">Bảo Chứng Escrow 15%</div>
+                <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0;">Lịch Sử Đặt Cọc Ký Quỹ & Hoàn Tiền</h3>
+              </div>
+              <div style="overflow-x: auto;">
+                <table style="width: 100%; border-collapse: collapse; font-size: 0.84rem;">
+                  <thead>
+                    <tr style="background: var(--bg-subtle); border-bottom: 1px solid var(--border-color); text-align: left;">
+                      <th style="padding: 12px 18px; font-weight: 700; color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase;">PHIÊN ĐẤU GIÁ</th>
+                      <th style="padding: 12px 18px; font-weight: 700; color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase;">MÃ PIN</th>
+                      <th style="padding: 12px 18px; font-weight: 700; color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; text-align: right;">SỐ TIỀN CỌC (15%)</th>
+                      <th style="padding: 12px 18px; font-weight: 700; color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; text-align: center;">TRẠNG THÁI ESCROW</th>
+                      <th style="padding: 12px 18px; font-weight: 700; color: var(--text-muted); font-size: 0.72rem; text-transform: uppercase; text-align: right;">THAO TÁC</th>
+                    </tr>
+                  </thead>
+                  <tbody id="dash-escrow-tbody">
+                    <!-- Populated via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===================================================================
+               PANEL 5: CÁC PHIÊN ĐANG THAM GIA
+               =================================================================== -->
+          <div class="dash-panel" id="tab-active-auctions">
+            <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
+              <div>
+                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #059669; font-weight: 700; margin-bottom: 2px;">Đấu Giá Trực Tiếp</div>
+                <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0 0 2px 0;">Các Phiên Bạn Đang Tham Gia Trả Giá</h3>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 0;">Theo dõi trạng thái dẫn đầu hoặc bị vượt giá thời gian thực.</p>
+              </div>
+              <a href="auctions.html" class="btn btn-outline" style="font-size: 0.78rem;">+ Tham Gia Phiên Khác</a>
+            </div>
+            <div id="dash-active-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px;">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <!-- ===================================================================
+               PANEL 6: DANH SÁCH THEO DÕI (WATCHLIST)
+               =================================================================== -->
+          <div class="dash-panel" id="tab-watchlist">
+            <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
+              <div>
+                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #DC2626; font-weight: 700; margin-bottom: 2px;">Danh Mục Ưa Thích</div>
+                <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0 0 2px 0;">Danh Sách Theo Dõi (Watchlist Cá Nhân)</h3>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 0;">Các phiên đấu giá bạn đã bấm biểu tượng trái tim để nhận thông báo biến động giá.</p>
+              </div>
+              <a href="auctions.html" class="btn btn-outline" style="font-size: 0.78rem;">Khám Phá Sàn Đấu Giá</a>
+            </div>
+            
+            <div id="dash-watchlist-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 20px;">
+              <!-- Populated via JS -->
+            </div>
+            
+            <div id="dash-watchlist-empty" style="display: none; background: var(--bg-surface); border: 1px dashed var(--border-color); border-radius: var(--radius-md); padding: 48px 24px; text-align: center;">
+              <svg style="width: 44px; height: 44px; color: #DC2626; margin: 0 auto 12px auto; display: block;" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+              <h3 style="font-size: 1.1rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">Watchlist Của Bạn Đang Trống</h3>
+              <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: 18px; max-width: 460px; margin-left: auto; margin-right: auto;">Hãy nhấn biểu tượng trái tim trên các phiên đấu giá ở Trang Chủ hoặc trang Khám Phá để lưu lại theo dõi.</p>
+              <a href="auctions.html" class="btn btn-primary" style="font-size: 0.84rem;">Khám Phá Các Phiên Đang Mở</a>
+            </div>
+          </div>
+
+          <!-- ===================================================================
+               PANEL 7: CÁC PHIÊN ĐÃ THẮNG
+               =================================================================== -->
+          <div class="dash-panel" id="tab-won-lots">
+            <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 14px; margin-bottom: 20px;">
+              <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #059669; font-weight: 700; margin-bottom: 2px;">Chứng Thực Quyền Sở Hữu</div>
+              <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0 0 2px 0;">Các Phiên Đấu Giá Bạn Đã Thắng Thầu</h3>
+              <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 0;">Hoàn tất thanh toán số tiền còn lại và in Chứng Thư Bán Hàng Thụy Sĩ Geneva Seal chính thức.</p>
+            </div>
+            <div id="dash-won-grid" style="display: flex; flex-direction: column; gap: 16px;">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <!-- ===================================================================
+               PANEL 8: KHO ĐỒ CÁ NHÂN (VAULT / INVENTORY)
+               =================================================================== -->
+          <div class="dash-panel" id="tab-vault">
+            <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
+              <div>
+                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #059669; font-weight: 700; margin-bottom: 2px;">Lưu Ký Tài Sản Quý Giá</div>
+                <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0 0 2px 0;">Kho Đồ Cá Nhân & Bộ Sưu Tập (Personal Vault)</h3>
+                <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 0;">Các kiệt tác bạn sở hữu hợp pháp. Bấm 1-click để đưa lên sàn bán lại (Resell) bất kỳ lúc nào.</p>
+              </div>
+              <a href="seller-studio.html" class="btn btn-primary" style="font-size: 0.78rem;">+ Ký Gửi Vật Phẩm Mới</a>
+            </div>
+            <div id="dash-vault-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); gap: 20px;">
+              <!-- Populated via JS -->
+            </div>
+          </div>
+
+          <!-- ===================================================================
+               PANEL 9: LỊCH SỬ MUA VÀ BÁN
+               =================================================================== -->
+          <div class="dash-panel" id="tab-buy-sell-history">
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px; box-shadow: var(--shadow-card);">
+              <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
+                <div>
+                  <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #059669; font-weight: 700; margin-bottom: 2px;">Thẩm Định & Niêm Yết</div>
+                  <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0;">Các Phiên Do Bạn Đăng Bán</h3>
+                </div>
+                <a href="seller-studio.html" class="btn btn-primary" style="font-size: 0.78rem;">+ Đăng Bán Phiên Mới</a>
+              </div>
+              <div id="dash-listed-lots-list" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Populated via JS -->
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </main><!-- Withdraw Modal -->
+  <div class="modal" id="modal-withdraw" aria-hidden="true" role="dialog">
+    <div class="modal__backdrop" onclick="window.closeModal('modal-withdraw')"></div>
+    <div class="modal__container" style="max-width: 440px;">
+      <div class="modal__header">
+        <h3 class="modal__title">Rút Tiền Khả Dụng Về Ngân Hàng</h3>
+        <button class="modal__close" onclick="window.closeModal('modal-withdraw')">&times;</button>
+      </div>
+      <div class="modal__body" style="padding: 20px;">
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 4px;">Ngân hàng thụ hưởng</label>
+          <select id="withdraw-bank" class="form-control" style="width: 100%; padding: 8px 12px; font-size: 0.85rem;">
+            <option value="VCB">Vietcombank - NHTM CP Ngoại Thương</option>
+            <option value="ACB">ACB - Ngân hàng Á Châu</option>
+            <option value="TCB">Techcombank - Ngân hàng Kỹ Thương</option>
+            <option value="JPM">JPMorgan Chase N.A. (Geneva Private Banking)</option>
+          </select>
+        </div>
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 4px;">Số tài khoản</label>
+          <input type="text" id="withdraw-account" class="form-control font-mono" value="0071000665107" style="width: 100%; padding: 8px 12px; font-size: 0.85rem;" />
+        </div>
+        <div class="form-group" style="margin-bottom: 14px;">
+          <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 4px;">Số tiền rút (VNĐ)</label>
+          <input type="number" id="withdraw-amount" class="form-control font-mono" value="1000000000" step="50000000" style="width: 100%; padding: 8px 12px; font-size: 0.95rem; font-weight: 700; color: #059669;" />
+          <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 4px;">Khả dụng tối đa: <strong id="withdraw-max-val" class="font-mono">25.000.000.000 ₫</strong></div>
+        </div>
+      </div>
+      <div class="modal__footer" style="justify-content: space-between;">
+        <button type="button" class="btn btn-outline" onclick="window.closeModal('modal-withdraw')">Hủy</button>
+        <button type="button" class="btn btn-primary" onclick="window.confirmWithdraw()">Xác Nhận Rút Tiền</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Site Footer Root -->
+  <div id="site-footer-root"></div>
+
+  <!-- Modals Root -->
+  <div id="modals-root"></div>
+
+  <!-- Scripts -->
+  <script src="js/app-core.js"></script>
+  <script src="components/header.js"></script>
+  <script src="components/footer.js"></script>
+  <script src="components/modals.js"></script>
+
+  <script>
+    (function() {
+      var store = window.AureliaApp || window.AuctionStore;
+      if (!store) return;
+
+      // Tab switcher
+      function switchTab(tabId) {
+        document.querySelectorAll('.dash-menu-item').forEach(function(item) {
+          item.classList.toggle('active', item.getAttribute('data-tab') === tabId);
+        });
+        document.querySelectorAll('.dash-panel').forEach(function(panel) {
+          panel.classList.toggle('active', panel.id === tabId);
+        });
+        try { history.replaceState(null, '', 'dashboard.html?tab=' + tabId.replace('tab-', '')); } catch(e) {}
+        updateDashboardData();
+      }
+
+      window.switchTab = switchTab;
+
+      document.querySelectorAll('.dash-menu-item').forEach(function(item) {
+        item.addEventListener('click', function() {
+          switchTab(this.getAttribute('data-tab'));
+        });
+      });
+
+      // Parse initial query param tab
+      var urlParams = new URLSearchParams(window.location.search);
+      var initialTab = urlParams.get('tab');
+      if (initialTab) {
+        switchTab('tab-' + initialTab);
+      }
+
+      function updateDashboardData() {
+        var user = store.getCurrentUser();
+        if (!user) {
+          user = {
+            uid: 'usr-thang-6651',
+            fullName: 'Phạm Ngọc Thắng',
+            mssv: '6651071071',
+            paddleId: '#PD-6651',
+            email: 'thang.pn@aurelia.ch',
+            phone: '0908 665 107',
+            walletAvailable: 25000000000,
+            walletEscrow: 360000000,
+            avatar: 'assets/images/user_thang.jpg'
+          };
+        }
+
+        // Header info
+        var elName = document.getElementById('dash-user-name');
+        if (elName) elName.textContent = user.fullName;
+        var elPaddle = document.getElementById('dash-user-paddle');
+        if (elPaddle) elPaddle.textContent = user.paddleId || '#PD-6651';
+        var elMssv = document.getElementById('dash-user-mssv');
+        if (elMssv && user.mssv) elMssv.textContent = user.mssv;
+        var elAvatar = document.getElementById('dash-user-avatar');
+        if (elAvatar && user.avatar) elAvatar.src = user.avatar;
+        var elRoleBadge = document.getElementById('dash-user-role-badge');
+        if (elRoleBadge) {
+          if (user.role === 'admin' || user.isAdmin) {
+            elRoleBadge.innerHTML = '<svg viewBox="0 0 24 24" style="width: 12px; height: 12px; stroke: #FFF; fill: none; stroke-width: 2.2;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> QUẢN TRỊ VIÊN HỆ THỐNG (SUPER ADMIN) &bull; VIP COLLECTOR';
+          } else {
+            elRoleBadge.textContent = (user.role || 'VIP COLLECTOR') + ' • KYC LEVEL 3';
+          }
+        }
+
+        // Wallet balances
+        var avail = user.walletAvailable || 0;
+        var locked = user.walletEscrow || 0;
+        var total = avail + locked;
+
+        var elAvail = document.getElementById('wallet-val-available');
+        if (elAvail) elAvail.textContent = store.formatCurrency(avail);
+        var elLocked = document.getElementById('wallet-val-locked');
+        if (elLocked) elLocked.textContent = store.formatCurrency(locked);
+        var elTotal = document.getElementById('wallet-val-total');
+        if (elTotal) elTotal.textContent = store.formatCurrency(total);
+        var withdrawMax = document.getElementById('withdraw-max-val');
+        if (withdrawMax) withdrawMax.textContent = store.formatCurrency(avail);
+
+        // 3. Top-up history
+        var txs = store.getTransactions ? store.getTransactions().filter(function(t) { return t.type === 'TOPUP'; }) : [];
+        var topupTbody = document.getElementById('dash-topup-tbody');
+        if (topupTbody) {
+          topupTbody.innerHTML = txs.map(function(t) {
+            return `
+              <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 12px 18px; font-family: var(--font-mono); font-weight: 700; color: var(--text-primary);">${t.id}</td>
+                <td style="padding: 12px 18px; color: var(--text-secondary);">${t.method}</td>
+                <td style="padding: 12px 18px; text-align: right; font-family: var(--font-mono); font-weight: 800; color: #059669;">+${store.formatCurrency(t.amount)}</td>
+                <td style="padding: 12px 18px; font-size: 0.78rem; color: var(--text-muted);">${new Date(t.timestamp).toLocaleString('vi-VN')}</td>
+                <td style="padding: 12px 18px; text-align: center;"><span class="badge badge--live" style="font-size: 0.65rem;">THÀNH CÔNG</span></td>
+              </tr>
+            `;
+          }).join('');
+        }
+
+        // 4. Escrow deposit history
+        var deposits = store.getDeposits ? store.getDeposits() : [];
+        var escrowTbody = document.getElementById('dash-escrow-tbody');
+        if (escrowTbody) {
+          escrowTbody.innerHTML = deposits.map(function(d) {
+            var room = store.getRoom(d.roomId);
+            var statusLabel = d.status === 'LOCKED' ? '<span class="badge badge--waiting" style="font-size:0.65rem;">ĐANG TẠM KHÓA</span>' : '<span class="badge badge--live" style="font-size:0.65rem;">ĐÃ HOÀN TIỀN 100%</span>';
+            return `
+              <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 12px 18px; font-weight: 700; color: var(--text-primary);">${room ? room.title : 'Lot #' + d.roomId}</td>
+                <td style="padding: 12px 18px; font-family: var(--font-mono); font-weight: 600;">#${d.roomPin || (room ? room.roomPin : '---')}</td>
+                <td style="padding: 12px 18px; text-align: right; font-family: var(--font-mono); font-weight: 800; color: #059669;">${store.formatCurrency(d.amount)}</td>
+                <td style="padding: 12px 18px; text-align: center;">${statusLabel}</td>
+                <td style="padding: 12px 18px; text-align: right;">
+                  <a href="live-room.html?room=${d.roomPin || (room ? room.roomPin : d.roomId)}" class="btn btn-outline" style="font-size: 0.72rem; padding: 4px 8px;">Vào Phòng</a>
+                </td>
+              </tr>
+            `;
+          }).join('');
+          var badgeEscrow = document.getElementById('badge-escrow-count');
+          if (badgeEscrow) badgeEscrow.textContent = deposits.length;
+        }
+
+        // 5. Active auctions
+        var activeRooms = store.getUserActiveLots ? store.getUserActiveLots() : [];
+        var activeGrid = document.getElementById('dash-active-grid');
+        if (activeGrid) {
+          if (activeRooms.length === 0) {
+            activeGrid.innerHTML = '<div style="color:var(--text-muted);padding:36px;text-align:center;grid-column:1/-1;background:var(--bg-surface);border:1px dashed var(--border-color);border-radius:var(--radius-md);">Hiện tại bạn chưa đặt giá phiên nào đang mở sàn. <a href="auctions.html" style="color:#059669;font-weight:700;">Khám phá ngay &rarr;</a></div>';
+          } else {
+            activeGrid.innerHTML = activeRooms.map(function(r) {
+              var isLeader = r.leaderUid === user.uid || r.leaderPaddleId === user.paddleId;
+              var img = (r.images && r.images[0]) ? r.images[0] : 'assets/images/patek_nautilus_gold.jpg';
+              if (img.includes('omega') || (!img.startsWith('http') && !img.startsWith('assets/'))) {
+                img = 'assets/images/patek_nautilus_gold.jpg';
+              }
+              return `
+                <div style="background:var(--bg-surface);border:1px solid var(--border-color);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-card);display:flex;flex-direction:column;justify-content:space-between;">
+                  <div>
+                    <div style="height:170px;position:relative;background:#0F172A;">
+                      <img src="${img}" style="width:100%;height:100%;object-fit:cover;" alt="${r.title}"/>
+                      <div style="position:absolute;top:10px;left:10px;">
+                        <span class="badge ${isLeader ? 'badge--live' : 'badge--waiting'}" style="font-size:0.68rem;font-weight:700;">
+                          ${isLeader ? 'BẠN ĐANG DẪN ĐẦU' : 'BỊ VƯỢT GIÁ'}
+                        </span>
+                      </div>
+                      <div style="position:absolute;bottom:10px;right:10px;background:rgba(15,23,42,0.85);backdrop-filter:blur(4px);padding:3px 8px;border-radius:4px;color:#FFF;font-size:0.7rem;font-family:var(--font-mono);font-weight:700;">
+                        PIN #${r.roomPin || r.roomId}
+                      </div>
+                    </div>
+                    <div style="padding:16px;">
+                      <h4 style="font-size:0.95rem;font-weight:700;margin:0 0 6px 0;color:var(--text-primary);line-height:1.35;">${r.title}</h4>
+                      <div style="font-size:0.78rem;color:var(--text-muted);margin-bottom:8px;">
+                        Giá hiện tại: <strong class="font-mono text-emerald price-val">${store.formatCurrency(r.currentPrice || r.startPrice)}</strong>
+                      </div>
+                      <div style="font-size:0.72rem;color:var(--text-secondary);">
+                        Người dẫn đầu: <strong>${r.leaderName || 'Nhà Sưu Tầm'} (${r.leaderPaddleId || '#PD-****'})</strong>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="padding:12px 16px;border-top:1px solid var(--border-color);background:var(--bg-subtle);">
+                    <a href="live-room.html?room=${r.roomPin || r.roomId}" class="btn btn-primary" style="font-size:0.78rem;width:100%;text-align:center;justify-content:center;">
+                      ${isLeader ? 'Theo Dõi Phòng Đấu Giá &rarr;' : 'Vào Đặt Giá Lại Ngay &rarr;'}
+                    </a>
+                  </div>
+                </div>
+              `;
+            }).join('');
+          }
+          var badgeActive = document.getElementById('badge-active-count');
+          if (badgeActive) badgeActive.textContent = activeRooms.length;
+        }
+
+        // 6. Watchlist
+        var watchedRooms = store.getWatchedRooms ? store.getWatchedRooms() : [];
+        var watchGrid = document.getElementById('dash-watchlist-grid');
+        var watchEmpty = document.getElementById('dash-watchlist-empty');
+        if (watchGrid) {
+          if (watchedRooms.length === 0) {
+            watchGrid.innerHTML = '';
+            if (watchEmpty) watchEmpty.style.display = 'block';
+          } else {
+            if (watchEmpty) watchEmpty.style.display = 'none';
+            watchGrid.innerHTML = watchedRooms.map(function(r) {
+              var img = (r.images && r.images[0]) ? r.images[0] : 'assets/images/patek_nautilus_gold.jpg';
+              if (img.includes('omega') || (!img.startsWith('http') && !img.startsWith('assets/'))) {
+                img = 'assets/images/patek_nautilus_gold.jpg';
+              }
+              return `
+                <div style="background:var(--bg-surface);border:1px solid var(--border-color);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-card);display:flex;flex-direction:column;justify-content:space-between;">
+                  <div>
+                    <div style="height:180px;position:relative;background:#0F172A;">
+                      <img src="${img}" style="width:100%;height:100%;object-fit:cover;" alt="${r.title}"/>
+                      <button type="button" class="lot-card-heart-btn active" onclick="window.toggleDashboardWatchlist('${r.roomId}')" title="Bỏ theo dõi" style="position:absolute;top:10px;right:10px;width:32px;height:32px;border-radius:50%;background:#FFF;color:#DC2626;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 6px rgba(0,0,0,0.2);">
+                        <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:#DC2626;stroke:#DC2626;"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
+                      </button>
+                      <div style="position:absolute;bottom:10px;left:10px;background:rgba(15,23,42,0.85);backdrop-filter:blur(4px);padding:3px 8px;border-radius:4px;color:#FFF;font-size:0.7rem;font-family:var(--font-mono);font-weight:700;">
+                        PIN #${r.roomPin || r.roomId}
+                      </div>
+                    </div>
+                    <div style="padding:16px;">
+                      <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;margin-bottom:4px;">${r.categoryName || 'Tài sản giám định'}</div>
+                      <h4 style="font-size:0.95rem;font-weight:700;color:var(--text-primary);margin:0 0 8px 0;line-height:1.35;">${r.title}</h4>
+                      <div style="font-size:0.78rem;color:var(--text-muted);">
+                        Giá hiện tại: <strong class="font-mono text-emerald price-val">${store.formatCurrency(r.currentPrice || r.startPrice)}</strong>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="padding:12px 16px;border-top:1px solid var(--border-color);display:flex;justify-content:space-between;align-items:center;background:var(--bg-subtle);">
+                    <button type="button" onclick="window.toggleDashboardWatchlist('${r.roomId}')" class="btn btn-outline" style="font-size:0.72rem;padding:5px 10px;color:#DC2626;">
+                      Xóa Khỏi Watchlist
+                    </button>
+                    <a href="live-room.html?room=${r.roomPin || r.roomId}" class="btn btn-primary" style="font-size:0.72rem;padding:5px 12px;">
+                      Vào Phòng &rarr;
+                    </a>
+                  </div>
+                </div>
+              `;
+            }).join('');
+          }
+          var badgeWatch = document.getElementById('badge-watchlist-count');
+          if (badgeWatch) badgeWatch.textContent = watchedRooms.length;
+        }
+
+        // 7. Won lots
+        var wonLots = store.getUserWonLots ? store.getUserWonLots() : [];
+        var wonGrid = document.getElementById('dash-won-grid');
+        if (wonGrid) {
+          wonGrid.innerHTML = wonLots.map(function(r) {
+            var isPaid = r.isFullyPaid === true;
+            var img = (r.images && r.images[0]) ? r.images[0] : 'assets/images/patek_nautilus_gold.jpg';
+            return `
+              <div style="background:var(--bg-surface);border:1px solid var(--border-color);border-radius:var(--radius-md);padding:22px;box-shadow:var(--shadow-card);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:18px;">
+                <div style="display:flex;align-items:center;gap:16px;">
+                  <img src="${img}" style="width:84px;height:84px;border-radius:8px;object-fit:cover;border:1px solid var(--border-color);" alt=""/>
+                  <div>
+                    <div style="display:flex;align-items:center;gap:8px;margin-bottom:4px;">
+                      <span class="badge badge--live" style="font-size:0.65rem;">TRÚNG ĐẤU GIÁ</span>
+                      <span style="font-size:0.72rem;font-family:var(--font-mono);color:var(--text-muted);">LOT #${r.lotNumber || '112'} &bull; PIN #${r.roomPin || '192834'}</span>
+                    </div>
+                    <h4 style="font-size:1.05rem;font-weight:700;color:var(--text-primary);margin:0 0 4px 0;">${r.title}</h4>
+                    <div style="font-size:0.8rem;color:var(--text-secondary);">
+                      Giá gõ búa: <strong class="font-mono text-emerald price-val">${store.formatCurrency(r.currentPrice || r.startPrice)}</strong> &bull; 
+                      Trạng thái: <strong style="color:${isPaid ? '#059669' : '#DC2626'};">${isPaid ? 'ĐÃ TẤT TOÁN 100%' : 'Chờ tất toán số tiền còn lại (85%)'}</strong>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="display:flex;gap:10px;flex-wrap:wrap;">
+                  <button type="button" class="btn btn-outline" onclick="window.openCertificateModal('${r.roomId}')" style="font-size:0.8rem;display:inline-flex;align-items:center;gap:6px;">
+                    <svg viewBox="0 0 24 24" style="width:14px;height:14px;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                    <span>Xem & In Biên Bản</span>
+                  </button>
+                  ${!isPaid ? `
+                    <button type="button" class="btn btn-primary" onclick="window.executePaySettlement('${r.roomId}')" style="font-size:0.8rem;">
+                      <span>Thanh Toán Phần Còn Lại</span>
+                    </button>
+                  ` : `
+                    <button type="button" class="btn btn-outline" disabled style="font-size:0.8rem;color:#059669;border-color:#059669;opacity:1;background:rgba(5,150,105,0.06);">
+                      ✓ Đã Hoàn Tất Nghĩa Vụ
+                    </button>
+                  `}
+                </div>
+              </div>
+            `;
+          }).join('');
+          var badgeWon = document.getElementById('badge-won-count');
+          if (badgeWon) badgeWon.textContent = wonLots.length;
+        }
+
+        // 8. Vault Inventory
+        var vaultItems = store.getUserInventory ? store.getUserInventory() : [];
+        var vaultGrid = document.getElementById('dash-vault-grid');
+        if (vaultGrid) {
+          vaultGrid.innerHTML = vaultItems.map(function(item) {
+            return `
+              <div style="background:var(--bg-surface);border:1px solid var(--border-color);border-radius:var(--radius-md);overflow:hidden;box-shadow:var(--shadow-card);padding:18px;display:flex;flex-direction:column;justify-content:space-between;">
+                <div>
+                  <img src="${item.image}" style="width:100%;height:160px;object-fit:cover;border-radius:6px;margin-bottom:12px;border:1px solid var(--border-color);" alt=""/>
+                  <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;">${item.categoryName}</div>
+                  <h4 style="font-size:0.95rem;font-weight:700;color:var(--text-primary);margin:4px 0 8px 0;line-height:1.35;">${item.title}</h4>
+                  <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:14px;">
+                    Định giá thị trường: <strong class="font-mono text-emerald price-val">${store.formatCurrency(item.estimatedValue)}</strong>
+                  </div>
+                </div>
+                <button type="button" class="btn btn-primary" onclick="window.executeResell('${item.id}')" style="font-size:0.78rem;width:100%;display:inline-flex;align-items:center;justify-content:center;gap:6px;">
+                  <svg viewBox="0 0 24 24" style="width:14px;height:14px;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                  <span>Đưa Lên Đấu Giá Lại (Resell)</span>
+                </button>
+              </div>
+            `;
+          }).join('');
+        }
+
+        // 9. Listed lots (Seller history)
+        var listedLots = store.getUserListedLots ? store.getUserListedLots() : [];
+        var listContainer = document.getElementById('dash-listed-lots-list');
+        if (listContainer) {
+          listContainer.innerHTML = listedLots.map(function(r) {
+            var statusBadge = r.status === 'WAITING' ? '<span class="badge badge--waiting" style="font-size:0.65rem;">CHỜ DUYỆT / CHỜ BẮT ĐẦU</span>' : (r.status === 'REJECTED' ? '<span class="badge" style="background:#FEE2E2;color:#DC2626;font-size:0.65rem;">BỊ TỪ CHỐI</span>' : '<span class="badge badge--live" style="font-size:0.65rem;">ĐÃ DUYỆT</span>');
+            var img = (r.images && r.images[0]) ? r.images[0] : 'assets/images/patek_nautilus_gold.jpg';
+            if (img.includes('omega') || (!img.startsWith('http') && !img.startsWith('assets/'))) {
+              img = 'assets/images/patek_nautilus_gold.jpg';
+            }
+            return `
+              <div style="background:var(--bg-page);border:1px solid var(--border-color);border-radius:var(--radius-sm);padding:14px 18px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:14px;">
+                <div style="display:flex;align-items:center;gap:14px;">
+                  <img src="${img}" style="width:52px;height:52px;border-radius:6px;object-fit:cover;border:1px solid var(--border-color);" alt=""/>
+                  <div>
+                    <div style="display:flex;align-items:center;gap:8px;">
+                      <strong style="font-size:0.88rem;color:var(--text-primary);">${r.title}</strong>
+                      ${statusBadge}
+                    </div>
+                    <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">
+                      PIN: #${r.roomPin || r.roomId} &bull; Khởi điểm: <strong class="font-mono text-emerald price-val">${store.formatCurrency(r.startPrice)}</strong>
+                      ${r.rejectionReason ? ` &bull; <span style="color:#DC2626;font-weight:600;">Lý do thẩm định: "${r.rejectionReason}"</span>` : ''}
+                    </div>
+                  </div>
+                </div>
+
+                <div style="display:flex;gap:8px;">
+                  ${r.status === 'REJECTED' ? `
+                    <a href="seller-studio.html?edit=${r.roomId}" class="btn btn-primary" style="font-size:0.75rem;padding:6px 14px;background:#DC2626;border-color:#DC2626;">Sửa & Gửi Lại Thẩm Định</a>
+                  ` : `
+                    <a href="live-room.html?room=${r.roomPin || r.roomId}" class="btn btn-outline" style="font-size:0.75rem;padding:6px 14px;">Vào Phòng Phiên Này &rarr;</a>
+                  `}
+                </div>
+              </div>
+            `;
+          }).join('');
+        }
+      }
+
+      window.toggleDashboardWatchlist = function(roomId) {
+        store.toggleWatchlist(roomId);
+        updateDashboardData();
+        if (window.renderHeader) window.renderHeader();
+      };
+
+      window.saveUserProfile = function(e) {
+        e.preventDefault();
+        var name = document.getElementById('prof-input-name').value;
+        var email = document.getElementById('prof-input-email').value;
+        var user = store.getCurrentUser();
+        if (user) {
+          user.fullName = name;
+          user.email = email;
+          var users = store.getUsers();
+          var idx = users.findIndex(function(u) { return u.uid === user.uid; });
+          if (idx > -1) {
+            users[idx].fullName = name;
+            users[idx].email = email;
+            localStorage.setItem('AURELIA_USERS_V4', JSON.stringify(users));
+          }
+          localStorage.setItem('AURELIA_CURRENT_USER_V4', JSON.stringify(user));
+          if (window.showToast) window.showToast('Cập Nhật Thành Công', 'Thông tin hồ sơ cá nhân đã được lưu an toàn.', 'success', 2500);
+          updateDashboardData();
+        }
+      };
+
+      window.openWithdrawModal = function() {
+        window.openModal('modal-withdraw');
+      };
+
+      window.confirmWithdraw = function() {
+        var amt = Number(document.getElementById('withdraw-amount').value) || 0;
+        var user = store.getCurrentUser();
+        if (!user) return;
+        if (amt <= 0 || amt > user.walletAvailable) {
+          alert('Số tiền rút không hợp lệ hoặc vượt quá số dư khả dụng!');
+          return;
+        }
+        user.walletAvailable -= amt;
+        var users = store.getUsers();
+        var idx = users.findIndex(function(u) { return u.uid === user.uid; });
+        if (idx > -1) users[idx].walletAvailable = user.walletAvailable;
+        localStorage.setItem('AURELIA_USERS_V4', JSON.stringify(users));
+        localStorage.setItem('AURELIA_CURRENT_USER_V4', JSON.stringify(user));
+
+        if (store.logAuditEvent) store.logAuditEvent('WITHDRAW', 'Rút tiền ' + store.formatCurrency(amt) + ' về ngân hàng', user.fullName);
+        if (store.addNotification) store.addNotification('Rút tiền thành công', 'Lệnh rút ' + store.formatCurrency(amt) + ' đã được chuyển đến tài khoản ngân hàng thành công.', 'info');
+
+        window.closeModal('modal-withdraw');
+        if (window.showToast) window.showToast('Rút Tiền Thành Công', 'Đã chuyển ' + store.formatCurrency(amt) + ' về tài khoản ngân hàng của quý khách.', 'success', 3000);
+        updateDashboardData();
+      };
+
+      window.executePaySettlement = function(roomId) {
+        if (confirm('Xác nhận thanh toán số tiền còn lại cho phiên đấu giá này từ ví khả dụng?')) {
+          var res = store.paySettlement(roomId);
+          if (res.success) {
+            updateDashboardData();
+          } else {
+            alert(res.message);
+          }
+        }
+      };
+
+      window.executeResell = function(lotId) {
+        if (confirm('Xác nhận đưa tài sản này lên sàn đấu giá lại (Resell)?')) {
+          var res = store.resellLot(lotId);
+          if (res.success) {
+            updateDashboardData();
+            switchTab('tab-buy-sell-history');
+          }
+        }
+      };
+
+      updateDashboardData();
+
+      if (store && typeof store.subscribe === 'function') {
+        store.subscribe(updateDashboardData);
+      }
+    })();
+  </script>
+</body>
+</html>

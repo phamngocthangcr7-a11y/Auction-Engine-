@@ -1,0 +1,358 @@
+/**
+ * AURELIA FINE AUCTIONS - BASE & RESET STYLES
+ * Swiss Editorial Style (Sotheby's × Bring a Trailer)
+ */
+
+/* 1. RESET & KHÓA KÍCH THƯỚC SVG (CHỐNG LỖI SVG ĐEN KHỔNG LỒ CHE MÀN HÌNH) */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+svg {
+  width: 18px !important;
+  height: 18px !important;
+  max-width: 22px !important;
+  max-height: 22px !important;
+  display: inline-block;
+  vertical-align: middle;
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* 2. KHÓA KÍCH THƯỚC ẢNH (CHỐNG LỖI ẢNH PHÓNG TO TRÀN MÀN HÌNH) */
+img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 3. BASE BODY & TYPOGRAPHY */
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  overflow-x: hidden;
+}
+
+body {
+  min-height: 100vh;
+  background-color: var(--bg-page) !important;
+  color: var(--text-primary) !important;
+  font-family: var(--font-body);
+  font-size: 15px;
+  line-height: 1.5;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Đảm bảo tiêu đề sử dụng var(--text-primary) tự thích ứng Light & Dark Mode */
+h1, h2, h3, h4, h5, h6, .page-title, .section-title {
+  color: var(--text-primary);
+  font-family: var(--font-heading);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+/* Đảm bảo chữ trắng hiển thị đúng 100% trên thẻ có ảnh hoặc nền tối */
+.text-white, .text-inverse, [style*="color: #FFFFFF"], [style*="color:#FFFFFF"] {
+  color: #FFFFFF !important;
+}
+
+h1 { font-size: clamp(1.85rem, 3.5vw, 2.5rem); }
+h2 { font-size: clamp(1.4rem, 2.5vw, 1.85rem); }
+h3 { font-size: 1.15rem; }
+h4 { font-size: 0.95rem; }
+
+.font-serif {
+  font-family: var(--font-serif) !important;
+}
+
+/* Font chữ số cố định độ rộng để đồng hồ và giá tiền nhảy không bị giật khung */
+.mono-num, .price-val, .timer-val, .font-mono {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+}
+
+p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+/* 4. KHÓA ĐỘ TƯƠNG PHẢN NÚT BẤM (CHỐNG LỖI CHỮ TRẮNG TRÊN NỀN TRẮNG) */
+.btn, button, a.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 11px 20px;
+  border-radius: var(--radius-md);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+  font-family: var(--font-body);
+  line-height: 1.2;
+}
+
+.btn--sm, .btn-sm {
+  padding: 7px 12px;
+  font-size: 13px;
+  border-radius: var(--radius-sm);
+}
+
+.btn--md, .btn-md {
+  padding: 10px 18px;
+  font-size: 14px;
+}
+
+.btn--lg, .btn-lg {
+  padding: 13px 24px;
+  font-size: 15px;
+}
+
+.btn-primary, .btn--primary {
+  background-color: #0F172A !important;
+  color: #FFFFFF !important;
+  border-color: #0F172A !important;
+}
+.btn-primary:hover:not(:disabled), .btn--primary:hover:not(:disabled) {
+  background-color: #1E293B !important;
+  color: #FFFFFF !important;
+}
+
+.btn-emerald, .btn--emerald, .btn--bid {
+  background-color: #059669 !important;
+  color: #FFFFFF !important;
+  border-color: #059669 !important;
+}
+.btn-emerald:hover:not(:disabled), .btn--emerald:hover:not(:disabled), .btn--bid:hover:not(:disabled) {
+  background-color: #047857 !important;
+  color: #FFFFFF !important;
+}
+
+.btn-outline, .btn-secondary, .btn--outline, .btn--secondary {
+  background-color: #FFFFFF !important;
+  color: #0F172A !important;
+  border: 1px solid #CBD5E1 !important;
+}
+.btn-outline:hover:not(:disabled), .btn-secondary:hover:not(:disabled),
+.btn--outline:hover:not(:disabled), .btn--secondary:hover:not(:disabled) {
+  background-color: #F1F5F9 !important;
+  color: #0F172A !important;
+}
+
+button:disabled, .btn:disabled, .btn--disabled {
+  opacity: 0.45 !important;
+  cursor: not-allowed !important;
+}
+
+/* 5. FORM CONTROLS & UTILITIES */
+.form-control, input[type="text"], input[type="search"], input[type="number"], input[type="email"], select, textarea {
+  width: 100%;
+  padding: 9px 12px;
+  font-size: 14px;
+  font-family: var(--font-body);
+  background-color: #FFFFFF;
+  color: var(--text-primary);
+  border: 1px solid #CBD5E1;
+  border-radius: var(--radius-sm);
+  outline: none;
+  transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+}
+.form-control:focus, input:focus, select:focus, textarea:focus {
+  border-color: var(--text-primary);
+  box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.1);
+}
+
+.form-label {
+  display: block;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-secondary);
+  margin-bottom: 6px;
+}
+
+/* Badges */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  border-radius: var(--radius-sm);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+.badge--live {
+  background: rgba(5, 150, 105, 0.1);
+  color: var(--accent-emerald);
+  border: 1px solid rgba(5, 150, 105, 0.3);
+}
+.badge--live::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: var(--accent-emerald);
+}
+.badge--waiting {
+  background: rgba(217, 119, 6, 0.1);
+  color: var(--accent-amber);
+  border: 1px solid rgba(217, 119, 6, 0.3);
+}
+.badge--ended {
+  background: #F1F5F9;
+  color: var(--text-muted);
+  border: 1px solid #CBD5E1;
+}
+
+/* Colors */
+.text-emerald { color: var(--accent-emerald) !important; }
+.text-amber { color: var(--accent-amber) !important; }
+.text-crimson { color: var(--accent-crimson) !important; }
+.text-primary { color: var(--text-primary) !important; }
+.text-secondary { color: var(--text-secondary) !important; }
+.text-muted { color: var(--text-muted) !important; }
+
+/* ==========================================================================
+   7. DARK MODE COMPONENT OVERRIDES ([data-theme="dark"])
+   ========================================================================== */
+[data-theme="dark"] body {
+  background-color: var(--bg-page) !important;
+  color: var(--text-primary) !important;
+}
+
+[data-theme="dark"] .site-header {
+  background-color: var(--bg-surface) !important;
+  border-bottom-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .site-header__logo-brand {
+  color: #F8FAFC !important;
+}
+
+[data-theme="dark"] .nav-link {
+  color: #94A3B8;
+}
+
+[data-theme="dark"] .nav-link:hover,
+[data-theme="dark"] .nav-link.active {
+  color: #F8FAFC !important;
+}
+
+[data-theme="dark"] .site-footer {
+  background-color: var(--bg-surface) !important;
+  border-top-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .lot-card,
+[data-theme="dark"] .modal__container,
+[data-theme="dark"] .card {
+  background-color: var(--bg-surface) !important;
+  border-color: var(--border-color) !important;
+  color: var(--text-primary);
+}
+
+[data-theme="dark"] .form-control,
+[data-theme="dark"] input[type="text"],
+[data-theme="dark"] input[type="number"],
+[data-theme="dark"] input[type="password"],
+[data-theme="dark"] input[type="email"],
+[data-theme="dark"] select,
+[data-theme="dark"] textarea {
+  background-color: var(--bg-subtle) !important;
+  border-color: var(--border-color) !important;
+  color: #F8FAFC !important;
+}
+
+[data-theme="dark"] .btn-outline,
+[data-theme="dark"] .btn--outline {
+  border-color: var(--border-color) !important;
+  color: #F8FAFC !important;
+  background-color: transparent !important;
+}
+
+[data-theme="dark"] .btn-outline:hover,
+[data-theme="dark"] .btn--outline:hover {
+  background-color: var(--bg-subtle) !important;
+}
+
+[data-theme="dark"] .btn--secondary {
+  background-color: var(--bg-subtle) !important;
+  color: #F8FAFC !important;
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .btn-primary,
+[data-theme="dark"] .btn--primary {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  color: #FFFFFF !important;
+}
+
+[data-theme="dark"] .btn-primary:hover,
+[data-theme="dark"] .btn--primary:hover {
+  background-color: #047857 !important;
+}
+
+[data-theme="dark"] .lot-card__action-btn {
+  background-color: var(--bg-subtle) !important;
+  color: #F8FAFC !important;
+  border-color: var(--border-color) !important;
+}
+
+[data-theme="dark"] .lot-card__action-btn:hover {
+  background-color: #059669 !important;
+  color: #FFFFFF !important;
+  border-color: #059669 !important;
+}
+
+[data-theme="dark"] .badge--ended {
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+  border-color: var(--border-color);
+}
+
+/* Ensure active buttons always have emerald background and bright white text in both light and dark mode */
+.cat-select-btn.active,
+.duration-pill-btn.active,
+.cat-pill.cat-pill--active,
+[data-theme="dark"] .cat-select-btn.active,
+[data-theme="dark"] .duration-pill-btn.active,
+[data-theme="dark"] .cat-pill.cat-pill--active {
+  background-color: #059669 !important;
+  border-color: #059669 !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+}
+
+/* Badge waiting over dark visual backgrounds */
+.lot-card .badge--waiting,
+.hero-spotlight .badge--waiting,
+.preview-card .badge--waiting {
+  background: rgba(15, 23, 42, 0.85) !important;
+  color: #F8FAFC !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}

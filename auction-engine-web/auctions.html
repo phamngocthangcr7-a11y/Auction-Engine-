@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Khám phá và tra cứu bộ sưu tập đấu giá độc quyền với bộ lọc đa tầng thông minh, sắp xếp linh hoạt và tính năng so sánh đa vật phẩm.">
+  <title>Khám Phá Phiên Đấu Giá • AURELIA</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <script>
+    window.handleImgError = function(img, title, cat) {
+      if (!img) return;
+      img.onerror = null;
+      var safeTitle = (title || img.alt || 'AUCTION LOT').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      var safeCat = (cat || 'PREMIUM LOT').toUpperCase();
+      var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">' +
+        '<rect width="100%" height="100%" fill="#F7F6F2"/>' +
+        '<rect x="20" y="20" width="760" height="560" fill="none" stroke="#E2E0D8" stroke-width="2"/>' +
+        '<text x="400" y="420" font-family="Newsreader, serif" font-size="18" font-weight="600" fill="#525866" letter-spacing="3" text-anchor="middle">' + safeCat + '</text>' +
+        '<text x="400" y="460" font-family="Plus Jakarta Sans, sans-serif" font-size="20" font-weight="700" fill="#111315" text-anchor="middle">' + (safeTitle.length > 40 ? safeTitle.substring(0, 37) + '...' : safeTitle) + '</text>' +
+        '<text x="400" y="500" font-family="JetBrains Mono, monospace" font-size="12" fill="#868C98" text-anchor="middle">AURELIA FINE AUCTIONS &bull; GENÈVE</text>' +
+      '</svg>';
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    };
+  </script>
+
+</head>
+<body>
+  <!-- Header Root -->
+  <div id="site-header-root"></div>
+
+  <!-- MAIN CATALOG CONTENT -->
+  <main class="page-body" style="padding-top: var(--space-4); padding-bottom: var(--space-8);">
+    <div class="container container--wide">
+      
+      <!-- Breadcrumb -->
+      <nav aria-label="Breadcrumb" style="margin-bottom: var(--space-3); font-size: 0.78rem; color: var(--text-muted);">
+        <a href="index.html" style="color: var(--text-muted); text-decoration: none;">Aurelia Genève</a>
+        <span style="margin: 0 6px;">/</span>
+        <span style="color: var(--text-primary); font-weight: 600;">Danh Mục Đấu Giá</span>
+      </nav>
+
+      <div class="catalog-layout" style="display: grid; grid-template-columns: 260px 1fr; gap: var(--space-5);">
+        
+        <!-- 1. ASIDE: FILTER SIDEBAR -->
+        <aside class="filter-sidebar" aria-label="Bộ lọc đa tầng" style="background: var(--bg-surface); border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); padding: var(--space-4); height: fit-content;">
+          <div class="flex items-center justify-between" style="padding-bottom: var(--space-3); border-bottom: 1px solid var(--border-hairline); margin-bottom: var(--space-4);">
+            <h3 style="font-size: 0.95rem; font-weight: 700; margin: 0; color: var(--text-primary);">Bộ Lọc</h3>
+            <button type="button" id="btn-reset-filters" class="btn btn--outline btn--sm" style="font-size: 0.72rem; padding: 2px 8px;">
+              Đặt lại
+            </button>
+          </div>
+
+          <!-- Keyword Search -->
+          <div class="filter-group" style="margin-bottom: var(--space-4);">
+            <h4 style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 8px;">
+              Tìm kiếm từ khóa
+            </h4>
+            <div style="position: relative;">
+              <input 
+                type="search" 
+                id="catalog-search-input" 
+                class="form-control" 
+                placeholder="Tên phiên, hãng, mã PIN..."
+                style="padding-left: 2rem; font-size: 0.8rem;"
+              />
+              <svg viewBox="0 0 24 24" style="position: absolute; left: 0.65rem; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: var(--text-muted);"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+            </div>
+          </div>
+
+          <!-- Category Checkboxes -->
+          <div class="filter-group" style="margin-bottom: var(--space-4);">
+            <h4 style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 8px;">
+              Danh mục tài sản
+            </h4>
+            <div class="filter-checkbox-list" style="display: flex; flex-direction: column; gap: 6px; font-size: 0.82rem;">
+              <label class="flex items-center gap-2" style="cursor: pointer;">
+                <input type="checkbox" name="cat" value="watches" checked style="accent-color: var(--accent-primary);">
+                <span>Đồng hồ Cơ Thụy Sĩ</span>
+              </label>
+              <label class="flex items-center gap-2" style="cursor: pointer;">
+                <input type="checkbox" name="cat" value="hypercars" checked style="accent-color: var(--accent-primary);">
+                <span>Siêu xe & Mô tô hiếm</span>
+              </label>
+              <label class="flex items-center gap-2" style="cursor: pointer;">
+                <input type="checkbox" name="cat" value="tech" checked style="accent-color: var(--accent-primary);">
+                <span>Công nghệ & Bản mẫu</span>
+              </label>
+              <label class="flex items-center gap-2" style="cursor: pointer;">
+                <input type="checkbox" name="cat" value="art" checked style="accent-color: var(--accent-primary);">
+                <span>Tranh Nghệ Thuật</span>
+              </label>
+              <label class="flex items-center gap-2" style="cursor: pointer;">
+                <input type="checkbox" name="cat" value="antiques" checked style="accent-color: var(--accent-primary);">
+                <span>Đồ Cổ & Cổ Vật</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Status Checkboxes -->
+          <div class="filter-group" style="margin-bottom: var(--space-4);">
+            <h4 style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 8px;">
+              Trạng thái phiên
+            </h4>
+            <div class="filter-checkbox-list" style="display: flex; flex-direction: column; gap: 6px; font-size: 0.82rem;">
+              <label class="flex items-center gap-2" style="cursor: pointer;">
+                <input type="checkbox" name="status" value="LIVE" checked style="accent-color: var(--accent-primary);">
+                <span class="badge badge--live" style="font-size: 0.62rem; padding: 2px 6px;">LIVE</span>
+                <span>Đang diễn ra</span>
+              </label>
+              <label class="flex items-center gap-2" style="cursor: pointer;">
+                <input type="checkbox" name="status" value="WAITING" checked style="accent-color: var(--accent-primary);">
+                <span class="badge badge--waiting" style="font-size: 0.62rem; padding: 2px 6px;">WAITING</span>
+                <span>Chờ khai mạc</span>
+              </label>
+              <label class="flex items-center gap-2" style="cursor: pointer;">
+                <input type="checkbox" name="status" value="ENDED" checked style="accent-color: var(--accent-primary);">
+                <span class="badge badge--ended" style="font-size: 0.62rem; padding: 2px 6px;">ENDED</span>
+                <span>Đã kết thúc</span>
+              </label>
+            </div>
+          </div>
+
+          <!-- Price Range Filter -->
+          <div class="filter-group">
+            <h4 style="font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-muted); margin-bottom: 8px;">
+              Khoảng giá (VNĐ)
+            </h4>
+            <div style="display: flex; gap: 6px; align-items: center;">
+              <input type="number" id="filter-price-min" class="form-control" placeholder="Tối thiểu" value="0" style="font-size: 0.75rem; padding: 6px 8px;">
+              <span style="color: var(--text-muted);">-</span>
+              <input type="number" id="filter-price-max" class="form-control" placeholder="Không giới hạn" value="" style="font-size: 0.75rem; padding: 6px 8px;">
+            </div>
+          </div>
+        </aside>
+
+        <!-- 2. MAIN RESULTS AREA -->
+        <section aria-label="Danh sách kết quả đấu giá">
+          <!-- Toolbar -->
+          <div class="flex items-center justify-between" style="background: var(--bg-surface); border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); padding: 10px 16px; margin-bottom: var(--space-4); flex-wrap: wrap; gap: var(--space-2);">
+            <div>
+              <span style="font-size: 0.85rem; color: var(--text-secondary);">
+                Hiển thị <strong id="catalog-count-display" class="font-mono text-primary">0</strong> phiên đấu giá
+              </span>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <!-- Sort Select -->
+              <div class="flex items-center gap-2">
+                <label for="catalog-sort-select" style="font-size: 0.75rem; color: var(--text-muted);">Sắp xếp:</label>
+                <select id="catalog-sort-select" class="form-control" style="width: auto; padding: 4px 8px; font-size: 0.75rem;">
+                  <option value="endingSoonest">Sắp kết thúc sớm nhất</option>
+                  <option value="priceDesc">Giá cao nhất</option>
+                  <option value="priceAsc">Giá thấp nhất</option>
+                </select>
+              </div>
+
+              <!-- View Mode Toggle with Clean SVGs -->
+              <div class="flex gap-1" role="group" aria-label="Chế độ xem">
+                <button type="button" id="btn-view-grid" class="btn btn--outline btn--sm" style="padding: 4px 8px;" title="Xem dạng lưới">
+                  <svg viewBox="0 0 24 24" style="width: 14px; height: 14px;"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+                </button>
+                <button type="button" id="btn-view-list" class="btn btn--outline btn--sm" style="padding: 4px 8px;" title="Xem dạng danh sách">
+                  <svg viewBox="0 0 24 24" style="width: 14px; height: 14px;"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Interactive Category Pills -->
+          <div class="category-pills-bar" style="display: flex; gap: 8px; margin-bottom: var(--space-4); overflow-x: auto; padding-bottom: 4px; flex-wrap: wrap;">
+            <button type="button" class="btn-cat-pill active" data-cat="all" style="padding: 6px 14px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border-color); background: var(--accent-navy); color: #FFFFFF; transition: all 0.2s ease;">
+              Tất Cả (8)
+            </button>
+            <button type="button" class="btn-cat-pill" data-cat="watches" style="padding: 6px 14px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-secondary); transition: all 0.2s ease;">
+              Đồng Hồ Thụy Sĩ (3)
+            </button>
+            <button type="button" class="btn-cat-pill" data-cat="hypercars" style="padding: 6px 14px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-secondary); transition: all 0.2s ease;">
+              Siêu Xe & Xe Cổ Điển (3)
+            </button>
+            <button type="button" class="btn-cat-pill" data-cat="tech" style="padding: 6px 14px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-secondary); transition: all 0.2s ease;">
+              Công Nghệ & Bản Mẫu (1)
+            </button>
+            <button type="button" class="btn-cat-pill" data-cat="art" style="padding: 6px 14px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-secondary); transition: all 0.2s ease;">
+              Tranh Nghệ Thuật (1)
+            </button>
+            <button type="button" class="btn-cat-pill" data-cat="antiques" style="padding: 6px 14px; border-radius: 999px; font-size: 0.78rem; font-weight: 600; cursor: pointer; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-secondary); transition: all 0.2s ease;">
+              Đồ Cổ & Cổ Vật (1)
+            </button>
+          </div>
+
+          <!-- Items Container -->
+          <div id="catalog-items-container" class="grid grid--cards"></div>
+
+          <!-- Empty State -->
+          <div id="catalog-empty-state" style="display: none; padding: 48px; text-align: center; background: var(--bg-surface); border-radius: var(--radius-sm); border: 1px dashed var(--border-hairline);">
+            <h3 style="font-size: 1.1rem; margin-bottom: 6px; color: var(--text-primary);">Không tìm thấy phiên phù hợp</h3>
+            <p style="font-size: 0.85rem; color: var(--text-secondary); margin-bottom: var(--space-4);">
+              Hãy thử điều chỉnh lại bộ lọc từ khóa, khoảng giá hoặc trạng thái phiên.
+            </p>
+            <button type="button" id="btn-clear-empty-filter" class="btn btn--primary btn--sm">Đặt Lại Bộ Lọc</button>
+          </div>
+        </section>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Footer Root -->
+  <div id="site-footer-root"></div>
+
+  <!-- Modals Root -->
+  <div id="modals-root"></div>
+
+  <!-- Scripts -->
+  <script src="js/app-core.js"></script>
+  <script src="components/header.js"></script>
+  <script src="components/footer.js"></script>
+  <script src="components/modals.js"></script>
+
+  <script>
+    (function() {
+      if (typeof window.renderHeader === 'function') window.renderHeader();
+      if (typeof window.renderFooter === 'function') window.renderFooter();
+      if (typeof window.renderModals === 'function') window.renderModals();
+
+      var store = window.AureliaApp || window.AuctionStore;
+      if (!store) return;
+
+      var currentViewMode = 'grid';
+      var gridBtn = document.getElementById('btn-view-grid');
+      var listBtn = document.getElementById('btn-view-list');
+      var container = document.getElementById('catalog-items-container');
+
+      function setViewMode(mode) {
+        currentViewMode = mode;
+        if (mode === 'grid') {
+          container.className = 'grid grid--cards';
+        } else {
+          container.className = 'grid grid--cols-1';
+        }
+        renderCatalog();
+      }
+
+      if (gridBtn) gridBtn.addEventListener('click', function() { setViewMode('grid'); });
+      if (listBtn) listBtn.addEventListener('click', function() { setViewMode('list'); });
+
+      // Synchronize Category Pills & URL
+      function syncCatPillUI(activeCat) {
+        document.querySelectorAll('.btn-cat-pill').forEach(function(pill) {
+          var isMatch = pill.getAttribute('data-cat') === activeCat;
+          if (isMatch) {
+            pill.style.background = 'var(--accent-navy)';
+            pill.style.color = '#FFFFFF';
+            pill.style.borderColor = 'var(--accent-navy)';
+            pill.classList.add('active');
+          } else {
+            pill.style.background = 'var(--bg-surface)';
+            pill.style.color = 'var(--text-secondary)';
+            pill.style.borderColor = 'var(--border-color)';
+            pill.classList.remove('active');
+          }
+        });
+      }
+
+      var urlParams = new URLSearchParams(window.location.search);
+      var paramCat = urlParams.get('category');
+      if (paramCat) {
+        document.querySelectorAll('input[name="cat"]').forEach(function(cb) {
+          cb.checked = (cb.value === paramCat);
+        });
+        syncCatPillUI(paramCat);
+      } else {
+        syncCatPillUI('all');
+      }
+
+      document.querySelectorAll('.btn-cat-pill').forEach(function(pill) {
+        pill.addEventListener('click', function() {
+          var cat = pill.getAttribute('data-cat');
+          if (cat === 'all') {
+            document.querySelectorAll('input[name="cat"]').forEach(function(cb) { cb.checked = true; });
+            try { history.replaceState(null, '', 'auctions.html'); } catch(e) {}
+          } else {
+            document.querySelectorAll('input[name="cat"]').forEach(function(cb) {
+              cb.checked = (cb.value === cat);
+            });
+            try { history.replaceState(null, '', 'auctions.html?category=' + cat); } catch(e) {}
+          }
+          syncCatPillUI(cat);
+          renderCatalog();
+        });
+      });
+
+      function renderCatalog() {
+        var rooms = store.getRooms();
+        var searchKeyword = (document.getElementById('catalog-search-input').value || '').trim().toLowerCase();
+        var checkedCats = Array.from(document.querySelectorAll('input[name="cat"]:checked')).map(function(cb) { return cb.value; });
+        var checkedStatuses = Array.from(document.querySelectorAll('input[name="status"]:checked')).map(function(cb) { return cb.value; });
+        var minPrice = Number(document.getElementById('filter-price-min').value) || 0;
+        var maxPrice = Number(document.getElementById('filter-price-max').value) || Infinity;
+        var sortCriterion = document.getElementById('catalog-sort-select').value;
+
+        var filtered = rooms.filter(function(r) {
+          var price = r.currentPrice || r.startPrice || 0;
+          if (searchKeyword && !r.title.toLowerCase().includes(searchKeyword) && !(r.roomPin && r.roomPin.includes(searchKeyword)) && !(r.categoryName && r.categoryName.toLowerCase().includes(searchKeyword))) {
+            return false;
+          }
+          if (checkedCats.length > 0 && !checkedCats.includes(r.category)) return false;
+          if (checkedStatuses.length > 0 && !checkedStatuses.includes(r.status)) return false;
+          if (price < minPrice || (maxPrice < Infinity && price > maxPrice)) return false;
+          return true;
+        });
+
+        if (sortCriterion === 'priceDesc') {
+          filtered.sort(function(a, b) { return (b.currentPrice || b.startPrice || 0) - (a.currentPrice || a.startPrice || 0); });
+        } else if (sortCriterion === 'priceAsc') {
+          filtered.sort(function(a, b) { return (a.currentPrice || a.startPrice || 0) - (b.currentPrice || b.startPrice || 0); });
+        } else {
+          filtered.sort(function(a, b) { return new Date(a.endTime || 0).getTime() - new Date(b.endTime || 0).getTime(); });
+        }
+
+        var countEl = document.getElementById('catalog-count-display');
+        if (countEl) countEl.textContent = filtered.length;
+
+        var emptyState = document.getElementById('catalog-empty-state');
+        if (filtered.length === 0) {
+          container.innerHTML = '';
+          if (emptyState) emptyState.style.display = 'block';
+          return;
+        }
+        if (emptyState) emptyState.style.display = 'none';
+
+        container.innerHTML = filtered.map(function(room) {
+          var remainingMs = room.endTime ? Math.max(0, new Date(room.endTime).getTime() - Date.now()) : 0;
+          var totalSecs = Math.floor(remainingMs / 1000);
+          var mins = Math.floor(totalSecs / 60);
+          var secs = totalSecs % 60;
+          
+          var timeStr = 'Đã kết thúc';
+          if (room.status === 'WAITING') {
+            timeStr = 'Chờ khai mạc';
+          } else if (room.status === 'LIVE') {
+            timeStr = remainingMs > 0 ? (mins + ':' + (secs < 10 ? '0' : '') + secs) : 'Đang chốt phiên';
+          }
+
+          var statusBadge = 'badge--waiting';
+          var statusText = 'CHỜ MỞ SÀN';
+          if (room.status === 'LIVE') {
+            statusBadge = 'badge--live';
+            statusText = 'ĐANG DIỄN RA';
+          } else if (room.status === 'ENDED') {
+            statusBadge = 'badge--ended';
+            statusText = 'ĐÃ KẾT THÚC';
+          }
+
+          var imgUrl = (room.images && room.images[0]) || store.getFallbackImage(room.title, room.categoryName);
+          var currentPrice = room.currentPrice || room.startPrice || 0;
+
+          var watchlist = store.getWatchlist ? store.getWatchlist() : [];
+          var isHearted = watchlist.indexOf(room.roomId) > -1 || watchlist.indexOf(room.roomPin) > -1;
+          return '<article class="lot-card" data-room-pin="' + room.roomPin + '" style="position:relative;">' +
+            '<button type="button" class="lot-card-heart-btn ' + (isHearted ? 'active' : '') + '" onclick="event.stopPropagation(); store.toggleWatchlist(\'' + (room.roomId || room.roomPin) + '\'); this.classList.toggle(\'active\');" title="Lưu vào danh sách theo dõi" style="position:absolute;top:10px;left:10px;z-index:10;width:30px;height:30px;border-radius:50%;background:rgba(15,23,42,0.7);backdrop-filter:blur(4px);border:1px solid rgba(255,255,255,0.25);color:#FFF;display:flex;align-items:center;justify-content:center;cursor:pointer;"><svg viewBox="0 0 24 24" style="width:14px;height:14px;stroke:currentColor;fill:' + (isHearted ? '#DC2626' : 'none') + ';"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg></button>' +
+            '<div class="lot-card__media">' +
+              '<img src="' + imgUrl + '" alt="' + room.title + '" class="lot-card__img" loading="lazy" onerror="if (window.handleImgError) window.handleImgError(this, \'' + room.title.replace(/'/g, "\\'") + '\', \'' + (room.categoryName || '').replace(/'/g, "\\'") + '\');">' +
+              '<div class="lot-card__top-overlay">' +
+                '<span class="badge ' + statusBadge + '">' + statusText + '</span>' +
+                '<span class="badge" style="background: var(--bg-surface); color: var(--text-primary); border: 1px solid var(--border-hairline); font-family: var(--font-mono); font-weight: 600;">#PIN ' + room.roomPin + '</span>' +
+              '</div>' +
+            '</div>' +
+
+            '<div class="lot-card__body">' +
+              '<div class="lot-card__category">' + (room.categoryName || 'TÀI SẢN CAO CẤP') + '</div>' +
+              '<h3 class="lot-card__title">' +
+                '<a href="live-room.html?room=' + room.roomPin + '">' + room.title + '</a>' +
+              '</h3>' +
+
+              '<div class="lot-card__data-strip">' +
+                '<div>' +
+                  '<div class="lot-card__data-label">' + (room.status === 'WAITING' ? 'Giá khởi điểm' : 'Giá hiện tại') + '</div>' +
+                  '<div class="lot-card__price price-val font-mono" style="white-space:nowrap;">' + store.formatCurrency(currentPrice) + '</div>' +
+                '</div>' +
+                '<div style="text-align: right;">' +
+                  '<div class="lot-card__data-label">' + (room.status === 'WAITING' ? 'Thời lượng' : 'Thời gian') + '</div>' +
+                  '<div class="lot-card__timer">' + timeStr + '</div>' +
+                '</div>' +
+              '</div>' +
+
+              '<a href="live-room.html?room=' + room.roomPin + '" class="lot-card__action-btn">' +
+                '<span>Vào Phòng Đấu Giá</span>' +
+                '<svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>' +
+              '</a>' +
+            '</div>' +
+          '</article>';
+        }).join('');
+      }
+
+      // Live countdown loop
+      setInterval(function() {
+        var rooms = store.getRooms();
+        rooms.forEach(function(r) {
+          var card = document.querySelector('.lot-card[data-room-pin="' + r.roomPin + '"]');
+          if (card) {
+            var timerEl = card.querySelector('.lot-card__timer');
+            if (timerEl) {
+              if (r.status === 'WAITING') {
+                timerEl.textContent = 'Chờ khai mạc';
+              } else if (r.status === 'ENDED') {
+                timerEl.textContent = 'Đã kết thúc';
+              } else if (r.endTime) {
+                var diff = Math.max(0, new Date(r.endTime).getTime() - Date.now());
+                var totalSec = Math.floor(diff / 1000);
+                var m = Math.floor(totalSec / 60);
+                var s = totalSec % 60;
+                timerEl.textContent = (m < 10 ? '0' + m : m) + ':' + (s < 10 ? '0' + s : s);
+              }
+            }
+          }
+        });
+      }, 1000);
+
+      // Event bindings
+      var searchInput = document.getElementById('catalog-search-input');
+      var debounceTimer = null;
+      if (searchInput) {
+        searchInput.addEventListener('input', function() {
+          clearTimeout(debounceTimer);
+          debounceTimer = setTimeout(renderCatalog, 250);
+        });
+      }
+
+      ['filter-price-min', 'filter-price-max', 'catalog-sort-select'].forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el) el.addEventListener('change', renderCatalog);
+      });
+
+      document.querySelectorAll('input[name="cat"], input[name="status"]').forEach(function(el) {
+        el.addEventListener('change', function() {
+          var checkedCats = Array.from(document.querySelectorAll('input[name="cat"]:checked')).map(function(cb) { return cb.value; });
+          if (checkedCats.length === 1) {
+            syncCatPillUI(checkedCats[0]);
+          } else if (checkedCats.length === 4) {
+            syncCatPillUI('all');
+          } else {
+            syncCatPillUI('');
+          }
+          renderCatalog();
+        });
+      });
+
+      var resetBtn = document.getElementById('btn-reset-filters');
+      if (resetBtn) {
+        resetBtn.addEventListener('click', function() {
+          if (searchInput) searchInput.value = '';
+          document.querySelectorAll('input[name="cat"], input[name="status"]').forEach(function(cb) { cb.checked = true; });
+          document.getElementById('filter-price-min').value = 0;
+          document.getElementById('filter-price-max').value = '';
+          document.getElementById('catalog-sort-select').value = 'endingSoonest';
+          syncCatPillUI('all');
+          try { history.replaceState(null, '', 'auctions.html'); } catch(e) {}
+          renderCatalog();
+        });
+      }
+
+      var clearEmptyBtn = document.getElementById('btn-clear-empty-filter');
+      if (clearEmptyBtn) clearEmptyBtn.addEventListener('click', function() { resetBtn.click(); });
+
+      // Initial Mount
+      renderCatalog();
+
+      store.subscribe(function() {
+        renderCatalog();
+      });
+
+    })();
+  </script>
+</body>
+</html>

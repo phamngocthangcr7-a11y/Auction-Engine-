@@ -1,0 +1,1954 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Phòng Đấu Giá Trực Tiếp • AURELIA</title>
+  
+  <script>
+    // Safe immediate image fallback
+    window.handleImgError = function(img, title, cat) {
+      if (!img) return;
+      img.onerror = null;
+      var safeTitle = (title || img.alt || 'AUCTION LOT').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      var safeCat = (cat || 'PREMIUM LOT').toUpperCase();
+      var svg = '<svg xmlns="http://www.w3.org/2000/svg" width="800" height="600" viewBox="0 0 800 600">' +
+        '<rect width="100%" height="100%" fill="#F7F6F2"/>' +
+        '<rect x="20" y="20" width="760" height="560" fill="none" stroke="#E2E0D8" stroke-width="2"/>' +
+        '<circle cx="400" cy="250" r="100" fill="none" stroke="#0F172A" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.3"/>' +
+        '<text x="400" y="420" font-family="Newsreader, serif" font-size="18" font-weight="600" fill="#525866" letter-spacing="3" text-anchor="middle">' + safeCat + '</text>' +
+        '<text x="400" y="460" font-family="Plus Jakarta Sans, sans-serif" font-size="20" font-weight="700" fill="#111315" text-anchor="middle">' + (safeTitle.length > 40 ? safeTitle.substring(0, 37) + '...' : safeTitle) + '</text>' +
+        '<text x="400" y="500" font-family="JetBrains Mono, monospace" font-size="12" fill="#868C98" text-anchor="middle">AURELIA FINE AUCTIONS &bull; GENÈVE</text>' +
+      '</svg>';
+      img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
+    };
+  </script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Core CSS Design System -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <style>
+    /* Live Room Specific Swiss Editorial Layout */
+    .live-room-grid {
+      display: grid;
+      grid-template-columns: 55% 45%;
+      gap: var(--space-6);
+      align-items: flex-start;
+    }
+    @media (max-width: 960px) {
+      .live-room-grid {
+        grid-template-columns: 1fr;
+        gap: var(--space-5);
+      }
+    }
+
+    .media-stage {
+      background: #0B0F17;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      overflow: hidden;
+      margin-bottom: var(--space-4);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+    }
+    .media-stage__main-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 10;
+      max-height: 440px;
+      overflow: hidden;
+      cursor: zoom-in;
+      background: #0B0F17;
+    }
+    .media-stage__main {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center;
+      display: block;
+      transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .media-stage__main-wrap:hover .media-stage__main {
+      transform: scale(1.03);
+    }
+    .media-stage__zoom-badge {
+      position: absolute;
+      bottom: 14px;
+      right: 14px;
+      background: rgba(15, 23, 42, 0.88);
+      backdrop-filter: blur(8px);
+      color: #F8FAFC;
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      font-size: 0.72rem;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      pointer-events: none;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+      transition: all 0.25s ease;
+      opacity: 0.95;
+    }
+    .media-stage__main-wrap:hover .media-stage__zoom-badge {
+      transform: translateY(-2px);
+      background: rgba(15, 23, 42, 0.98);
+      border-color: rgba(255, 255, 255, 0.45);
+    }
+    .media-stage__thumbs {
+      display: flex;
+      gap: 10px;
+      padding: 10px 14px;
+      background: var(--bg-surface);
+      border-top: 1px solid var(--border-hairline);
+      overflow-x: auto;
+    }
+    .media-thumb-item {
+      width: 76px;
+      height: 56px;
+      object-fit: cover;
+      border-radius: 6px;
+      border: 2px solid transparent;
+      cursor: pointer;
+      opacity: 0.72;
+      transition: all var(--transition-fast);
+      flex-shrink: 0;
+    }
+    .media-thumb-item:hover {
+      opacity: 1;
+      border-color: var(--border-color);
+      transform: translateY(-1px);
+    }
+    .media-thumb-item.active {
+      opacity: 1;
+      border-color: #059669;
+      box-shadow: 0 0 0 2px rgba(5, 150, 105, 0.35);
+    }
+
+    /* Interactive Lightbox Zoom Modal */
+    .media-lightbox {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: rgba(10, 14, 23, 0.94);
+      backdrop-filter: blur(10px);
+      display: none;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 20px 24px;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+    }
+    .media-lightbox.active {
+      display: flex;
+      opacity: 1;
+    }
+    .media-lightbox__header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #F8FAFC;
+      z-index: 10;
+    }
+    .media-lightbox__title {
+      font-family: var(--font-serif);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #F8FAFC;
+      max-width: 60%;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .media-lightbox__actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .lightbox-btn {
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #FFFFFF;
+      width: 36px;
+      height: 36px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.15s ease, transform 0.15s ease;
+    }
+    .lightbox-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      transform: scale(1.05);
+    }
+    .lightbox-btn--close {
+      background: rgba(220, 38, 38, 0.3);
+      border-color: rgba(220, 38, 38, 0.5);
+      color: #FCA5A5;
+    }
+    .lightbox-btn--close:hover {
+      background: rgba(220, 38, 38, 0.6);
+      color: #FFFFFF;
+    }
+    .media-lightbox__content {
+      position: relative;
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      margin: 14px 0;
+    }
+    .media-lightbox__viewport {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+    .media-lightbox__viewport img {
+      max-width: 90vw;
+      max-height: 80vh;
+      object-fit: contain;
+      border-radius: 8px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      user-select: none;
+    }
+    .lightbox-nav-btn {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(15, 23, 42, 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      color: #FFFFFF;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      z-index: 10;
+      transition: all 0.2s ease;
+    }
+    .lightbox-nav-btn:hover {
+      background: rgba(15, 23, 42, 0.95);
+      transform: translateY(-50%) scale(1.1);
+    }
+    .lightbox-nav-btn--prev { left: 16px; }
+    .lightbox-nav-btn--next { right: 16px; }
+    .media-lightbox__footer {
+      text-align: center;
+      color: #94A3B8;
+      font-size: 0.8rem;
+      font-family: var(--font-mono);
+    }
+
+    .spec-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.85rem;
+    }
+    .spec-table tr {
+      border-bottom: 1px solid var(--border-hairline);
+    }
+    .spec-table th {
+      text-align: left;
+      padding: 10px 12px;
+      color: var(--text-secondary);
+      font-weight: 500;
+      width: 35%;
+      background: var(--bg-canvas);
+    }
+    .spec-table td {
+      padding: 10px 12px;
+      color: var(--text-primary);
+      font-weight: 600;
+      background: var(--bg-surface);
+    }
+
+    /* Podium Sticky Container */
+    .podium-sticky-card {
+      position: sticky;
+      top: 88px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      padding: var(--space-5);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+    }
+
+    /* 2-Box Metric Strip */
+    .podium-metrics-2box {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: var(--space-3);
+      margin: var(--space-4) 0;
+    }
+    .metric-box {
+      background: var(--bg-canvas);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      padding: var(--space-3) var(--space-4);
+    }
+    .metric-box__label {
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: var(--text-muted);
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .metric-box__val {
+      font-family: var(--font-mono);
+      font-size: 1.45rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      font-variant-numeric: tabular-nums;
+      line-height: 1.2;
+    }
+    .metric-box__val--bid {
+      color: var(--accent-bid);
+    }
+    .metric-box__val--danger {
+      color: var(--accent-danger);
+    }
+    .metric-box__sub {
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      margin-top: 4px;
+    }
+
+    /* Financial Breakdown Bar */
+    .podium-finance-strip {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 6px;
+      padding: 8px 12px;
+      background: var(--bg-subtle);
+      border-radius: var(--radius-sm);
+      margin-bottom: var(--space-4);
+      font-size: 0.72rem;
+      text-align: center;
+    }
+    .podium-finance-strip div span {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.65rem;
+      margin-bottom: 2px;
+    }
+    .podium-finance-strip div strong {
+      font-family: var(--font-mono);
+      color: var(--text-primary);
+    }
+
+    /* Quick Bid Increment Buttons */
+    .quick-step-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-bottom: var(--space-3);
+    }
+    .btn-quick-step {
+      padding: 8px 6px;
+      background: var(--bg-surface);
+      border: 1px solid var(--border-hairline);
+      border-radius: var(--radius-sm);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      cursor: pointer;
+      text-align: center;
+      transition: all var(--transition-fast);
+    }
+    .btn-quick-step:hover {
+      border-color: var(--accent-primary);
+      background: var(--bg-canvas);
+    }
+    .btn-quick-step strong {
+      display: block;
+      font-family: var(--font-mono);
+      font-size: 0.82rem;
+      color: var(--accent-bid);
+    }
+
+    /* Tab Switcher */
+    .room-tabs-nav {
+      display: flex;
+      border-bottom: 1px solid var(--border-hairline);
+      margin-top: var(--space-5);
+      margin-bottom: var(--space-3);
+    }
+    .room-tab-btn {
+      padding: 10px 16px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+    .room-tab-btn:hover {
+      color: var(--text-primary);
+    }
+    .room-tab-btn.active {
+      color: var(--text-primary);
+      border-bottom-color: var(--accent-primary);
+    }
+
+    .room-tab-content {
+      display: none;
+    }
+    .room-tab-content.active {
+      display: block;
+    }
+
+    /* Clean Bids Table */
+    .bids-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+    .bids-table th {
+      text-align: left;
+      padding: 8px 10px;
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--text-muted);
+      border-bottom: 1px solid var(--border-hairline);
+      background: var(--bg-canvas);
+    }
+    .bids-table td {
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--border-hairline);
+      color: var(--text-primary);
+    }
+    .bids-table tr:first-child td {
+      background: rgba(13, 148, 136, 0.06);
+      font-weight: 700;
+    }
+
+    /* Anti-Sniping Alert Banner */
+    .sniping-alert-banner {
+      background: rgba(180, 83, 9, 0.08);
+      border: 1px solid var(--accent-warning);
+      border-radius: var(--radius-sm);
+      padding: 8px 12px;
+      margin-bottom: var(--space-3);
+      font-size: 0.75rem;
+      color: var(--accent-warning);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .sniping-alert-banner svg {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site Header Root -->
+  <div id="site-header-root"></div>
+
+  <!-- MAIN EDITORIAL CONTENT -->
+  <main class="page-body" style="padding-top: var(--space-4); padding-bottom: var(--space-8);">
+    <div class="container container--wide">
+      
+      <!-- Top Navigation & Breadcrumbs -->
+      <div class="flex items-center justify-between" style="margin-bottom: var(--space-3); flex-wrap: wrap; gap: var(--space-2);">
+        <nav aria-label="Breadcrumb" style="font-size: 0.78rem; color: var(--text-muted);">
+          <a href="index.html" style="color: var(--text-muted); text-decoration: none;">Aurelia Genève</a>
+          <span style="margin: 0 6px;">/</span>
+          <a href="auctions.html" style="color: var(--text-muted); text-decoration: none;">Danh Mục Đấu Giá</a>
+          <span style="margin: 0 6px;">/</span>
+          <span id="room-pin-crumb" class="font-mono" style="font-weight: 600; color: var(--text-primary);">LOT #------</span>
+        </nav>
+
+        <div class="flex items-center gap-2">
+          <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 500;">Sàn đấu giá bảo chứng Sotheby's &bull; Geneva Standard</span>
+        </div>
+      </div>
+
+      <!-- 2-COLUMN SWISS EDITORIAL LAYOUT -->
+      <div class="live-room-grid">
+        
+        <!-- ===================================================================
+             COL 1 (55%): MEDIA, TITLES, TECHNICAL SPECS, PROVENANCE
+             =================================================================== -->
+        <div>
+          <!-- Lot Header -->
+          <div style="margin-bottom: var(--space-4);">
+            <div class="flex items-center gap-2" style="margin-bottom: var(--space-2);">
+              <span id="room-cat-badge" class="badge" style="background: var(--bg-subtle); color: var(--text-secondary); border: 1px solid var(--border-hairline);">
+                DANH MỤC
+              </span>
+              <span id="room-id-tag" class="font-mono text-muted" style="font-size: 0.75rem;">
+                #LOT-PREMIUM
+              </span>
+              <span id="room-top-status-badge" class="badge badge--live">
+                ĐANG DIỄN RA
+              </span>
+            </div>
+
+            <h1 id="room-lot-title" class="editorial-title" style="font-size: 1.85rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--space-2); line-height: 1.25;">
+              Đang đồng bộ dữ liệu phiên đấu giá...
+            </h1>
+            <p id="room-lot-desc" style="font-size: 0.9rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 0;">
+              Chứng nhận thẩm định chính hãng, lưu trữ theo quy chuẩn quốc tế Geneva.
+            </p>
+          </div>
+
+          <!-- Main Media Stage (16:10 Ratio, Cover Fit, Hover Zoom & Lightbox) -->
+          <div class="media-stage">
+            <div class="media-stage__main-wrap" id="main-image-wrap" onclick="window.openLightbox()" title="Nhấp để phóng to ảnh (Full HD)">
+              <img 
+                id="room-main-image" 
+                class="media-stage__main" 
+                src="assets/images/patek_nautilus_gold.jpg" 
+                alt="Ảnh vật phẩm đấu giá" 
+                onerror="if(window.handleImgError) window.handleImgError(this);"
+              />
+              <div class="media-stage__zoom-badge">
+                <svg viewBox="0 0 24 24" style="width: 14px; height: 14px;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line><line x1="11" y1="8" x2="11" y2="14"></line><line x1="8" y1="11" x2="14" y2="11"></line></svg>
+                <span>Nhấp để phóng to ảnh (Full HD)</span>
+              </div>
+            </div>
+            <div id="room-gallery-thumbs" class="media-stage__thumbs">
+              <!-- Rendered via JS (3-4 Thumbnails) -->
+            </div>
+          </div>
+
+          <!-- Technical Specifications Table (Swiss 2-Column Hairline Grid) -->
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); padding: var(--space-4); margin-bottom: var(--space-4);">
+            <h3 style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: var(--space-3); padding-bottom: 6px; border-bottom: 1px solid var(--border-hairline);">
+              Thông Số Kỹ Thuật (Specifications)
+            </h3>
+            <table class="spec-table" id="room-specs-table">
+              <tbody>
+                <!-- Rendered dynamically -->
+              </tbody>
+            </table>
+          </div>
+
+          <!-- Provenance & Appraisal Section -->
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); padding: var(--space-4);">
+            <h3 style="font-size: 0.95rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--text-primary); margin-bottom: var(--space-3); padding-bottom: 6px; border-bottom: 1px solid var(--border-hairline);">
+              Chứng Thực & Lai Lịch (Provenance & Appraisal)
+            </h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); font-size: 0.85rem;">
+              <div>
+                <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 2px;">Cơ quan thẩm định</span>
+                <strong id="appraisal-inspector" style="color: var(--text-primary);">Sotheby's Horology Geneva Bureau</strong>
+              </div>
+              <div>
+                <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 2px;">Điểm tình trạng</span>
+                <strong id="appraisal-score" class="text-emerald">9.9/10 (Mint Pristine)</strong>
+              </div>
+              <div>
+                <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 2px;">Số chứng thư số</span>
+                <strong id="appraisal-certno" class="font-mono" style="color: var(--text-primary);">PP-CH-2026-8821</strong>
+              </div>
+              <div>
+                <span style="display: block; font-size: 0.72rem; color: var(--text-muted); margin-bottom: 2px;">Lai lịch bộ sưu tập</span>
+                <strong id="appraisal-provenance" style="color: var(--text-primary);">Bộ sưu tập Hoàng gia Liechtenstein</strong>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ===================================================================
+             COL 2 (45% STICKY): THE TRADING PODIUM & ACTION DECK
+             =================================================================== -->
+        <div>
+          <div class="podium-sticky-card">
+            
+            <!-- Podium Top Bar -->
+            <div class="flex items-center justify-between" style="border-bottom: 1px solid var(--border-hairline); padding-bottom: var(--space-3); margin-bottom: var(--space-3);">
+              <div class="flex items-center gap-2">
+                <span id="podium-status-badge" class="badge badge--live">ĐANG DIỄN RA</span>
+                <span id="podium-room-pin-display" class="font-mono text-muted" style="font-weight: 600; font-size: 0.82rem;">#PIN: ------</span>
+              </div>
+              <div>
+                <button type="button" class="btn btn--outline btn--sm" id="btn-invite-modal" onclick="window.openRoomInviteModal(roomId)" style="padding: 5px 10px; font-size: 0.72rem; font-weight: 600;" title="Mời tham gia phòng và xem mã QR">
+                  <svg viewBox="0 0 24 24" style="width: 14px; height: 14px;"><circle cx="18" cy="5" r="3"></circle><circle cx="6" cy="12" r="3"></circle><circle cx="18" cy="19" r="3"></circle><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line></svg>
+                  <span>Mời Tham Gia (PIN & QR)</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 2-Box Metric Strip -->
+            <div class="podium-metrics-2box">
+              <div class="metric-box">
+                <div class="metric-box__label" id="label-price-box">
+                  <svg viewBox="0 0 24 24" style="width: 13px; height: 13px;"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+                  <span>Mức Giá Hiện Tại</span>
+                </div>
+                <div class="metric-box__val metric-box__val--bid" id="podium-current-price">
+                  0 ₫
+                </div>
+                <div class="metric-box__sub" id="podium-leader-box">
+                  Đang dẫn đầu: <strong id="podium-leader-name">---</strong>
+                </div>
+              </div>
+
+              <div class="metric-box">
+                <div class="metric-box__label" id="label-clock-box">
+                  <svg viewBox="0 0 24 24" style="width: 13px; height: 13px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                  <span id="podium-timer-title">Thời Gian Còn Lại</span>
+                </div>
+                <div class="metric-box__val" id="podium-countdown-clock">
+                  --:--
+                </div>
+                <div class="metric-box__sub" id="podium-timer-sub">
+                  Kèm cơ chế Anti-Sniping
+                </div>
+              </div>
+            </div>
+
+            <!-- Anti-Sniping Alert Banner -->
+            <div class="sniping-alert-banner" id="anti-sniping-banner" style="display: none;">
+              <svg viewBox="0 0 24 24"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+              <div>
+                <strong>Cơ chế Anti-Sniping đang kích hoạt</strong>: Trả giá trong 30 giây cuối sẽ tự động cộng thêm +30 giây để đảm bảo công bằng.
+              </div>
+            </div>
+
+            <!-- Financial Specs Strip -->
+            <div class="podium-finance-strip">
+              <div>
+                <span>GIÁ KHỞI ĐIỂM</span>
+                <strong id="podium-start-price">---</strong>
+              </div>
+              <div>
+                <span>BƯỚC GIÁ TỐI THIỂU</span>
+                <strong id="podium-step-price">---</strong>
+              </div>
+              <div>
+                <span>KÝ QUỸ CỌC (15%)</span>
+                <strong id="podium-deposit-price">---</strong>
+              </div>
+            </div>
+
+            <!-- =================================================================
+                 ADAPTIVE ACTION DECK (WAITING / LIVE / ENDED)
+                 ================================================================= -->
+            <div id="action-deck-root">
+              
+              <!-- 1. PANEL CHỜ KHAI MẠC (WAITING STATE) -->
+              <div id="deck-panel-waiting" style="display: none; background: var(--bg-canvas); border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); padding: var(--space-4); text-align: center;">
+                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); font-weight: 700; margin-bottom: 6px;">
+                  TRẠNG THÁI PHÒNG
+                </div>
+                <h4 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--space-2);">
+                  Phiên Đấu Giá Chưa Khai Mạc
+                </h4>
+                <p id="deck-waiting-desc" style="font-size: 0.8rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: var(--space-3);">
+                  Vui lòng chờ Chủ phòng phát lệnh mở sàn để bắt đầu phiên trả giá trực tiếp.
+                </p>
+
+                <!-- Dành cho Chủ phòng (Host) -->
+                <div id="waiting-host-actions" style="display: none;">
+                  <button type="button" class="btn btn--primary btn--lg" id="btn-start-auction-now" style="width: 100%; font-weight: 700; margin-bottom: var(--space-2);">
+                    <svg viewBox="0 0 24 24"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    <span>Bắt Đầu Phiên Đấu Giá (Start Auction)</span>
+                  </button>
+                  <div class="flex items-center justify-between" style="font-size: 0.75rem; color: var(--text-muted);">
+                    <span>Thời lượng đã đặt: <strong id="waiting-host-duration">15 phút</strong></span>
+                    <button type="button" class="btn btn--outline btn--sm" onclick="window.simulateMockDeposit()" style="font-weight: 600;">
+                      <svg viewBox="0 0 24 24" style="width: 13px; height: 13px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                      <span>+ Mô phỏng Khách Ký Quỹ</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Dành cho Khách (Bidder/Guest) -->
+                <div id="waiting-bidder-actions" style="display: none;">
+                  <div id="waiting-bidder-not-deposited">
+                    <button type="button" class="btn btn--primary btn--md" style="width: 100%; font-weight: 600;" onclick="window.openDepositModal(roomId)">
+                      <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                      <span>Nộp Cọc Ký Quỹ (15%) Để Sẵn Sàng Ra Giá</span>
+                    </button>
+                  </div>
+                  <div id="waiting-bidder-has-deposited" style="display: none; background: rgba(13, 148, 136, 0.08); border: 1px solid var(--accent-bid); border-radius: var(--radius-sm); padding: 10px; font-size: 0.8rem; color: var(--accent-bid); font-weight: 600;">
+                    Quý khách đã ký quỹ thành công • Thẻ <span id="waiting-user-paddle">#PD----</span> • Sẵn sàng đặt giá khi mở sàn.
+                  </div>
+                </div>
+              </div>
+
+              <!-- 2. PANEL ĐANG DIỄN RA (LIVE STATE) -->
+              <div id="deck-panel-live" style="display: none;">
+                
+                <!-- Sub-panel: Host Controls khi đang LIVE -->
+                <div id="live-host-controls" style="display: none; background: var(--bg-canvas); border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); padding: var(--space-4); margin-bottom: var(--space-3);">
+                  <div class="flex items-center justify-between" style="margin-bottom: var(--space-2);">
+                    <span style="font-size: 0.72rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; color: var(--text-muted);">
+                      BẢNG ĐIỀU HÀNH CHỦ PHÒNG (HOST CONTROLS)
+                    </span>
+                    <span class="badge" style="background: var(--bg-surface); border: 1px solid var(--border-hairline); font-size: 0.65rem;">HOST CHÍNH THỨC</span>
+                  </div>
+                  
+                  <button type="button" class="btn btn--primary btn--lg" id="btn-host-settle-early" style="width: 100%; font-weight: 700; margin-bottom: var(--space-2);">
+                    <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    <span>Chốt Phiên & Công Bố Kết Quả</span>
+                  </button>
+                  <p id="host-settle-note" style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: var(--space-2); text-align: center;">
+                    Cần có ít nhất 1 lượt trả giá hợp lệ để chốt phiên sớm.
+                  </p>
+
+                  <div class="flex gap-2">
+                    <button type="button" class="btn btn--outline btn--sm" style="flex: 1; font-size: 0.74rem; font-weight: 600;" onclick="window.simulateMockBid()" title="Mô phỏng 1 khách ký quỹ ra giá +1 bước giá">
+                      <svg viewBox="0 0 24 24" style="width: 13px; height: 13px; color: var(--accent-emerald);"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                      <span>⚡ Khách Trả Giá (+1 Bước)</span>
+                    </button>
+                    <button type="button" class="btn btn--outline btn--sm" id="btn-fast-forward-15s" style="flex: 1; font-size: 0.74rem; font-weight: 600;" title="Tua đồng hồ xuống 15 giây cuối để thử nghiệm Anti-Sniping">
+                      <svg viewBox="0 0 24 24" style="width: 13px; height: 13px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                      <span>⏱️ Tua 15 Giây Cuối</span>
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Sub-panel: Khách chưa đăng nhập -->
+                <div id="live-guest-auth" style="display: none; background: var(--bg-canvas); border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); padding: var(--space-4); text-align: center;">
+                  <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+                    Đăng Nhập Để Tham Gia Trả Giá
+                  </h4>
+                  <p style="font-size: 0.78rem; color: var(--text-secondary); margin-bottom: var(--space-3); line-height: 1.5;">
+                    Quý khách cần đăng nhập hoặc tạo tài khoản để nhận Mã Thẻ Đấu Giá và tham gia đặt cọc trong phiên này.
+                  </p>
+                  <div class="flex gap-2" style="max-width: 320px; margin: 0 auto; justify-content: center;">
+                    <button type="button" class="btn btn--primary btn--md" style="flex: 1; font-weight: 600;" onclick="window.openAuthModal('login')">
+                      Đăng Nhập
+                    </button>
+                    <button type="button" class="btn btn--secondary btn--md" style="flex: 1; font-weight: 600;" onclick="window.openAuthModal('register')">
+                      Đăng Ký Mới
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Sub-panel: Khách đã đăng nhập nhưng CHƯA nộp cọc -->
+                <div id="live-need-deposit" style="display: none; background: var(--bg-canvas); border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); padding: var(--space-4); text-align: center;">
+                  <h4 style="font-size: 0.95rem; font-weight: 700; color: var(--text-primary); margin-bottom: 6px;">
+                    Yêu Cầu Đặt Cọc Ký Quỹ (15%)
+                  </h4>
+                  <p style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: var(--space-3);">
+                    Theo quy chuẩn của Aurelia, nhà sưu tầm cần khóa tạm thời 15% giá khởi điểm để xác thực thẻ đấu giá hợp lệ. Tiền cọc sẽ được hoàn trả tự động 100% nếu quý khách không trúng thầu.
+                  </p>
+                  <div style="background: var(--bg-surface); border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); padding: 8px 12px; margin-bottom: var(--space-3); font-size: 0.75rem; display: flex; justify-content: space-between;">
+                    <span class="text-muted">Mức cọc cần ký quỹ:</span>
+                    <strong class="font-mono text-emerald" id="deck-deposit-needed-display">---</strong>
+                  </div>
+                  <button type="button" class="btn btn--primary btn--md" style="width: 100%; font-weight: 700;" onclick="window.openDepositModal(roomId)">
+                    <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+                    <span>Ký Quỹ Ngay & Nhận Thẻ Trả Giá</span>
+                  </button>
+                </div>
+
+                <!-- Sub-panel: Khách ĐÃ nộp cọc (Bàn phím trả giá đầy đủ) -->
+                <div id="live-ready-bidding" style="display: none;">
+                  <div class="flex items-center justify-between" style="background: rgba(13, 148, 136, 0.08); border: 1px solid var(--accent-bid); border-radius: var(--radius-sm); padding: 6px 12px; margin-bottom: var(--space-3); font-size: 0.75rem;">
+                    <span style="color: var(--accent-bid); font-weight: 600;">
+                      Đã ký quỹ hợp lệ &bull; Thẻ <strong id="bidding-user-paddle">#PD----</strong>
+                    </span>
+                    <span class="badge badge--live" style="font-size: 0.65rem;">SẴN SÀNG</span>
+                  </div>
+
+                  <!-- Notification if user is already leading -->
+                  <div id="bidding-leader-warning" style="display: none; background: rgba(5, 150, 105, 0.08); border: 1px solid var(--accent-emerald); border-radius: var(--radius-sm); padding: 8px 12px; margin-bottom: var(--space-3); font-size: 0.78rem; text-align: center; color: var(--accent-emerald);"></div>
+
+                  <!-- Quick Steps Multipliers -->
+                  <div class="quick-step-grid">
+                    <button type="button" class="btn-quick-step" id="btn-step-1x">
+                      <span>+1x Bước</span>
+                      <strong id="btn-step-1x-val">0 ₫</strong>
+                    </button>
+                    <button type="button" class="btn-quick-step" id="btn-step-2x">
+                      <span>+2x Bước</span>
+                      <strong id="btn-step-2x-val">0 ₫</strong>
+                    </button>
+                    <button type="button" class="btn-quick-step" id="btn-step-5x">
+                      <span>+5x Bước</span>
+                      <strong id="btn-step-5x-val">0 ₫</strong>
+                    </button>
+                  </div>
+
+                  <!-- Custom Input -->
+                  <div class="form-group" style="margin-bottom: var(--space-3);">
+                    <label class="form-label" for="custom-bid-input" style="font-size: 0.75rem; margin-bottom: 4px;">
+                      Mức giá đề xuất của bạn (VNĐ):
+                    </label>
+                    <div style="position: relative;">
+                      <input 
+                        type="number" 
+                        id="custom-bid-input" 
+                        class="form-control" 
+                        style="font-family: var(--font-mono); font-size: 1.15rem; font-weight: 700; padding-right: 3rem;"
+                        placeholder="0"
+                      />
+                      <span style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">VNĐ</span>
+                    </div>
+                  </div>
+
+                  <!-- Main Submit Bid Button -->
+                  <button type="button" class="btn btn--bid btn--lg" id="btn-submit-bid" style="width: 100%; font-weight: 700; margin-bottom: var(--space-3);">
+                    <svg viewBox="0 0 24 24"><line x1="12" y1="19" x2="12" y2="5"></line><polyline points="5 12 12 5 19 12"></polyline></svg>
+                    <span>Xác Nhận Đặt Giá</span>
+                  </button>
+
+                  <!-- Testing Helpers -->
+                  <div style="background: var(--bg-canvas); border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); padding: 8px 12px; font-size: 0.72rem; display: flex; align-items: center; justify-content: space-between;">
+                    <label class="flex items-center gap-2" style="cursor: pointer; color: var(--text-secondary); margin: 0;">
+                      <input type="checkbox" id="chk-rival-bot" style="accent-color: var(--accent-primary);">
+                      <span>Bật đối thủ tự động (Rival Bot)</span>
+                    </label>
+                    <button type="button" class="btn btn--outline btn--sm" id="btn-fast-forward-bidder" style="padding: 2px 6px; font-size: 0.68rem;">
+                      Tua 15s
+                    </button>
+                  </div>
+                </div>
+
+              </div>
+
+              <!-- 3. PANEL ĐÃ KẾT THÚC (ENDED STATE) -->
+              <div id="deck-panel-ended" style="display: none; background: var(--bg-canvas); border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); padding: var(--space-5); text-align: center;">
+                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text-muted); font-weight: 700; margin-bottom: 6px;">
+                  BIÊN BẢN PHIÊN ĐẤU GIÁ
+                </div>
+                <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin-bottom: var(--space-2);">
+                  Phiên Đấu Giá Đã Kết Thúc
+                </h3>
+                <p id="deck-ended-desc" style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; max-width: 400px; margin: 0 auto var(--space-4);">
+                  Phiên đấu giá đã hoàn tất theo quy chế sàn.
+                </p>
+
+                <button type="button" class="btn btn--primary btn--md" id="btn-view-auction-result" style="font-weight: 600; margin: 0 auto;">
+                  <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                  <span>Xem Biên Bản Xác Nhận Kết Quả</span>
+                </button>
+              </div>
+
+            </div>
+
+            <!-- =================================================================
+                 2 CLEAN TABS: LỊCH SỬ TRẢ GIÁ & NGƯỜI THAM GIA ĐÃ KÝ QUỸ
+                 ================================================================= -->
+            <div class="room-tabs-nav">
+              <button type="button" class="room-tab-btn active" id="tab-btn-bids" onclick="window.switchRoomTab('bids')">
+                Lịch Sử Trả Giá (<span id="tab-bids-count">0</span>)
+              </button>
+              <button type="button" class="room-tab-btn" id="tab-btn-deposits" onclick="window.switchRoomTab('deposits')">
+                Người Tham Gia Đã Ký Quỹ (<span id="tab-deposits-count">0</span>)
+              </button>
+            </div>
+
+            <!-- Tab 1: Lịch Sử Trả Giá -->
+            <div class="room-tab-content active" id="tab-content-bids">
+              <div style="max-height: 240px; overflow-y: auto;">
+                <table class="bids-table">
+                  <thead>
+                    <tr>
+                      <th>Thời gian</th>
+                      <th>Nhà sưu tầm</th>
+                      <th style="text-align: right;">Mức giá</th>
+                    </tr>
+                  </thead>
+                  <tbody id="bids-table-body">
+                    <!-- Rendered via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Tab 2: Người Tham Gia Đã Ký Quỹ -->
+            <div class="room-tab-content" id="tab-content-deposits">
+              <div style="max-height: 240px; overflow-y: auto;">
+                <table class="bids-table">
+                  <thead>
+                    <tr>
+                      <th>Thẻ số</th>
+                      <th>Nhà sưu tầm</th>
+                      <th style="text-align: right;">Tiền cọc</th>
+                      <th style="text-align: right;">Trạng thái</th>
+                    </tr>
+                  </thead>
+                  <tbody id="deposits-table-body">
+                    <!-- Rendered via JS -->
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Fullscreen Interactive Lightbox Zoom Modal -->
+  <div id="media-lightbox" class="media-lightbox" aria-hidden="true">
+    <div class="media-lightbox__header">
+      <div id="lightbox-title" class="media-lightbox__title">Ảnh Vật Phẩm Đấu Giá</div>
+      <div class="media-lightbox__actions">
+        <button type="button" class="lightbox-btn" onclick="window.zoomLightbox(-0.25)" title="Thu nhỏ (-)">
+          <svg viewBox="0 0 24 24" style="width: 16px; height: 16px;"><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+        <span id="lightbox-zoom-level" style="font-family: var(--font-mono); font-size: 0.75rem; color: #CBD5E1; min-width: 44px; text-align: center;">100%</span>
+        <button type="button" class="lightbox-btn" onclick="window.zoomLightbox(+0.25)" title="Phóng to (+)">
+          <svg viewBox="0 0 24 24" style="width: 16px; height: 16px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+        </button>
+        <button type="button" class="lightbox-btn" onclick="window.resetLightboxZoom()" title="Vừa màn hình">
+          <svg viewBox="0 0 24 24" style="width: 16px; height: 16px;"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"></path></svg>
+        </button>
+        <button type="button" class="lightbox-btn lightbox-btn--close" onclick="window.closeLightbox()" title="Đóng (Esc)">
+          <svg viewBox="0 0 24 24" style="width: 16px; height: 16px;"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+    </div>
+    <div class="media-lightbox__content" onclick="if(event.target===this||event.target.id==='lightbox-viewport') window.closeLightbox()">
+      <button type="button" class="lightbox-nav-btn lightbox-nav-btn--prev" onclick="event.stopPropagation(); window.navLightbox(-1)" title="Ảnh trước">
+        <svg viewBox="0 0 24 24" style="width: 20px; height: 20px;"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <div class="media-lightbox__viewport" id="lightbox-viewport">
+        <img id="lightbox-img" src="" alt="Phóng to ảnh vật phẩm" />
+      </div>
+      <button type="button" class="lightbox-nav-btn lightbox-nav-btn--next" onclick="event.stopPropagation(); window.navLightbox(+1)" title="Ảnh kế tiếp">
+        <svg viewBox="0 0 24 24" style="width: 20px; height: 20px;"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+    <div class="media-lightbox__footer">
+      <span id="lightbox-counter">1 / 3</span> &bull; <span style="color: #64748B;">Dùng phím Mũi tên trái/phải để chuyển ảnh, cuộn hoặc bấm +/- để phóng to</span>
+    </div>
+  </div>
+
+  <!-- Site Footer Root -->
+  <div id="site-footer-root"></div>
+
+  <!-- Modals Root -->
+  <div id="modals-root"></div>
+
+  <!-- Scripts -->
+  <script src="js/app-core.js"></script>
+  <script src="components/header.js"></script>
+  <script src="components/footer.js"></script>
+  <script src="components/modals.js"></script>
+  <script src="js/mqtt.min.js"></script>
+
+  <!-- Live Room Logic Controller -->
+  <script>
+    (function() {
+      // 1. Render Modals & Components
+      try { if (typeof window.renderHeader === 'function') window.renderHeader(); } catch (e) { console.error('Header:', e); }
+      try { if (typeof window.renderFooter === 'function') window.renderFooter(); } catch (e) { console.error('Footer:', e); }
+      try { if (typeof window.renderModals === 'function') window.renderModals(); } catch (e) { console.error('Modals:', e); }
+
+      var store = window.AureliaApp || window.AuctionStore;
+      if (!store) {
+        console.error('AuctionStore is missing!');
+        return;
+      }
+
+      // 2. Identify Room from URL & Hydrate if Shared
+      var urlParams = new URLSearchParams(window.location.search);
+      var roomParam = urlParams.get('room') || urlParams.get('id') || '839201';
+      var shareParam = urlParams.get('share');
+
+      // 1.5. Realtime Cross-Device Synchronization via Public MQTT WebSocket Relay
+      var mqttClient = null;
+      var mqttClientId = 'aurelia_' + Math.random().toString(16).substring(2, 10);
+      var mqttTopic = 'aurelia/auction/room/' + String(roomParam || '').replace(/[^0-9]/g, '');
+
+      try {
+        if (typeof mqtt !== 'undefined' && typeof mqtt.connect === 'function') {
+          var brokerUrl = 'wss://broker.emqx.io:8084/mqtt';
+          mqttClient = mqtt.connect(brokerUrl, {
+            clientId: mqttClientId,
+            clean: true,
+            connectTimeout: 4000,
+            reconnectPeriod: 5000
+          });
+
+          mqttClient.on('connect', function() {
+            console.log('[Realtime Relay] Connected to cross-device broker on topic:', mqttTopic);
+            mqttClient.subscribe(mqttTopic, { qos: 1 });
+          });
+
+          mqttClient.on('message', function(t, payload) {
+            try {
+              var data = JSON.parse(payload.toString());
+              if (!data || !data.type) return;
+              if (data.senderId === mqttClientId) return; // Ignore own echoes
+
+              if (data.type === 'NEW_BID' && data.bid) {
+                var currentBids = store.getBids(window.roomId);
+                if (!currentBids.some(function(b) { return b.id === data.bid.id; })) {
+                  store.addBid(data.bid);
+                  store.updateRoom(window.roomId, {
+                    currentPrice: data.bid.amount,
+                    leaderUid: data.bid.uid,
+                    leaderName: data.bid.bidderName,
+                    leaderPaddleId: data.bid.paddleId
+                  });
+                  renderRoom();
+                  if (soundSystem) soundSystem.playGavelStrike(1, 200);
+                  if (window.showToast) {
+                    window.showToast('Trả giá mới từ thiết bị khác', data.bid.bidderName + ' (' + data.bid.paddleId + ') vừa trả ' + store.formatCurrency(data.bid.amount), 'info', 2500);
+                  }
+                }
+              } else if (data.type === 'ROOM_STATUS') {
+                store.updateRoom(window.roomId, data.payload);
+                renderRoom();
+              }
+            } catch (err) {
+              console.warn('[Realtime Relay] Message error:', err);
+            }
+          });
+        }
+      } catch (e) {
+        console.warn('[Realtime Relay] MQTT not initialized:', e);
+      }
+
+      // Hydrate from Shareable URL if provided
+      if (shareParam) {
+        try {
+          var rawJson = decodeURIComponent(escape(atob(decodeURIComponent(shareParam))));
+          var sData = JSON.parse(rawJson);
+          if (sData && sData.pin) {
+            var hydratedRoom = {
+              roomId: sData.id || ('room-' + sData.pin),
+              id: sData.id || ('lot-' + sData.pin),
+              lotNumber: String(sData.pin).slice(-3),
+              roomPin: String(sData.pin),
+              title: sData.t || 'Phiên Đấu Giá Niêm Yết',
+              category: sData.c || 'watches',
+              categoryName: sData.cn || 'Đồng hồ Cơ Thụy Sĩ',
+              shortDesc: sData.d || 'Phiên đấu giá được tạo và chia sẻ từ hệ thống Aurelia Fine Auctions.',
+              startPrice: Number(sData.sp) || 1500000000,
+              currentPrice: Number(sData.cp) || Number(sData.sp) || 1500000000,
+              stepPrice: Number(sData.st) || 50000000,
+              depositAmount: Number(sData.dp) || Math.round((Number(sData.sp) || 1500000000) * 0.15),
+              status: sData.status || 'WAITING',
+              durationMinutes: Number(sData.dur) || 15,
+              durationSeconds: Number(sData.durSec) || ((Number(sData.dur) || 15) * 60),
+              startTime: null,
+              endTime: null,
+              featured: false,
+              leaderUid: '',
+              leaderName: '',
+              leaderPaddleId: '',
+              sellerId: sData.sellerId || 'usr-host-remote',
+              sellerName: sData.host || 'Chủ Phòng Aurelia',
+              sellerPaddleId: '#HOST-COMMUNITY',
+              participantsCount: 1,
+              images: (sData.imgs && sData.imgs.length >= 3) ? sData.imgs : [
+                'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=1200&q=85',
+                'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=1200&q=85',
+                'https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?auto=format&fit=crop&w=1200&q=85'
+              ],
+              specs: sData.specs || {
+                'Thương hiệu': 'Geneva Certified Piece',
+                'Xuất xứ': 'Geneva, Thụy Sĩ',
+                'Tình trạng': 'Mới 100% Nguyên bản'
+              },
+              appraisal: {
+                inspector: "Aurelia Global Curators Bureau",
+                score: '9.9/10 (Verified)',
+                certNo: 'PP-CH-' + sData.pin,
+                provenance: 'Bộ sưu tập tư nhân Geneva'
+              }
+            };
+            store.upsertRoom(hydratedRoom);
+            roomParam = String(sData.pin);
+            if (window.showToast) {
+              window.showToast('Đã nhận phòng đấu giá', 'Tải thành công phiên đấu giá #' + sData.pin + ' từ liên kết mời!', 'success', 2500);
+            }
+          }
+        } catch (e) {
+          console.error('Lỗi giải mã liên kết chia sẻ:', e);
+        }
+      }
+
+      var currentRoom = store.getRoom(roomParam);
+      if (!currentRoom) {
+        var allRooms = store.getRooms();
+        currentRoom = allRooms.find(function(r) {
+          return String(r.roomPin) === String(roomParam) || String(r.roomId) === String(roomParam);
+        }) || (allRooms.length > 0 ? allRooms[0] : null);
+      }
+
+      if (!currentRoom) {
+        if (window.showToast) {
+          window.showToast('Không tìm thấy phòng', 'Phòng đấu giá không tồn tại trên hệ thống!', 'error');
+        } else {
+          alert('Không tìm thấy phòng đấu giá hợp lệ!');
+        }
+        window.location.href = 'index.html';
+        return;
+      }
+
+      // 3. Auto-Migration of Images for Luxury Watch lots (Never show silver watch on book)
+      (function migrateImagesIfNeeded() {
+        if (!currentRoom) return;
+        var t = (currentRoom.title || '').toLowerCase();
+        var isPatekOrWatch = t.indexOf('patek') !== -1 || t.indexOf('nautilus') !== -1 || t.indexOf('5711') !== -1 || currentRoom.category === 'watches';
+        var hasSilverWatch = currentRoom.images && currentRoom.images.some(function(img) {
+          return img.indexOf('1524805444758') !== -1 || img.indexOf('1522335789203') !== -1;
+        });
+
+        if (hasSilverWatch || (isPatekOrWatch && (!currentRoom.images || currentRoom.images.length < 3))) {
+          currentRoom.images = [
+            'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=1200&q=85',
+            'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=1200&q=85',
+            'https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?auto=format&fit=crop&w=1200&q=85'
+          ];
+          store.upsertRoom(currentRoom);
+        }
+      })();
+
+            window.roomId = currentRoom.roomId;
+      var clockInterval = null;
+      var soundSystem = null;
+      try {
+        if (typeof WebAudioSoundSystem === 'function') {
+          soundSystem = new WebAudioSoundSystem();
+        }
+      } catch (e) {}
+
+      // Tab switcher function
+      window.switchRoomTab = function(tabName) {
+        var btnBids = document.getElementById('tab-btn-bids');
+        var btnDeps = document.getElementById('tab-btn-deposits');
+        var cntBids = document.getElementById('tab-content-bids');
+        var cntDeps = document.getElementById('tab-content-deposits');
+
+        if (tabName === 'bids') {
+          if (btnBids) btnBids.classList.add('active');
+          if (btnDeps) btnDeps.classList.remove('active');
+          if (cntBids) cntBids.classList.add('active');
+          if (cntDeps) cntDeps.classList.remove('active');
+        } else {
+          if (btnBids) btnBids.classList.remove('active');
+          if (btnDeps) btnDeps.classList.add('active');
+          if (cntBids) cntBids.classList.remove('active');
+          if (cntDeps) cntDeps.classList.add('active');
+        }
+      };
+
+      // 4. Interactive Lightbox Zoom Controller
+      var lightboxCurrentIndex = 0;
+      var lightboxZoom = 1.0;
+
+      function getRoomImages() {
+        if (currentRoom.images && currentRoom.images.length > 0) {
+          return currentRoom.images;
+        }
+        return [
+          'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=1200&q=85',
+          'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=1200&q=85',
+          'https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?auto=format&fit=crop&w=1200&q=85'
+        ];
+      }
+
+      window.openLightbox = function(idx) {
+        var imgs = getRoomImages();
+        lightboxCurrentIndex = typeof idx === 'number' ? idx : 0;
+        lightboxZoom = 1.0;
+
+        var box = document.getElementById('media-lightbox');
+        var imgEl = document.getElementById('lightbox-img');
+        var titleEl = document.getElementById('lightbox-title');
+        var counterEl = document.getElementById('lightbox-counter');
+        var zoomEl = document.getElementById('lightbox-zoom-level');
+
+        if (titleEl) titleEl.textContent = currentRoom.title;
+        if (imgEl) {
+          imgEl.src = imgs[lightboxCurrentIndex];
+          imgEl.style.transform = 'scale(1)';
+        }
+        if (counterEl) counterEl.textContent = (lightboxCurrentIndex + 1) + ' / ' + imgs.length;
+        if (zoomEl) zoomEl.textContent = '100%';
+
+        if (box) {
+          box.classList.add('active');
+          box.setAttribute('aria-hidden', 'false');
+          document.body.style.overflow = 'hidden';
+        }
+      };
+
+      window.closeLightbox = function() {
+        var box = document.getElementById('media-lightbox');
+        if (box) {
+          box.classList.remove('active');
+          box.setAttribute('aria-hidden', 'true');
+          document.body.style.overflow = '';
+        }
+      };
+
+      window.zoomLightbox = function(delta) {
+        lightboxZoom = Math.min(3.0, Math.max(0.5, lightboxZoom + delta));
+        var imgEl = document.getElementById('lightbox-img');
+        var zoomEl = document.getElementById('lightbox-zoom-level');
+        if (imgEl) imgEl.style.transform = 'scale(' + lightboxZoom + ')';
+        if (zoomEl) zoomEl.textContent = Math.round(lightboxZoom * 100) + '%';
+      };
+
+      window.resetLightboxZoom = function() {
+        lightboxZoom = 1.0;
+        var imgEl = document.getElementById('lightbox-img');
+        var zoomEl = document.getElementById('lightbox-zoom-level');
+        if (imgEl) imgEl.style.transform = 'scale(1)';
+        if (zoomEl) zoomEl.textContent = '100%';
+      };
+
+      window.navLightbox = function(step) {
+        var imgs = getRoomImages();
+        lightboxCurrentIndex = (lightboxCurrentIndex + step + imgs.length) % imgs.length;
+        lightboxZoom = 1.0;
+
+        var imgEl = document.getElementById('lightbox-img');
+        var counterEl = document.getElementById('lightbox-counter');
+        var zoomEl = document.getElementById('lightbox-zoom-level');
+
+        if (imgEl) {
+          imgEl.src = imgs[lightboxCurrentIndex];
+          imgEl.style.transform = 'scale(1)';
+        }
+        if (counterEl) counterEl.textContent = (lightboxCurrentIndex + 1) + ' / ' + imgs.length;
+        if (zoomEl) zoomEl.textContent = '100%';
+
+        // Also sync main room image and active thumbnail
+        var mainImg = document.getElementById('room-main-image');
+        if (mainImg) mainImg.src = imgs[lightboxCurrentIndex];
+        document.querySelectorAll('.media-thumb-item').forEach(function(el, i) {
+          if (i === lightboxCurrentIndex) el.classList.add('active');
+          else el.classList.remove('active');
+        });
+      };
+
+      // Keyboard navigation for Lightbox
+      document.addEventListener('keydown', function(e) {
+        var box = document.getElementById('media-lightbox');
+        if (!box || !box.classList.contains('active')) return;
+        if (e.key === 'Escape') window.closeLightbox();
+        else if (e.key === 'ArrowLeft') window.navLightbox(-1);
+        else if (e.key === 'ArrowRight') window.navLightbox(1);
+        else if (e.key === '+' || e.key === '=') window.zoomLightbox(0.25);
+        else if (e.key === '-' || e.key === '_') window.zoomLightbox(-0.25);
+      });
+
+      // 5. Render Room Data & State
+      function renderRoom() {
+        var room = store.getRoom(window.roomId);
+        if (!room) return;
+        currentRoom = room;
+
+        var currentUser = store.getCurrentUser();
+        var bids = store.getBids(room.roomId);
+        var deposits = store.getDeposits().filter(function(d) { return d.roomId === room.roomId; });
+
+        // Breadcrumbs & Basic Info
+        var crumbEl = document.getElementById('room-pin-crumb');
+        if (crumbEl) crumbEl.textContent = 'LOT #' + room.roomPin;
+
+        var idTag = document.getElementById('room-id-tag');
+        if (idTag) idTag.textContent = '#' + (room.id || room.roomPin);
+
+        var catBadge = document.getElementById('room-cat-badge');
+        if (catBadge) catBadge.textContent = room.categoryName || 'TÀI SẢN CAO CẤP';
+
+        var titleEl = document.getElementById('room-lot-title');
+        if (titleEl) titleEl.textContent = room.title;
+
+        var descEl = document.getElementById('room-lot-desc');
+        if (descEl) descEl.textContent = room.shortDesc || room.fullDesc || 'Chứng nhận thẩm định chính hãng, lưu trữ theo quy chuẩn quốc tế Geneva.';
+
+        // Status badges
+        var topStatus = document.getElementById('room-top-status-badge');
+        var podiumStatus = document.getElementById('podium-status-badge');
+        var statusClass = 'badge--waiting';
+        var statusLabel = 'CHỜ KHAI MẠC';
+
+        if (room.status === 'LIVE') {
+          statusClass = 'badge--live';
+          statusLabel = 'ĐANG DIỄN RA';
+        } else if (room.status === 'ENDED') {
+          statusClass = 'badge--ended';
+          statusLabel = 'ĐÃ KẾT THÚC';
+        }
+
+        if (topStatus) {
+          topStatus.className = 'badge ' + statusClass;
+          topStatus.textContent = statusLabel;
+        }
+        if (podiumStatus) {
+          podiumStatus.className = 'badge ' + statusClass;
+          podiumStatus.textContent = statusLabel;
+        }
+
+        // Room PIN on podium
+        var pinEl = document.getElementById('podium-room-pin-display');
+        if (pinEl) pinEl.textContent = '#PIN: ' + room.roomPin;
+
+        // Media Gallery & Thumbnails (At least 3 photos)
+        var galleryImages = getRoomImages();
+        var mainImg = document.getElementById('room-main-image');
+        if (mainImg) {
+          mainImg.src = galleryImages[0];
+          var thumbsWrap = document.getElementById('room-gallery-thumbs');
+          if (thumbsWrap) {
+            thumbsWrap.innerHTML = galleryImages.map(function(img, idx) {
+              return '<img src="' + img + '" class="media-thumb-item ' + (idx === 0 ? 'active' : '') + '" alt="Góc chụp ' + (idx + 1) + '" onerror="if(window.handleImgError) window.handleImgError(this);" onclick="document.getElementById(\'room-main-image\').src = \'' + img + '\'; document.querySelectorAll(\'.media-thumb-item\').forEach(function(el){ el.classList.remove(\'active\'); }); this.classList.add(\'active\'); lightboxCurrentIndex = ' + idx + ';" />';
+            }).join('');
+          }
+        }
+
+        // Specifications
+        var specsTbody = document.querySelector('#room-specs-table tbody');
+        if (specsTbody) {
+          var specs = room.specs || {};
+          var rows = Object.keys(specs).map(function(key) {
+            return '<tr><th>' + key + '</th><td>' + specs[key] + '</td></tr>';
+          }).join('');
+          specsTbody.innerHTML = rows || '<tr><td colspan="2" class="text-muted">Đang cập nhật tài liệu kỹ thuật...</td></tr>';
+        }
+
+        // Provenance & Appraisal
+        var appraisal = room.appraisal || {};
+        var inspEl = document.getElementById('appraisal-inspector');
+        if (inspEl) inspEl.textContent = appraisal.inspector || "Sotheby's Horology Geneva Bureau";
+        var scoreEl = document.getElementById('appraisal-score');
+        if (scoreEl) scoreEl.textContent = appraisal.score || '9.9/10 (Mint Pristine)';
+        var certEl = document.getElementById('appraisal-certno');
+        if (certEl) certEl.textContent = appraisal.certNo || 'PP-CH-' + room.roomPin;
+        var provEl = document.getElementById('appraisal-provenance');
+        if (provEl) provEl.textContent = appraisal.provenance || 'Bộ sưu tập Hoàng gia Châu Âu';
+
+        // 2-Box Metric: Price
+        var priceValEl = document.getElementById('podium-current-price');
+        var priceLabelEl = document.getElementById('label-price-box');
+        var leaderBoxEl = document.getElementById('podium-leader-box');
+
+        var displayPrice = room.currentPrice || room.startPrice;
+        if (priceValEl) priceValEl.textContent = store.formatCurrency(displayPrice);
+
+        if (room.status === 'WAITING') {
+          if (priceLabelEl) priceLabelEl.querySelector('span').textContent = 'Giá Khởi Điểm';
+          if (leaderBoxEl) leaderBoxEl.innerHTML = 'Chưa có lượt trả giá nào';
+        } else if (room.status === 'LIVE') {
+          if (priceLabelEl) priceLabelEl.querySelector('span').textContent = 'Mức Giá Hiện Tại';
+          if (leaderBoxEl) {
+            if (room.leaderName) {
+              leaderBoxEl.innerHTML = 'Đang dẫn đầu: <strong>' + room.leaderName + '</strong> (' + (room.leaderPaddleId || '---') + ')';
+            } else {
+              leaderBoxEl.innerHTML = 'Chưa có lượt trả giá nào';
+            }
+          }
+        } else if (room.status === 'ENDED') {
+          if (priceLabelEl) priceLabelEl.querySelector('span').textContent = 'Giá Chốt Phiên';
+          if (leaderBoxEl) {
+            if (room.leaderUid && room.leaderName) {
+              leaderBoxEl.innerHTML = 'Trúng thầu: <strong>' + room.leaderName + '</strong> (' + room.leaderPaddleId + ')';
+            } else {
+              leaderBoxEl.innerHTML = 'Đóng phiên không có giao dịch';
+            }
+          }
+        }
+
+        // Financial strip
+        var startPrEl = document.getElementById('podium-start-price');
+        if (startPrEl) startPrEl.textContent = store.formatCurrency(room.startPrice);
+        var stepPrEl = document.getElementById('podium-step-price');
+        if (stepPrEl) stepPrEl.textContent = '+' + store.formatCurrency(room.stepPrice);
+        var depPrEl = document.getElementById('podium-deposit-price');
+        if (depPrEl) depPrEl.textContent = store.formatCurrency(room.depositAmount);
+
+        // Render Action Deck according to Status
+        renderActionDeck(room, currentUser, bids, deposits);
+
+        // Render Tabs Content
+        renderBidsTab(bids);
+        renderDepositsTab(deposits);
+      }
+
+      // Render Adaptive Action Deck
+      function renderActionDeck(room, currentUser, bids, deposits) {
+        var panelWaiting = document.getElementById('deck-panel-waiting');
+        var panelLive = document.getElementById('deck-panel-live');
+        var panelEnded = document.getElementById('deck-panel-ended');
+
+        panelWaiting.style.display = 'none';
+        panelLive.style.display = 'none';
+        panelEnded.style.display = 'none';
+
+        var isHost = currentUser && (currentUser.uid === room.sellerId || currentUser.role === 'HOST');
+        var hasDeposited = currentUser && deposits.some(function(d) { return d.uid === currentUser.uid && d.status === 'LOCKED'; });
+
+        if (room.status === 'WAITING') {
+          panelWaiting.style.display = 'block';
+          var hostWaitingActions = document.getElementById('waiting-host-actions');
+          var bidderWaitingActions = document.getElementById('waiting-bidder-actions');
+          var waitingDesc = document.getElementById('deck-waiting-desc');
+
+          if (isHost) {
+            hostWaitingActions.style.display = 'block';
+            bidderWaitingActions.style.display = 'none';
+            waitingDesc.textContent = 'Bạn là Chủ phòng đấu giá. Nhấp nút bên dưới để mở sàn và bắt đầu đếm ngược thời gian.';
+            var durEl = document.getElementById('waiting-host-duration');
+            if (durEl) {
+              var tSec = room.durationSeconds || Math.round((Number(room.durationMinutes) || 15) * 60);
+              var dh = Math.floor(tSec / 3600);
+              var dm = Math.floor((tSec % 3600) / 60);
+              var ds = tSec % 60;
+              var dText = (dh > 0 ? dh + ' giờ ' : '') + (dm > 0 ? dm + ' phút ' : '') + (ds > 0 ? ds + ' giây' : '');
+              durEl.textContent = dText.trim() || '15 phút';
+            }
+          } else {
+            hostWaitingActions.style.display = 'none';
+            bidderWaitingActions.style.display = 'block';
+            waitingDesc.textContent = 'Phiên đấu giá đang chờ Chủ phòng phát lệnh mở sàn. Quý khách có thể nộp tiền ký quỹ 15% trước để nhận thẻ đấu giá.';
+            
+            var notDepWrap = document.getElementById('waiting-bidder-not-deposited');
+            var hasDepWrap = document.getElementById('waiting-bidder-has-deposited');
+            if (hasDeposited) {
+              notDepWrap.style.display = 'none';
+              hasDepWrap.style.display = 'block';
+              var pEl = document.getElementById('waiting-user-paddle');
+              if (pEl) pEl.textContent = currentUser.paddleId;
+            } else {
+              notDepWrap.style.display = 'block';
+              hasDepWrap.style.display = 'none';
+            }
+          }
+
+        } else if (room.status === 'LIVE') {
+          panelLive.style.display = 'block';
+          var liveHostControls = document.getElementById('live-host-controls');
+          var liveGuestAuth = document.getElementById('live-guest-auth');
+          var liveNeedDeposit = document.getElementById('live-need-deposit');
+          var liveReadyBidding = document.getElementById('live-ready-bidding');
+
+          liveHostControls.style.display = 'none';
+          liveGuestAuth.style.display = 'none';
+          liveNeedDeposit.style.display = 'none';
+          liveReadyBidding.style.display = 'none';
+
+          if (isHost) {
+            liveHostControls.style.display = 'block';
+            var settleBtn = document.getElementById('btn-host-settle-early');
+            var settleNote = document.getElementById('host-settle-note');
+            var hasBids = bids && bids.length > 0;
+            if (settleBtn) {
+              if (hasBids) {
+                settleBtn.disabled = false;
+                settleBtn.style.opacity = '1';
+                settleBtn.style.cursor = 'pointer';
+                if (settleNote) settleNote.textContent = 'Có thể chốt phiên ngay lập tức với mức giá ' + store.formatCurrency(room.currentPrice);
+              } else {
+                settleBtn.disabled = true;
+                settleBtn.style.opacity = '0.5';
+                settleBtn.style.cursor = 'not-allowed';
+                if (settleNote) settleNote.textContent = 'Cần có ít nhất 1 lượt trả giá hợp lệ để chốt phiên sớm.';
+              }
+            }
+          } else if (!currentUser) {
+            liveGuestAuth.style.display = 'block';
+          } else if (!hasDeposited) {
+            liveNeedDeposit.style.display = 'block';
+            var depValEl = document.getElementById('deck-deposit-needed-display');
+            if (depValEl) depValEl.textContent = store.formatCurrency(room.depositAmount);
+          } else {
+            liveReadyBidding.style.display = 'block';
+            var paddleEl = document.getElementById('bidding-user-paddle');
+            if (paddleEl) paddleEl.textContent = currentUser.paddleId;
+
+            // Compute 3 quick steps values
+            var currP = Number(room.currentPrice || room.startPrice);
+            var stepP = Number(room.stepPrice || 1000000);
+
+            var s1 = currP + stepP;
+            var s2 = currP + stepP * 2;
+            var s5 = currP + stepP * 5;
+
+            var b1v = document.getElementById('btn-step-1x-val');
+            var b2v = document.getElementById('btn-step-2x-val');
+            var b5v = document.getElementById('btn-step-5x-val');
+            if (b1v) b1v.textContent = store.formatCurrency(s1);
+            if (b2v) b2v.textContent = store.formatCurrency(s2);
+            if (b5v) b5v.textContent = store.formatCurrency(s5);
+
+            var customInp = document.getElementById('custom-bid-input');
+            if (customInp && !customInp.value) {
+              customInp.value = s1;
+            }
+
+            var isLeader = currentUser && (currentUser.uid === room.leaderUid);
+            var leaderWarningEl = document.getElementById('bidding-leader-warning');
+            var btnBid = document.getElementById('btn-submit-bid');
+            var b1 = document.getElementById('btn-step-1x');
+            var b2 = document.getElementById('btn-step-2x');
+            var b5 = document.getElementById('btn-step-5x');
+
+            if (isLeader) {
+              if (leaderWarningEl) {
+                leaderWarningEl.style.display = 'block';
+                leaderWarningEl.innerHTML = 'Quý khách đang giữ mức giá dẫn đầu cao nhất (<strong>' + store.formatCurrency(room.currentPrice) + '</strong>). Không thể tự nâng giá chính mình.';
+              }
+              if (btnBid) { btnBid.disabled = true; btnBid.style.opacity = '0.5'; btnBid.style.cursor = 'not-allowed'; }
+              if (b1) { b1.disabled = true; b1.style.opacity = '0.5'; }
+              if (b2) { b2.disabled = true; b2.style.opacity = '0.5'; }
+              if (b5) { b5.disabled = true; b5.style.opacity = '0.5'; }
+            } else {
+              if (leaderWarningEl) leaderWarningEl.style.display = 'none';
+              if (btnBid) { btnBid.disabled = false; btnBid.style.opacity = '1'; btnBid.style.cursor = 'pointer'; }
+              if (b1) { b1.disabled = false; b1.style.opacity = '1'; }
+              if (b2) { b2.disabled = false; b2.style.opacity = '1'; }
+              if (b5) { b5.disabled = false; b5.style.opacity = '1'; }
+            }
+          }
+
+        } else if (room.status === 'ENDED') {
+          panelEnded.style.display = 'block';
+          var endedDesc = document.getElementById('deck-ended-desc');
+          if (room.leaderUid && room.leaderName) {
+            endedDesc.innerHTML = 'Vật phẩm đã được chốt quyền sở hữu cho nhà sưu tầm: <br><strong>' + room.leaderName + '</strong> (' + room.leaderPaddleId + ') với mức giá <strong>' + store.formatCurrency(room.currentPrice) + '</strong>.';
+          } else {
+            endedDesc.textContent = 'Phiên đấu giá đã đóng (Không có người mua). Toàn bộ tiền cọc ký quỹ (15%) đã được hoàn trả 100% về ví của người tham gia.';
+          }
+        }
+      }
+
+      // Render Bids Table Tab
+      function renderBidsTab(bids) {
+        var countEl = document.getElementById('tab-bids-count');
+        if (countEl) countEl.textContent = bids ? bids.length : 0;
+
+        var tbody = document.getElementById('bids-table-body');
+        if (!tbody) return;
+
+        if (!bids || bids.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="3" style="text-align: center; padding: 20px; color: var(--text-muted);">Chưa có lượt trả giá nào. Hãy là người đầu tiên đặt giá khởi điểm!</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = bids.map(function(b, idx) {
+          var timeStr = b.timestamp ? new Date(b.timestamp).toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : 'Vừa xong';
+          var isLeader = idx === 0;
+          return '<tr>' +
+            '<td class="font-mono text-muted" style="font-size: 0.72rem;">' + timeStr + '</td>' +
+            '<td><strong>' + (b.bidderName || 'Nhà Sưu Tầm') + '</strong> <span class="font-mono text-muted">(' + (b.paddleId || '---') + ')</span></td>' +
+            '<td style="text-align: right; font-weight: 700; font-family: var(--font-mono); color: ' + (isLeader ? 'var(--accent-bid)' : 'var(--text-primary)') + ';">' + store.formatCurrency(b.amount) + '</td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      // Render Deposits Table Tab
+      function renderDepositsTab(deposits) {
+        var countEl = document.getElementById('tab-deposits-count');
+        if (countEl) countEl.textContent = deposits ? deposits.length : 0;
+
+        var tbody = document.getElementById('deposits-table-body');
+        if (!tbody) return;
+
+        if (!deposits || deposits.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; padding: 20px; color: var(--text-muted);">Chưa có người ký quỹ cho phiên này.</td></tr>';
+          return;
+        }
+
+        tbody.innerHTML = deposits.map(function(d) {
+          var statusText = 'Đang ký quỹ';
+          var statusColor = 'var(--accent-bid)';
+          if (d.status === 'REFUNDED') {
+            statusText = 'Đã hoàn trả 100%';
+            statusColor = 'var(--text-muted)';
+          } else if (d.status === 'APPLIED_TO_WIN') {
+            statusText = 'Khấu trừ trúng thầu';
+            statusColor = 'var(--accent-primary)';
+          }
+
+          return '<tr>' +
+            '<td class="font-mono" style="font-weight: 600;">' + (d.paddleId || '---') + '</td>' +
+            '<td>' + (d.fullName || 'Nhà Sưu Tầm') + '</td>' +
+            '<td style="text-align: right; font-family: var(--font-mono);">' + store.formatCurrency(d.amount) + '</td>' +
+            '<td style="text-align: right; font-size: 0.72rem; font-weight: 600; color: ' + statusColor + ';">' + statusText + '</td>' +
+          '</tr>';
+        }).join('');
+      }
+
+      // 6. Countdown Loop
+      function startCountdown() {
+        if (clockInterval) clearInterval(clockInterval);
+
+        function tick() {
+          var room = store.getRoom(window.roomId);
+          if (!room) return;
+
+          var clockEl = document.getElementById('podium-countdown-clock');
+          var titleEl = document.getElementById('podium-timer-title');
+          var subEl = document.getElementById('podium-timer-sub');
+          var bannerEl = document.getElementById('anti-sniping-banner');
+
+          if (room.status === 'WAITING') {
+            var totalSecs = room.durationSeconds || Math.round((Number(room.durationMinutes) || 15) * 60);
+            var wh = Math.floor(totalSecs / 3600);
+            var wm = Math.floor((totalSecs % 3600) / 60);
+            var ws = totalSecs % 60;
+            var wStr = (wh > 0 ? (wh < 10 ? '0' + wh : wh) + ':' : '') + (wm < 10 ? '0' + wm : wm) + ':' + (ws < 10 ? '0' + ws : ws);
+            if (clockEl) {
+              clockEl.textContent = wStr;
+              clockEl.className = 'metric-box__val';
+            }
+            if (titleEl) titleEl.textContent = 'Thời Lượng Phiên';
+            if (subEl) subEl.textContent = 'Chờ lệnh mở sàn từ Host';
+            if (bannerEl) bannerEl.style.display = 'none';
+            return;
+          }
+
+          if (room.status === 'ENDED') {
+            if (clockEl) {
+              clockEl.textContent = '00:00';
+              clockEl.className = 'metric-box__val';
+            }
+            if (titleEl) titleEl.textContent = 'Trạng Thái';
+            if (subEl) subEl.textContent = 'Phiên đã đóng';
+            if (bannerEl) bannerEl.style.display = 'none';
+            return;
+          }
+
+          // When LIVE:
+          if (titleEl) titleEl.textContent = 'Thời Gian Còn Lại';
+          if (subEl) subEl.textContent = 'Kèm cơ chế Anti-Sniping';
+
+          var now = Date.now();
+          var end = new Date(room.endTime).getTime();
+          var diff = end - now;
+
+          if (diff <= 0) {
+            // Room expired -> Settle
+            if (clockEl) clockEl.textContent = '00:00';
+            store.settleAuction(room.roomId);
+            renderRoom();
+            var updated = store.getRoom(room.roomId);
+            if (window.openAuctionResultModal) {
+              window.openAuctionResultModal(updated);
+            }
+            return;
+          }
+
+          var totalSec = Math.floor(diff / 1000);
+          var lh = Math.floor(totalSec / 3600);
+          var lm = Math.floor((totalSec % 3600) / 60);
+          var ls = totalSec % 60;
+          var timeStr = (lh > 0 ? (lh < 10 ? '0' + lh : lh) + ':' : '') + (lm < 10 ? '0' + lm : lm) + ':' + (ls < 10 ? '0' + ls : ls);
+
+          if (clockEl) {
+            clockEl.textContent = timeStr;
+            if (totalSec <= 30) {
+              clockEl.className = 'metric-box__val metric-box__val--danger';
+            } else {
+              clockEl.className = 'metric-box__val';
+            }
+          }
+
+          // Anti-Sniping banner toggle
+          if (bannerEl) {
+            bannerEl.style.display = (totalSec <= 30) ? 'flex' : 'none';
+          }
+
+          // Beep on last 5 seconds
+          if (totalSec <= 5 && totalSec > 0 && soundSystem) {
+            soundSystem.playCountdownBeep(totalSec === 1 ? 1200 : 800);
+          }
+        }
+
+        tick(); // Execute immediately so no delay or '--:--' visible
+        clockInterval = setInterval(tick, 1000);
+      }
+
+      // 7. User & Host Actions
+      // Start Auction (by Host)
+      var btnStart = document.getElementById('btn-start-auction-now');
+      if (btnStart) {
+        btnStart.addEventListener('click', function() {
+          var updated = store.startAuction(window.roomId);
+          if (updated) {
+            if (soundSystem) soundSystem.playGavelStrike(1, 250);
+            if (window.showToast) {
+              window.showToast('Đã mở sàn đấu giá', 'Phiên đấu giá chính thức bắt đầu đếm ngược thời gian!', 'success');
+            }
+            renderRoom();
+          }
+        });
+      }
+
+      // Settle Early (by Host)
+      var btnSettle = document.getElementById('btn-host-settle-early');
+      if (btnSettle) {
+        btnSettle.addEventListener('click', function() {
+          var bids = store.getBids(window.roomId);
+          if (!bids || bids.length === 0) {
+            if (window.showToast) {
+              window.showToast('Chưa thể chốt phiên', 'Cần có ít nhất 1 lượt trả giá hợp lệ để chốt phiên sớm!', 'warning');
+            } else {
+              alert('Không thể chốt phiên sớm khi chưa có lượt trả giá nào!');
+            }
+            return;
+          }
+          if (confirm('Xác nhận gõ búa chốt phiên ngay lập tức với mức giá ' + store.formatCurrency(currentRoom.currentPrice) + '?')) {
+            var settled = store.settleAuction(window.roomId);
+            if (soundSystem) soundSystem.playGavelStrike(3, 300);
+            renderRoom();
+            if (window.openAuctionResultModal) {
+              window.openAuctionResultModal(settled);
+            }
+          }
+        });
+      }
+
+      // View Result Modal
+      var btnViewResult = document.getElementById('btn-view-auction-result');
+      if (btnViewResult) {
+        btnViewResult.addEventListener('click', function() {
+          if (window.openAuctionResultModal) {
+            window.openAuctionResultModal(currentRoom);
+          }
+        });
+      }
+
+      // Quick Bid Multipliers
+      function setBidAmount(amount) {
+        var inp = document.getElementById('custom-bid-input');
+        if (inp) inp.value = amount;
+      }
+
+      var b1 = document.getElementById('btn-step-1x');
+      var b2 = document.getElementById('btn-step-2x');
+      var b5 = document.getElementById('btn-step-5x');
+
+      if (b1) {
+        b1.addEventListener('click', function() {
+          var curr = Number(currentRoom.currentPrice || currentRoom.startPrice);
+          var st = Number(currentRoom.stepPrice || 1000000);
+          setBidAmount(curr + st);
+        });
+      }
+      if (b2) {
+        b2.addEventListener('click', function() {
+          var curr = Number(currentRoom.currentPrice || currentRoom.startPrice);
+          var st = Number(currentRoom.stepPrice || 1000000);
+          setBidAmount(curr + st * 2);
+        });
+      }
+      if (b5) {
+        b5.addEventListener('click', function() {
+          var curr = Number(currentRoom.currentPrice || currentRoom.startPrice);
+          var st = Number(currentRoom.stepPrice || 1000000);
+          setBidAmount(curr + st * 5);
+        });
+      }
+
+      // Submit Bid
+      var btnBid = document.getElementById('btn-submit-bid');
+      if (btnBid) {
+        btnBid.addEventListener('click', function() {
+          var inp = document.getElementById('custom-bid-input');
+          var amount = Number(inp ? inp.value : 0);
+          if (!amount || amount <= 0) {
+            if (window.showToast) {
+              window.showToast('Mức giá không hợp lệ', 'Vui lòng nhập mức giá hợp lệ lớn hơn mức giá hiện tại!', 'warning');
+            } else {
+              alert('Vui lòng nhập mức giá hợp lệ!');
+            }
+            return;
+          }
+
+          var res = store.placeBid(window.roomId, amount, 'MANUAL');
+          if (res && res.success) {
+            if (window.showToast) {
+              window.showToast('Trả giá thành công', 'Bạn đang dẫn đầu phiên với mức giá ' + store.formatCurrency(amount) + '!', 'success');
+            }
+            if (soundSystem) soundSystem.playGavelStrike(1, 200);
+            renderRoom();
+
+            // Realtime Relay: Broadcast bid to all connected devices (phones, tablets, other PCs)
+            if (mqttClient && mqttClient.connected) {
+              try {
+                mqttClient.publish(mqttTopic, JSON.stringify({
+                  type: 'NEW_BID',
+                  senderId: mqttClientId,
+                  bid: res.bid,
+                  roomId: window.roomId
+                }), { qos: 1 });
+              } catch(e) {
+                console.warn('[Realtime Relay] Publish error:', e);
+              }
+            }
+
+            // Trigger rival bot if checked
+            var chkBot = document.getElementById('chk-rival-bot');
+            if (chkBot && chkBot.checked) {
+              setTimeout(function() {
+                var updated = store.getRoom(window.roomId);
+                if (updated && updated.status === 'LIVE') {
+                  store.simulateBotRivalBid(window.roomId);
+                  renderRoom();
+                }
+              }, 4000);
+            }
+          } else {
+            if (window.showToast) {
+              window.showToast('Không thể trả giá', res.message || 'Mức giá không hợp lệ hoặc bạn chưa ký quỹ!', 'error');
+            } else {
+              alert(res.message || 'Không thể đặt giá!');
+            }
+          }
+        });
+      }
+
+      // Fast forward 15s (Anti-sniping demonstration)
+      function triggerFastForward() {
+        store.fastForward(window.roomId, 15);
+        if (window.showToast) {
+          window.showToast('Tua thời gian', 'Đồng hồ phiên đấu giá đã được tua xuống 15 giây cuối!', 'info');
+        }
+        renderRoom();
+      }
+      var ff1 = document.getElementById('btn-fast-forward-15s');
+      var ff2 = document.getElementById('btn-fast-forward-bidder');
+      if (ff1) ff1.addEventListener('click', triggerFastForward);
+      if (ff2) ff2.addEventListener('click', triggerFastForward);
+
+      // Top invite button
+      var btnTopInvite = document.getElementById('btn-top-invite');
+      if (btnTopInvite) {
+        btnTopInvite.addEventListener('click', function() {
+          if (window.openRoomInviteModal) window.openRoomInviteModal(window.roomId);
+        });
+      }
+      var btnPodiumInvite = document.getElementById('btn-invite-modal');
+      if (btnPodiumInvite) {
+        btnPodiumInvite.addEventListener('click', function() {
+          if (window.openRoomInviteModal) window.openRoomInviteModal(window.roomId);
+        });
+      }
+
+      // Quick Login Helper for In-Room
+      window.quickLoginInRoom = function(userKey) {
+        store.quickLogin(userKey);
+        renderRoom();
+      };
+
+      // 8. SIMULATOR HELPERS: 
+      // (a) Mock Deposit (In Waiting & Live)
+      window.simulateMockDeposit = function() {
+        var users = store.getUsers();
+        var existingDeps = store.getDeposits().filter(function(d) { return d.roomId === window.roomId; });
+        var candidate = users.find(function(u) {
+          return u.uid !== currentRoom.sellerId && !existingDeps.some(function(d) { return d.uid === u.uid; });
+        }) || {
+          uid: 'usr-sim-' + Date.now(),
+          fullName: existingDeps.length % 2 === 0 ? 'Nguyễn Minh Khôi' : 'Trần Nhật Tân',
+          paddleId: '#PD-' + Math.floor(1000 + Math.random() * 8999),
+          walletAvailable: 10000000000
+        };
+
+        store.depositEscrow(window.roomId, currentRoom.depositAmount, candidate);
+        if (window.showToast) {
+          window.showToast('Đã nộp cọc thành công', 'Nhà sưu tầm ' + candidate.fullName + ' (' + candidate.paddleId + ') đã ký quỹ bảo chứng 15%.', 'success');
+        }
+        renderRoom();
+        window.switchRoomTab('deposits');
+      };
+
+      // (b) Mock Bid (+1 Step Price, In Live only)
+      window.simulateMockBid = function() {
+        if (currentRoom.status !== 'LIVE') {
+          if (window.showToast) {
+            window.showToast('Phiên chưa mở sàn', 'Vui lòng nhấp nút \'Bắt Đầu Phiên Đấu Giá (Start Auction)\' trước khi mô phỏng trả giá!', 'warning');
+          } else {
+            alert('Vui lòng bắt đầu phiên đấu giá trước!');
+          }
+          return;
+        }
+
+        var deposits = store.getDeposits().filter(function(d) { return d.roomId === window.roomId; });
+        var bidder = null;
+        if (deposits.length > 0) {
+          var dep = deposits[Math.floor(Math.random() * deposits.length)];
+          bidder = {
+            uid: dep.uid,
+            fullName: dep.fullName,
+            paddleId: dep.paddleId
+          };
+        } else {
+          // If no one deposited yet, auto-deposit first!
+          bidder = {
+            uid: 'usr-sim-khoi',
+            fullName: 'Nguyễn Minh Khôi',
+            paddleId: '#PD-8841',
+            walletAvailable: 10000000000
+          };
+          store.depositEscrow(window.roomId, currentRoom.depositAmount, bidder);
+        }
+
+        var nextPrice = Number(currentRoom.currentPrice || currentRoom.startPrice) + Number(currentRoom.stepPrice || 50000000);
+        var res = store.placeBid(window.roomId, nextPrice, 'RIVAL_DEMO', bidder);
+        if (res && res.success) {
+          if (soundSystem) soundSystem.playGavelStrike(1, 200);
+          if (window.showToast) {
+            window.showToast('Khách trả giá thành công', 'Nhà sưu tầm ' + bidder.fullName + ' (' + bidder.paddleId + ') đã trả giá ' + store.formatCurrency(nextPrice) + '!', 'success');
+          }
+          renderRoom();
+          window.switchRoomTab('bids');
+        }
+      };
+
+      window.simulateRivalDepositAndBid = window.simulateMockBid;
+
+      // 9. Listen for Realtime Sync Events
+      store.subscribe(function(event) {
+        if (!event) return;
+        if (event.type === 'NEW_BID' || event.type === 'ESCROW_DEPOSITED' || event.type === 'ROOM_UPDATED' || event.type === 'AUCTION_STARTED' || event.type === 'AUCTION_SETTLED' || event.type === 'TIME_FAST_FORWARD') {
+          if (event.payload && (event.payload.roomId === window.roomId || (event.payload.room && event.payload.room.roomId === window.roomId))) {
+            renderRoom();
+          }
+        }
+      });
+
+      // Initial Mount
+      renderRoom();
+      startCountdown();
+      if (urlParams.get('openInvite') === 'true') {
+        setTimeout(function() {
+          if (window.openRoomInviteModal) window.openRoomInviteModal(window.roomId);
+        }, 300);
+      }
+
+    })();
+  </script>
+</body>
+</html>

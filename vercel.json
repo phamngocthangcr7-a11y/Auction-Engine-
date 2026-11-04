@@ -1,0 +1,13 @@
+{
+  "version": 2,
+  "rewrites": [
+    {
+      "source": "/",
+      "destination": "/auction-engine-web/index.html"
+    },
+    {
+      "source": "/((?!auction-engine-web/).*)",
+      "destination": "/auction-engine-web/$1"
+    }
+  ]
+}

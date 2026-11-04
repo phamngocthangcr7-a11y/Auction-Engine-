@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="AURELIA Admin Portal - Hệ thống quản trị sàn đấu giá quốc tế, phê duyệt phiên niêm yết, kiểm soát rủi ro và giám sát giao dịch Escrow.">
+  <title>Quản Trị Viên (Admin Portal) • AURELIA</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+  <!-- Core CSS Design System -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+  <link rel="stylesheet" href="css/pages.css">
+
+  <style>
+    .admin-layout {
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 24px;
+      align-items: start;
+    }
+    .admin-sidebar {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 16px;
+      box-shadow: var(--shadow-card);
+      position: sticky;
+      top: 86px;
+    }
+    .admin-menu-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 14px;
+      border-radius: var(--radius-sm);
+      color: var(--text-secondary);
+      font-size: 0.84rem;
+      font-weight: 600;
+      background: none;
+      border: none;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      margin-bottom: 2px;
+    }
+    .admin-menu-item:hover {
+      background: var(--bg-hover);
+      color: var(--text-primary);
+    }
+    .admin-menu-item.active {
+      background: #059669;
+      color: #FFFFFF !important;
+    }
+    .admin-menu-item.active svg {
+      stroke: #FFFFFF !important;
+    }
+    .admin-menu-item svg {
+      width: 16px;
+      height: 16px;
+      stroke: currentColor;
+      stroke-width: 1.75;
+      fill: none;
+      flex-shrink: 0;
+    }
+    .admin-badge {
+      background: rgba(255,255,255,0.25);
+      font-size: 0.68rem;
+      font-family: var(--font-mono);
+      font-weight: 700;
+      padding: 1px 6px;
+      border-radius: 999px;
+    }
+    .admin-menu-item:not(.active) .admin-badge {
+      background: var(--bg-page);
+      border: 1px solid var(--border-color);
+      color: var(--text-muted);
+    }
+    .admin-panel {
+      display: none;
+    }
+    .admin-panel.active {
+      display: block;
+    }
+    @media (max-width: 900px) {
+      .admin-layout {
+        grid-template-columns: 1fr;
+      }
+      .admin-sidebar {
+        position: static;
+        overflow-x: auto;
+        display: flex;
+        gap: 6px;
+        padding: 10px;
+      }
+      .admin-menu-item {
+        white-space: nowrap;
+        width: auto;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Site Header Root -->
+  <div id="site-header-root"></div>
+
+  <!-- MAIN ADMIN CONTENT -->
+  <main style="padding-top: 24px; padding-bottom: 64px;">
+    <div class="container container--wide">
+      
+      <!-- Admin Top Banner -->
+      <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 20px 24px; margin-bottom: 24px; box-shadow: var(--shadow-card); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px;">
+        <div style="display: flex; align-items: center; gap: 14px;">
+          <div style="width: 44px; height: 44px; border-radius: 8px; background: rgba(5,150,105,0.12); color: #059669; display: flex; align-items: center; justify-content: center; font-weight: 800;">
+            <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; stroke: #059669; fill: none; stroke-width: 2;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+          </div>
+          <div>
+            <div style="display: flex; align-items: center; gap: 8px;">
+              <h1 style="font-family: var(--font-serif); font-size: 1.45rem; font-weight: 800; color: var(--text-primary); margin: 0;">
+                Trung Tâm Quản Trị Hệ Thống (Admin Portal)
+              </h1>
+              <span class="badge badge--live" style="font-size: 0.68rem; background: #059669; color: #FFF;">SUPER ADMIN &bull; PHẠM NGỌC THẮNG</span>
+            </div>
+            <p style="font-size: 0.78rem; color: var(--text-secondary); margin: 2px 0 0 0;">
+              Quản trị viên tối cao: <strong style="color: var(--text-primary);">Phạm Ngọc Thắng (#PD-6651 &bull; MSSV: 6651071071)</strong> &bull; Giám sát toàn sàn, phê duyệt niêm yết, thẩm định rủi ro và quản lý dòng vốn Escrow.
+            </p>
+          </div>
+        </div>
+
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <button type="button" class="btn btn-outline" onclick="window.refreshAdminView()" style="font-size: 0.8rem; padding: 7px 14px;">
+            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px;"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+            <span>Đồng Bộ Dữ Liệu</span>
+          </button>
+          <a href="index.html" class="btn btn-primary" style="font-size: 0.8rem; padding: 7px 14px;">
+            <span>Xem Sàn Đấu Giá</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- 7 TABS LAYOUT: SIDEBAR + CONTENT -->
+      <div class="admin-layout">
+        
+        <!-- SIDEBAR -->
+        <aside class="admin-sidebar" aria-label="Menu quản trị">
+          <button type="button" class="admin-menu-item active" data-tab="adm-analytics">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+              <span>1. Thống Kê Tổng Quan</span>
+            </div>
+          </button>
+          <button type="button" class="admin-menu-item" data-tab="adm-auctions">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+              <span>2. Quản Lý Phiên (Duyệt)</span>
+            </div>
+            <span class="admin-badge" id="adm-pending-count" style="background: #D97706; color: #FFF;">1</span>
+          </button>
+          <button type="button" class="admin-menu-item" data-tab="adm-users">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+              <span>3. Quản Lý Tài Khoản</span>
+            </div>
+            <span class="admin-badge" id="adm-users-count">4</span>
+          </button>
+          <button type="button" class="admin-menu-item" data-tab="adm-categories">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+              <span>4. Quản Lý Danh Mục</span>
+            </div>
+            <span class="admin-badge" id="adm-cats-count">5</span>
+          </button>
+          <button type="button" class="admin-menu-item" data-tab="adm-products">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>
+              <span>5. Kiểm Tra Vi Phạm</span>
+            </div>
+          </button>
+          <button type="button" class="admin-menu-item" data-tab="adm-transactions">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24"><line x1="12" y1="1" x2="12" y2="23"></line><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"></path></svg>
+              <span>6. Quản Lý Giao Dịch</span>
+            </div>
+          </button>
+          <button type="button" class="admin-menu-item" data-tab="adm-audit-logs">
+            <div style="display: flex; align-items: center; gap: 10px;">
+              <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+              <span>7. Nhật Ký Hệ Thống</span>
+            </div>
+          </button>
+        </aside>
+
+        <!-- MAIN ADMIN PANELS -->
+        <div class="admin-content-area">
+          
+          <!-- ===================================================================
+               PANEL 1: THỐNG KÊ TỔNG QUAN (ANALYTICS)
+               =================================================================== -->
+          <div class="admin-panel active" id="adm-analytics">
+            <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; margin-bottom: 24px;" class="metric-grid-responsive">
+              <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; box-shadow: var(--shadow-sm);">
+                <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Tổng Khớp Lệnh (GMV)</span>
+                <div class="font-mono price-val text-emerald" style="font-size: 1.45rem; font-weight: 800; margin-top: 4px;" id="kpi-gmv">186.4 Tỷ ₫</div>
+                <div style="font-size: 0.7rem; color: #059669; margin-top: 4px;">+18.4% so với tuần trước</div>
+              </div>
+
+              <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; box-shadow: var(--shadow-sm);">
+                <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Tổng Số Phiên</span>
+                <div class="font-mono price-val" style="font-size: 1.45rem; font-weight: 800; margin-top: 4px; color: var(--text-primary);" id="kpi-auctions">12 Phiên</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">8 LIVE &bull; 2 Chờ &bull; 1 Đã khớp</div>
+              </div>
+
+              <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; box-shadow: var(--shadow-sm);">
+                <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Nhà Sưu Tầm Đã KYC</span>
+                <div class="font-mono price-val" style="font-size: 1.45rem; font-weight: 800; margin-top: 4px; color: var(--text-primary);" id="kpi-users">4 Thành viên</div>
+                <div style="font-size: 0.7rem; color: #059669; margin-top: 4px;">100% bảo chứng tài chính</div>
+              </div>
+
+              <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 18px; box-shadow: var(--shadow-sm);">
+                <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 600; text-transform: uppercase;">Tiền Ký Quỹ Escrow</span>
+                <div class="font-mono price-val text-amber" style="font-size: 1.45rem; font-weight: 800; margin-top: 4px;" id="kpi-escrow">3.850.000.000 ₫</div>
+                <div style="font-size: 0.7rem; color: var(--text-muted); margin-top: 4px;">Lưu ký JPMorgan Chase</div>
+              </div>
+            </div>
+
+            <!-- Category Distribution Analytics -->
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px; box-shadow: var(--shadow-card);">
+              <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0 0 16px 0;">Phân Bổ Giá Trị Giao Dịch Theo Danh Mục</h3>
+              <div style="display: flex; flex-direction: column; gap: 14px;">
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
+                    <span style="font-weight: 600;">Siêu Xe & Xe Cổ Điển (Porsche, Ferrari, AMG)</span>
+                    <strong class="font-mono text-emerald">128.5 Tỷ ₫ (68.9%)</strong>
+                  </div>
+                  <div style="height: 8px; background: var(--bg-page); border-radius: 4px; overflow: hidden;">
+                    <div style="height: 100%; width: 68.9%; background: #059669;"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
+                    <span style="font-weight: 600;">Đồng Hồ Cơ Thụy Sĩ (Patek Philippe, Rolex, AP)</span>
+                    <strong class="font-mono text-emerald">48.2 Tỷ ₫ (25.8%)</strong>
+                  </div>
+                  <div style="height: 8px; background: var(--bg-page); border-radius: 4px; overflow: hidden;">
+                    <div style="height: 100%; width: 25.8%; background: #F59E0B;"></div>
+                  </div>
+                </div>
+
+                <div>
+                  <div style="display: flex; justify-content: space-between; font-size: 0.8rem; margin-bottom: 4px;">
+                    <span style="font-weight: 600;">Tranh Nghệ Thuật & Cổ Vật (Monet, Gốm thời Minh)</span>
+                    <strong class="font-mono text-emerald">9.7 Tỷ ₫ (5.3%)</strong>
+                  </div>
+                  <div style="height: 8px; background: var(--bg-page); border-radius: 4px; overflow: hidden;">
+                    <div style="height: 100%; width: 5.3%; background: #3B82F6;"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- ===================================================================
+               PANEL 2: QUẢN LÝ PHIÊN ĐẤU GIÁ (DUYỆT / TỪ CHỐI KÈM LÝ DO)
+               =================================================================== -->
+          <div class="admin-panel" id="adm-auctions">
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-card);">
+              <div style="padding: 18px 24px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0;">Danh Sách Phiên Niêm Yết & Phê Chuẩn</h3>
+                <span style="font-size: 0.75rem; color: var(--text-muted);">Hỗ trợ duyệt và từ chối kèm nhập lý do cụ thể</span>
+              </div>
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
+                <thead>
+                  <tr style="background: var(--bg-page); border-bottom: 1px solid var(--border-color); text-align: left; font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">
+                    <th style="padding: 12px 18px;">Vật Phẩm / Mã PIN</th>
+                    <th style="padding: 12px 18px;">Người Tạo</th>
+                    <th style="padding: 12px 18px; text-align: right;">Giá Khởi Điểm</th>
+                    <th style="padding: 12px 18px; text-align: center;">Trạng Thái</th>
+                    <th style="padding: 12px 18px; text-align: right;">Hành Động Admin</th>
+                  </tr>
+                </thead>
+                <tbody id="adm-auctions-tbody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ===================================================================
+               PANEL 3: QUẢN LÝ TÀI KHOẢN (KHÓA / MỞ KHÓA)
+               =================================================================== -->
+          <div class="admin-panel" id="adm-users">
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-card);">
+              <div style="padding: 18px 24px; border-bottom: 1px solid var(--border-color);">
+                <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0;">Danh Sách Nhà Sưu Tầm & Thẻ Đấu Giá</h3>
+              </div>
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
+                <thead>
+                  <tr style="background: var(--bg-page); border-bottom: 1px solid var(--border-color); text-align: left; font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">
+                    <th style="padding: 12px 18px;">Nhà Sưu Tầm</th>
+                    <th style="padding: 12px 18px;">Mã Thẻ</th>
+                    <th style="padding: 12px 18px; text-align: right;">Số Dư Ví</th>
+                    <th style="padding: 12px 18px; text-align: center;">Tình Trạng</th>
+                    <th style="padding: 12px 18px; text-align: right;">Thao Tác</th>
+                  </tr>
+                </thead>
+                <tbody id="adm-users-tbody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ===================================================================
+               PANEL 4: QUẢN LÝ DANH MỤC
+               =================================================================== -->
+          <div class="admin-panel" id="adm-categories">
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px; box-shadow: var(--shadow-card); margin-bottom: 24px;">
+              <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0 0 16px 0;">Thêm Danh Mục Mới</h3>
+              <form id="form-add-category" onsubmit="window.saveNewCategory(event)" style="display: grid; grid-template-columns: 1fr 1fr 2fr auto; gap: 12px; align-items: end;">
+                <div>
+                  <label style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 4px;">Tên Danh Mục</label>
+                  <input type="text" id="cat-name-input" class="form-control" placeholder="Ví dụ: Rượu Vang Quý Hiếm" required style="padding: 8px 12px; font-size: 0.82rem; width: 100%;" />
+                </div>
+                <div>
+                  <label style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 4px;">Mã Slug (URL)</label>
+                  <input type="text" id="cat-slug-input" class="form-control font-mono" placeholder="rare-wine" required style="padding: 8px 12px; font-size: 0.82rem; width: 100%;" />
+                </div>
+                <div>
+                  <label style="font-size: 0.72rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 4px;">Mô tả ngắn</label>
+                  <input type="text" id="cat-desc-input" class="form-control" placeholder="Tuyển tập Bordeaux Grand Cru, Burgundy..." style="padding: 8px 12px; font-size: 0.82rem; width: 100%;" />
+                </div>
+                <div>
+                  <button type="submit" class="btn btn-primary" style="font-size: 0.82rem; padding: 9px 16px;">
+                    + Thêm Danh Mục
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-card);">
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
+                <thead>
+                  <tr style="background: var(--bg-page); border-bottom: 1px solid var(--border-color); text-align: left; font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">
+                    <th style="padding: 12px 18px;">Danh Mục</th>
+                    <th style="padding: 12px 18px;">Mã Slug</th>
+                    <th style="padding: 12px 18px;">Mô Tả</th>
+                    <th style="padding: 12px 18px; text-align: right;">Hành Động</th>
+                  </tr>
+                </thead>
+                <tbody id="adm-cats-tbody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ===================================================================
+               PANEL 5: KIỂM TRA VI PHẠM (SAFETY & COMPLIANCE)
+               =================================================================== -->
+          <div class="admin-panel" id="adm-products">
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px; box-shadow: var(--shadow-card);">
+              <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0 0 16px 0;">Kiểm Tra Vi Phạm & Tuân Thủ Geneva Seal</h3>
+              <div id="adm-compliance-list" style="display: flex; flex-direction: column; gap: 12px;">
+                <!-- Rendered via JS -->
+              </div>
+            </div>
+          </div>
+
+          <!-- ===================================================================
+               PANEL 6: QUẢN LÝ GIAO DỊCH (TRANSACTIONS)
+               =================================================================== -->
+          <div class="admin-panel" id="adm-transactions">
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-card);">
+              <div style="padding: 18px 24px; border-bottom: 1px solid var(--border-color);">
+                <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0;">Sổ Cái Giao Dịch Toàn Sàn (Ledger)</h3>
+              </div>
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
+                <thead>
+                  <tr style="background: var(--bg-page); border-bottom: 1px solid var(--border-color); text-align: left; font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">
+                    <th style="padding: 12px 18px;">Mã GD</th>
+                    <th style="padding: 12px 18px;">Loại Nghiệp Vụ</th>
+                    <th style="padding: 12px 18px; text-align: right;">Số Tiền</th>
+                    <th style="padding: 12px 18px;">Thời Gian</th>
+                    <th style="padding: 12px 18px;">Mô Tả Nghiệp Vụ</th>
+                  </tr>
+                </thead>
+                <tbody id="adm-tx-tbody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- ===================================================================
+               PANEL 7: NHẬT KÝ HỆ THỐNG (SYSTEM AUDIT LOGS)
+               =================================================================== -->
+          <div class="admin-panel" id="adm-audit-logs">
+            <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-card);">
+              <div style="padding: 18px 24px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center;">
+                <h3 style="font-size: 1.05rem; font-weight: 700; color: var(--text-primary); margin: 0;">Nhật Ký Kiểm Toán Thời Gian Thực (Audit Trail)</h3>
+                <span class="badge badge--live" style="font-size: 0.65rem;">REALTIME ACTIVE</span>
+              </div>
+              <table style="width: 100%; border-collapse: collapse; font-size: 0.82rem;">
+                <thead>
+                  <tr style="background: var(--bg-page); border-bottom: 1px solid var(--border-color); text-align: left; font-size: 0.7rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">
+                    <th style="padding: 12px 18px;">Thời Gian</th>
+                    <th style="padding: 12px 18px;">Hành Động</th>
+                    <th style="padding: 12px 18px;">Chi Tiết Sự Kiện</th>
+                    <th style="padding: 12px 18px;">Chủ Thể (Actor)</th>
+                  </tr>
+                </thead>
+                <tbody id="adm-audit-tbody">
+                  <!-- Rendered via JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Site Footer Root -->
+  <div id="site-footer-root"></div>
+
+  <!-- Modals Root -->
+  <div id="modals-root"></div>
+
+  <!-- Scripts -->
+  <script src="js/app-core.js"></script>
+  <script src="components/header.js"></script>
+  <script src="components/footer.js"></script>
+  <script src="components/modals.js"></script>
+
+  <script>
+    (function() {
+      var store = window.AureliaApp || window.AuctionStore;
+      if (!store) return;
+
+      // Tab switcher
+      function switchAdminTab(tabId) {
+        document.querySelectorAll('.admin-menu-item').forEach(function(item) {
+          item.classList.toggle('active', item.getAttribute('data-tab') === tabId);
+        });
+        document.querySelectorAll('.admin-panel').forEach(function(panel) {
+          panel.classList.toggle('active', panel.id === tabId);
+        });
+      }
+
+      document.querySelectorAll('.admin-menu-item').forEach(function(item) {
+        item.addEventListener('click', function() {
+          switchAdminTab(this.getAttribute('data-tab'));
+        });
+      });
+
+      window.refreshAdminView = function() {
+        var rooms = store.getRooms();
+        var users = store.getUsers();
+        var cats = store.getCategories ? store.getCategories() : [];
+        var logs = store.getAuditLogs ? store.getAuditLogs() : [];
+        var txs = store.getTransactions ? store.getTransactions() : [];
+
+        // 1. KPI
+        document.getElementById('kpi-auctions').textContent = rooms.length + ' Phiên';
+        document.getElementById('kpi-users').textContent = users.length + ' Thành viên';
+        var pending = rooms.filter(function(r) { return r.status === 'PENDING_APPROVAL'; }).length;
+        document.getElementById('adm-pending-count').textContent = pending;
+        document.getElementById('adm-users-count').textContent = users.length;
+        document.getElementById('adm-cats-count').textContent = cats.length;
+
+        // 2. Auctions Management
+        var aucTbody = document.getElementById('adm-auctions-tbody');
+        if (aucTbody) {
+          aucTbody.innerHTML = rooms.map(function(r) {
+            var statusBadge = '';
+            if (r.status === 'PENDING_APPROVAL') {
+              statusBadge = '<span class="badge" style="background:#FEF3C7;color:#D97706;font-size:0.65rem;font-weight:700;">CHỜ DUYỆT</span>';
+            } else if (r.status === 'LIVE') {
+              statusBadge = '<span class="badge badge--live" style="font-size:0.65rem;">LIVE</span>';
+            } else if (r.status === 'REJECTED') {
+              statusBadge = '<span class="badge" style="background:#FEE2E2;color:#DC2626;font-size:0.65rem;">BỊ TỪ CHỐI</span>';
+            } else {
+              statusBadge = '<span class="badge" style="background:#F1F5F9;color:#64748B;font-size:0.65rem;">' + r.status + '</span>';
+            }
+
+            return `
+              <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 12px 18px;">
+                  <strong style="font-size:0.85rem;color:var(--text-primary);display:block;">${r.title}</strong>
+                  <span style="font-size:0.72rem;color:var(--text-muted);font-family:var(--font-mono);">LOT #${r.lotNumber || '---'} &bull; PIN #${r.roomPin || r.roomId} &bull; ${r.categoryName || 'Tài sản'}</span>
+                </td>
+                <td style="padding: 12px 18px; color: var(--text-secondary);">${r.sellerName || 'Phạm Ngọc Thắng'} (${r.sellerPaddleId || '#PD-6651'})</td>
+                <td style="padding: 12px 18px; text-align: right; font-family: var(--font-mono); font-weight: 700; color: #059669;">${store.formatCurrency(r.startPrice)}</td>
+                <td style="padding: 12px 18px; text-align: center;">${statusBadge}</td>
+                <td style="padding: 12px 18px; text-align: right;">
+                  <div style="display: flex; justify-content: flex-end; gap: 6px;">
+                    ${r.status === 'PENDING_APPROVAL' || r.status === 'REJECTED' ? `
+                      <button type="button" class="btn btn-primary" style="font-size: 0.72rem; padding: 4px 10px;" onclick="window.approveRoom('${r.roomId}')">Duyệt Phiên</button>
+                    ` : ''}
+                    ${r.status !== 'REJECTED' ? `
+                      <button type="button" class="btn btn-outline" style="font-size: 0.72rem; padding: 4px 8px; color: #DC2626; border-color: rgba(220,38,38,0.3);" onclick="window.openAdminRejectModal('${r.roomId}')">Từ Chối</button>
+                    ` : ''}
+                    <a href="live-room.html?room=${r.roomPin || r.roomId}" class="btn btn-outline" style="font-size: 0.72rem; padding: 4px 8px;">Xem</a>
+                  </div>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+
+        // 3. Users Management
+        var userTbody = document.getElementById('adm-users-tbody');
+        if (userTbody) {
+          userTbody.innerHTML = users.map(function(u) {
+            var isLocked = u.isLocked === true;
+            return `
+              <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 12px 18px;">
+                  <strong style="font-size:0.85rem;color:var(--text-primary);display:block;">${u.fullName}</strong>
+                  <span style="font-size:0.72rem;color:var(--text-muted);">${u.email}</span>
+                </td>
+                <td style="padding: 12px 18px; font-family: var(--font-mono); font-weight: 700; color: #059669;">${u.paddleId}</td>
+                <td style="padding: 12px 18px; text-align: right; font-family: var(--font-mono); font-weight: 700;">${store.formatCurrency(u.walletAvailable || 0)}</td>
+                <td style="padding: 12px 18px; text-align: center;">
+                  <span class="badge ${isLocked ? 'badge--ended' : 'badge--live'}" style="font-size: 0.65rem;">
+                    ${isLocked ? 'ĐÃ KHÓA' : 'HOẠT ĐỘNG'}
+                  </span>
+                </td>
+                <td style="padding: 12px 18px; text-align: right;">
+                  <button type="button" class="btn btn-outline" style="font-size: 0.72rem; padding: 4px 10px; color:${isLocked ? '#059669' : '#DC2626'}; border-color:${isLocked ? '#059669' : 'rgba(220,38,38,0.3)'};" onclick="window.toggleUserLock('${u.uid}')">
+                    ${isLocked ? 'Mở Khóa' : 'Khóa Tài Khoản'}
+                  </button>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+
+        // 4. Categories Management
+        var catsTbody = document.getElementById('adm-cats-tbody');
+        if (catsTbody) {
+          catsTbody.innerHTML = cats.map(function(c) {
+            return `
+              <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 12px 18px; font-weight: 700; color: var(--text-primary);">${c.name}</td>
+                <td style="padding: 12px 18px; font-family: var(--font-mono); color: var(--text-muted);">${c.slug}</td>
+                <td style="padding: 12px 18px; color: var(--text-secondary);">${c.desc}</td>
+                <td style="padding: 12px 18px; text-align: right;">
+                  <button type="button" class="btn btn-outline" style="font-size: 0.72rem; padding: 3px 8px; color: #DC2626;" onclick="window.deleteCategory('${c.slug}')">Xóa</button>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        }
+
+        // 5. Compliance List
+        var compList = document.getElementById('adm-compliance-list');
+        if (compList) {
+          compList.innerHTML = `
+            <div style="background:var(--bg-page);border:1px solid var(--border-color);border-radius:8px;padding:14px;display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <strong style="font-size:0.85rem;color:var(--text-primary);">Lot #101 Patek Philippe Nautilus</strong>
+                  <span class="badge badge--live" style="font-size:0.65rem;">ĐÃ KIỂM ĐỊNH 10/10</span>
+                </div>
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Bảo chứng bởi Sotheby's Geneva Bureau &bull; Không ghi nhận vi phạm</div>
+              </div>
+              <button type="button" class="btn btn-outline" style="font-size:0.72rem;padding:4px 10px;color:#059669;border-color:#059669;" disabled>An Toàn</button>
+            </div>
+            <div style="background:var(--bg-page);border:1px solid var(--border-color);border-radius:8px;padding:14px;display:flex;justify-content:space-between;align-items:center;">
+              <div>
+                <div style="display:flex;align-items:center;gap:8px;">
+                  <strong style="font-size:0.85rem;color:var(--text-primary);">Lot #111 Patek Philippe Aquanaut</strong>
+                  <span class="badge badge--waiting" style="font-size:0.65rem;">CẦN XÁC MINH SỐ SERI</span>
+                </div>
+                <div style="font-size:0.75rem;color:var(--text-muted);margin-top:2px;">Đang chờ chuyên viên đối chiếu sổ thẻ gốc với Geneva Watch Registry</div>
+              </div>
+              <button type="button" class="btn btn-primary" style="font-size:0.72rem;padding:4px 10px;" onclick="window.showToast('Chứng Nhận An Toàn', 'Đã xác thực mã số thẻ hợp lệ.', 'success')">Đánh Dấu Đạt Chuẩn</button>
+            </div>
+          `;
+        }
+
+        // 6. Transactions Ledger
+        var txTbody = document.getElementById('adm-tx-tbody');
+        if (txTbody) {
+          txTbody.innerHTML = txs.map(function(t) {
+            return `
+              <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 12px 18px; font-family: var(--font-mono); font-weight: 700;">${t.id}</td>
+                <td style="padding: 12px 18px; font-weight: 600; color: var(--text-primary);">${t.type}</td>
+                <td style="padding: 12px 18px; text-align: right; font-family: var(--font-mono); font-weight: 700; color: #059669;">${store.formatCurrency(t.amount)}</td>
+                <td style="padding: 12px 18px; font-size: 0.78rem; color: var(--text-muted);">${new Date(t.timestamp).toLocaleString('vi-VN')}</td>
+                <td style="padding: 12px 18px; color: var(--text-secondary);">${t.desc}</td>
+              </tr>
+            `;
+          }).join('');
+        }
+
+        // 7. Audit Trail
+        var auditTbody = document.getElementById('adm-audit-tbody');
+        if (auditTbody) {
+          auditTbody.innerHTML = logs.map(function(l) {
+            return `
+              <tr style="border-bottom: 1px solid var(--border-color);">
+                <td style="padding: 12px 18px; font-size: 0.78rem; color: var(--text-muted); font-family: var(--font-mono);">${l.timestamp}</td>
+                <td style="padding: 12px 18px; font-weight: 700; color: #059669;">${l.action}</td>
+                <td style="padding: 12px 18px; color: var(--text-primary);">${l.detail}</td>
+                <td style="padding: 12px 18px; color: var(--text-muted); font-family: var(--font-mono); font-weight: 600;">${l.actor}</td>
+              </tr>
+            `;
+          }).join('');
+        }
+      };
+
+      window.approveRoom = function(roomId) {
+        if (confirm('Xác nhận phê chuẩn phiên đấu giá này lên sàn chính thức?')) {
+          store.approveRoom(roomId);
+          window.refreshAdminView();
+        }
+      };
+
+      window.toggleUserLock = function(uid) {
+        store.toggleUserLock(uid);
+        window.refreshAdminView();
+      };
+
+      window.saveNewCategory = function(e) {
+        e.preventDefault();
+        var name = document.getElementById('cat-name-input').value;
+        var slug = document.getElementById('cat-slug-input').value;
+        var desc = document.getElementById('cat-desc-input').value;
+        store.addCategory({ name: name, slug: slug, desc: desc });
+        document.getElementById('cat-name-input').value = '';
+        document.getElementById('cat-slug-input').value = '';
+        document.getElementById('cat-desc-input').value = '';
+        if (window.showToast) window.showToast('Thêm Danh Mục Thành Công', 'Danh mục mới đã được tạo.', 'success');
+        window.refreshAdminView();
+      };
+
+      window.deleteCategory = function(slug) {
+        if (confirm('Xác nhận xóa danh mục này?')) {
+          store.deleteCategory(slug);
+          window.refreshAdminView();
+        }
+      };
+
+      window.refreshAdminView();
+
+      if (store && typeof store.subscribe === 'function') {
+        store.subscribe(window.refreshAdminView);
+      }
+    })();
+  </script>
+</body>
+</html>
