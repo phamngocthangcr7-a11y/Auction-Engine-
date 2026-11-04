@@ -1,44 +1,43 @@
 @echo off
-chcp 65001 >nul
-title DAY CODE LEN GITHUB - AURELIA AUCTION ENGINE
+title DAY CODE LEN GITHUB - AURELIA AUCTION
 cls
 echo ===============================================================================
-echo        HỆ THỐNG ĐẨY CODE LÊN GITHUB DÀNH CHO DỰ ÁN AURELIA AUCTION
+echo        HE THONG DAY CODE LEN GITHUB - AURELIA AUCTION ENGINE
 echo ===============================================================================
 echo.
-echo Bước 1: Hãy vào trình duyệt mở https://github.com/new
-echo Bước 2: Tạo một Repository mới (đặt tên ví dụ: aurelia-auction) và chọn Public.
-echo Bước 3: Copy đường link của Repository vừa tạo (dạng: https://github.com/.../....git)
+echo Buoc 1: Vao trinh duyet mo https://github.com/new
+echo Buoc 2: Tao Repository moi (dat ten: aurelia-auction) va chon Public.
+echo Buoc 3: Copy duong link Repository vua tao (dang: https://github.com/.../...git)
 echo.
 echo ===============================================================================
-set /p REPO_URL="Dán đường link GitHub của bạn vào đây rồi ấn ENTER: "
+set /p REPO_URL="Dan duong link GitHub cua ban vao day roi an ENTER: "
 
 if "%REPO_URL%"=="" (
     echo.
-    echo [LỖI] Bạn chưa nhập link GitHub. Vui lòng chạy lại file và dán link vào.
+    echo [LOI] Ban chua nhap link GitHub. Vui long chay lai file va dan link vao.
     pause
     exit /b
 )
 
 echo.
-echo Đang liên kết kho lưu trữ GitHub...
+echo Dang lien ket kho luu tru GitHub...
 git remote remove origin 2>nul
 git remote add origin %REPO_URL%
 git branch -M main
 
 echo.
-echo Đang đẩy code lên GitHub (Vui lòng đăng nhập nếu GitHub yêu cầu)...
+echo Dang day code len GitHub (Neu hien cua so dang nhap, vui long dang nhap GitHub)...
 git push -u origin main
 
 if %ERRORLEVEL% EQU 0 (
     echo.
     echo ===============================================================================
-    echo [THÀNH CÔNG RỰC RỠ] Code đã được đẩy lên GitHub thành công!
-    echo Bây giờ bạn chỉ cần vào https://vercel.com/new -> Bấm "Import" -> Bấm "Deploy" là xong!
+    echo [THANH CONG RUC RO] Code da duoc day len GitHub thanh cong!
+    echo Bay gio ban vao https://vercel.com/new -> Bam "Import" -> Bam "Deploy" la xong!
     echo ===============================================================================
 ) else (
     echo.
-    echo [LỖI] Chưa đẩy được code. Vui lòng kiểm tra lại quyền đăng nhập GitHub hoặc đường link.
+    echo [LOI] Chua day duoc code. Vui long kiem tra lai quyen dang nhap hoac link.
 )
 
 echo.
