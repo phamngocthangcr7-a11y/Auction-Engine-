@@ -104,7 +104,7 @@ function renderFooter() {
         <!-- Bottom Copyright & Reset Demo Button -->
         <div class="site-footer__bottom">
           <div class="site-footer__copy">
-            &copy; 2026 Aurelia Fine Auctions. Nền tảng đấu giá trực tuyến có bảo chứng ký quỹ.
+            &copy; 2026 AUCTIONENGINE Fine Auctions. Nền tảng đấu giá trực tuyến có bảo chứng ký quỹ.
           </div>
           <div class="site-footer__bottom-links">
             <span style="font-size: 0.75rem; color: var(--text-muted);">Genève &bull; London &bull; New York</span>
@@ -145,9 +145,9 @@ function setupNewsletterValidation() {
       return;
     }
     if (window.showToast) {
-      window.showToast('Đăng ký bản tin', `Địa chỉ ${email} đã được thêm vào danh sách nhận bản tin ưu tiên của Aurelia Fine Auctions.`, 'success');
+      window.showToast('Đăng ký bản tin', `Địa chỉ ${email} đã được thêm vào danh sách nhận bản tin ưu tiên của AUCTIONENGINE Fine Auctions.`, 'success');
     } else {
-      alert(`Đăng ký thành công!\nĐịa chỉ ${email} đã được thêm vào danh sách nhận bản tin ưu tiên của Aurelia Fine Auctions.`);
+      alert(`Đăng ký thành công!\nĐịa chỉ ${email} đã được thêm vào danh sách nhận bản tin ưu tiên của AUCTIONENGINE Fine Auctions.`);
     }
     form.reset();
   });

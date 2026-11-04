@@ -1,5 +1,5 @@
 /**
- * AURELIA FINE AUCTIONS - MODAL DIALOGS SYSTEM
+ * AUCTIONENGINE FINE AUCTIONS - MODAL DIALOGS SYSTEM
  * Style: Swiss Editorial (Sotheby's × Bring a Trailer × Loupe This)
  * Zero Emojis - Inline SVG Icons (stroke-width="1.75")
  * Real Authentication (Login / Register / Profile) - Zero Dummy Account Clutter
@@ -30,7 +30,7 @@ function renderModals() {
         </div>
         <div class="modal__body">
           <p style="font-size: var(--font-size-xs); color: var(--text-secondary); line-height: 1.5; margin-bottom: var(--space-4);">
-            Mỗi phiên đấu giá tại sàn Aurelia được định danh bằng một <strong>Mã PIN 6 chữ số</strong>. Vui lòng nhập mã để vào thẳng phòng đấu giá:
+            Mỗi phiên đấu giá tại sàn AUCTIONENGINE được định danh bằng một <strong>Mã PIN 6 chữ số</strong>. Vui lòng nhập mã để vào thẳng phòng đấu giá:
           </p>
 
           <div class="form-group" style="margin-bottom: var(--space-4);">
@@ -145,7 +145,7 @@ function renderModals() {
               <form id="auth-login-form">
                 <div class="form-group">
                   <label class="form-label" for="modal-login-email">Email hoặc Mã Thẻ (#PD-xxxx)</label>
-                  <input type="text" id="modal-login-email" class="form-control" placeholder="thang.pn@aurelia.ch hoặc #PD-6651" required />
+                  <input type="text" id="modal-login-email" class="form-control" placeholder="thang.pn@auctionengine.vn hoặc #PD-6651" required />
                 </div>
                 <div class="form-group">
                   <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
@@ -206,7 +206,7 @@ function renderModals() {
                 <form id="auth-forgot-form-step1">
                   <div class="form-group">
                     <label class="form-label" for="modal-forgot-email">Tài khoản Email cần đặt lại mật khẩu</label>
-                    <input type="email" id="modal-forgot-email" class="form-control" value="thang.pn@aurelia.ch" placeholder="thang.pn@aurelia.ch" required />
+                    <input type="email" id="modal-forgot-email" class="form-control" value="thang.pn@auctionengine.vn" placeholder="thang.pn@auctionengine.vn" required />
                   </div>
                   <button type="submit" class="btn btn--primary btn--md" id="btn-forgot-send-otp" style="width: 100%; margin-top: var(--space-2); font-weight: 700; padding: 11px;">
                     ⚡ LẤY MÃ OTP & ĐẶT MẬT KHẨU MỚI (TRỰC TIẾP)
@@ -354,7 +354,7 @@ function renderModals() {
       <div class="modal__container" style="max-width: 600px;">
         <div class="modal__header" style="background: var(--bg-canvas);">
           <div>
-            <div style="font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--text-muted); font-weight: 700;">Aurelia Fine Auctions &bull; Official Protocol</div>
+            <div style="font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--text-muted); font-weight: 700;">AUCTIONENGINE Fine Auctions &bull; Official Protocol</div>
             <h3 class="modal__title" style="margin-top: 2px;">Biên Bản Xác Nhận Kết Quả Đấu Giá</h3>
           </div>
           <button class="modal__close" onclick="window.closeModal('modal-auction-result')" aria-label="Đóng">&times;</button>
@@ -608,7 +608,7 @@ function renderModals() {
         <div class="modal__body" id="modal-certificate-printable" style="padding: 24px; background: #FFFFFF; color: #0F172A; font-family: var(--font-sans); overflow-y: auto;">
           <div style="border: 2px solid #0F172A; padding: 24px; border-radius: 4px; position: relative;">
             <div style="text-align: center; border-bottom: 2px solid #0F172A; padding-bottom: 16px; margin-bottom: 20px;">
-              <div style="font-family: var(--font-serif); font-size: 1.8rem; font-weight: 800; letter-spacing: 0.08em; margin-bottom: 2px;">AURELIA FINE AUCTIONS</div>
+              <div style="font-family: var(--font-serif); font-size: 1.8rem; font-weight: 800; letter-spacing: 0.08em; margin-bottom: 2px;">AUCTIONENGINE FINE AUCTIONS</div>
               <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.25em; color: #475569;">GENÈVE &bull; MONACO &bull; PARIS &bull; ZÜRICH</div>
               <div style="margin-top: 10px; font-family: var(--font-serif); font-size: 1.15rem; font-style: italic; color: #059669; font-weight: 700;">Biên Bản & Chứng Thư Xác Nhận Trúng Đấu Giá</div>
             </div>
@@ -644,13 +644,13 @@ function renderModals() {
             <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-top: 16px; border-top: 1px solid #E2E8F0; font-size: 0.72rem; color: #64748B;">
               <div>
                 <div>Bảo chứng Escrow: Ngân hàng Giám định Thụy Sĩ (UBS Geneva)</div>
-                <div>Chữ ký số SHA-256 mã hóa lưu trữ vĩnh viễn trên sổ cái Aurelia.</div>
+                <div>Chữ ký số SHA-256 mã hóa lưu trữ vĩnh viễn trên sổ cái AUCTIONENGINE.</div>
               </div>
               <div style="text-align: center;">
                 <div style="width: 80px; height: 80px; border: 2px dashed #94A3B8; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 4px auto; color: #059669; font-weight: 800; font-size: 0.65rem; text-transform: uppercase;">
                   GENEVA SEAL
                 </div>
-                <div>Aurelia Authorized</div>
+                <div>AUCTIONENGINE Authorized</div>
               </div>
             </div>
           </div>
@@ -995,7 +995,7 @@ window.switchAuthTabTo = function(tabName) {
     if (s2) s2.style.display = 'none';
     const emailInput = document.getElementById('modal-forgot-email');
     if (emailInput && !emailInput.value) {
-      emailInput.value = 'thang.pn@aurelia.ch';
+      emailInput.value = 'thang.pn@auctionengine.vn';
     }
   } else {
     if (tabGroup) tabGroup.style.display = 'flex';
@@ -1235,7 +1235,7 @@ window.openRoomInviteModal = function(roomId) {
     durSec: room.durationSeconds || ((room.durationMinutes || 15) * 60),
     imgs: (room.images && room.images.length > 0) ? room.images.slice(0, 4) : [],
     specs: room.specs || {},
-    host: room.sellerName || 'Aurelia Curators',
+    host: room.sellerName || 'AUCTIONENGINE Curators',
     sellerId: room.sellerId || 'usr-host-remote',
     status: room.status || 'WAITING'
   };
@@ -1528,7 +1528,7 @@ window.openCertificateModal = function(roomId) {
     const rem = hammer - escrow;
 
     const elCode = document.getElementById('cert-code-no');
-    if (elCode) elCode.textContent = 'CERTIFICATE ID: AURELIA-GENEVA-' + (room.roomPin || '192834');
+    if (elCode) elCode.textContent = 'CERTIFICATE ID: AUCTIONENGINE-' + (room.roomPin || '192834');
     const elTitle = document.getElementById('cert-item-title');
     if (elTitle) elTitle.textContent = room.title;
     const elPin = document.getElementById('cert-lot-pin');

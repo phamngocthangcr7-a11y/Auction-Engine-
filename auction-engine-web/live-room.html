@@ -25,7 +25,7 @@
         '<circle cx="400" cy="250" r="100" fill="none" stroke="#0F172A" stroke-width="1.5" stroke-dasharray="6 4" opacity="0.3"/>' +
         '<text x="400" y="420" font-family="Newsreader, serif" font-size="18" font-weight="600" fill="#525866" letter-spacing="3" text-anchor="middle">' + safeCat + '</text>' +
         '<text x="400" y="460" font-family="Plus Jakarta Sans, sans-serif" font-size="20" font-weight="700" fill="#111315" text-anchor="middle">' + (safeTitle.length > 40 ? safeTitle.substring(0, 37) + '...' : safeTitle) + '</text>' +
-        '<text x="400" y="500" font-family="JetBrains Mono, monospace" font-size="12" fill="#868C98" text-anchor="middle">AURELIA FINE AUCTIONS &bull; GENÈVE</text>' +
+        '<text x="400" y="500" font-family="JetBrains Mono, monospace" font-size="12" fill="#868C98" text-anchor="middle">AUCTIONENGINE FINE AUCTIONS</text>' +
       '</svg>';
       img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg);
     };
@@ -828,7 +828,7 @@
                     Yêu Cầu Đặt Cọc Ký Quỹ (15%)
                   </h4>
                   <p style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.5; margin-bottom: var(--space-3);">
-                    Theo quy chuẩn của Aurelia, nhà sưu tầm cần khóa tạm thời 15% giá khởi điểm để xác thực thẻ đấu giá hợp lệ. Tiền cọc sẽ được hoàn trả tự động 100% nếu quý khách không trúng thầu.
+                    Theo quy chuẩn của AUCTIONENGINE, nhà sưu tầm cần khóa tạm thời 15% giá khởi điểm để xác thực thẻ đấu giá hợp lệ. Tiền cọc sẽ được hoàn trả tự động 100% nếu quý khách không trúng thầu.
                   </p>
                   <div style="background: var(--bg-surface); border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); padding: 8px 12px; margin-bottom: var(--space-3); font-size: 0.75rem; display: flex; justify-content: space-between;">
                     <span class="text-muted">Mức cọc cần ký quỹ:</span>
@@ -1134,7 +1134,7 @@
               leaderName: '',
               leaderPaddleId: '',
               sellerId: sData.sellerId || 'usr-host-remote',
-              sellerName: sData.host || 'Chủ Phòng Aurelia',
+              sellerName: sData.host || 'Chủ Phòng AUCTIONENGINE',
               sellerPaddleId: '#HOST-COMMUNITY',
               participantsCount: 1,
               images: (sData.imgs && sData.imgs.length >= 3) ? sData.imgs : [
@@ -1148,7 +1148,7 @@
                 'Tình trạng': 'Mới 100% Nguyên bản'
               },
               appraisal: {
-                inspector: "Aurelia Global Curators Bureau",
+                inspector: "AUCTIONENGINE Global Curators Bureau",
                 score: '9.9/10 (Verified)',
                 certNo: 'PP-CH-' + sData.pin,
                 provenance: 'Bộ sưu tập tư nhân Geneva'

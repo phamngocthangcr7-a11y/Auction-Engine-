@@ -134,7 +134,7 @@ function renderHeader() {
         
         <!-- Left: Brand Logo + Nav Links -->
         <div class="site-header__left">
-          <a href="index.html" class="site-header__logo" title="Trang chủ Aurelia Fine Auctions">
+          <a href="index.html" class="site-header__logo" title="Trang chủ AUCTIONENGINE Fine Auctions">
             <span class="site-header__logo-brand" style="font-family: var(--font-heading); font-weight: 800; letter-spacing: -0.02em;">AUCTION<span style="color: #F59E0B;">ENGINE</span></span>
             <span class="site-header__logo-sub">SÀN ĐẤU GIÁ TRỰC TUYẾN</span>
           </a>

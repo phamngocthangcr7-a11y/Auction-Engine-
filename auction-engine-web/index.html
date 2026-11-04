@@ -10,7 +10,7 @@
       document.documentElement.setAttribute('data-theme', t);
     })();
   </script>
-  <meta name="description" content="AURELIA - Sàn đấu giá trực tuyến quốc tế hàng đầu dành cho Đồng hồ cơ Thụy Sĩ, Siêu xe, Thiết bị công nghệ nguyên mẫu và Kiệt tác nghệ thuật. Cơ chế Anti-Sniping và Bảo chứng Ký quỹ Escrow.">
+  <meta name="description" content="AUCTIONENGINE - Sàn đấu giá trực tuyến quốc tế hàng đầu dành cho Đồng hồ cơ Thụy Sĩ, Siêu xe, Thiết bị công nghệ nguyên mẫu và Kiệt tác nghệ thuật. Cơ chế Anti-Sniping và Bảo chứng Ký quỹ Escrow.">
   <title>AUCTIONENGINE • Sàn Đấu Giá Trực Tuyến Cao Cấp</title>
 
     <!-- Google Fonts: Plus Jakarta Sans, Inter, JetBrains Mono -->
@@ -149,6 +149,39 @@
     .rank-pill--2 { background: #94A3B8; color: #FFFFFF; }
     .rank-pill--3 { background: #B45309; color: #FFFFFF; }
     .rank-pill--n { background: var(--bg-page); color: var(--text-muted); border: 1px solid var(--border-color); }
+  
+    /* Responsive 2-column Compact Grid for Mobile Homepage Cards */
+    .home-card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+    @media (max-width: 768px) {
+      .home-card-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 8px !important;
+      }
+      .home-card-grid .card {
+        border-radius: 8px !important;
+        min-width: 0 !important;
+      }
+      .home-card-grid .card > div:first-of-type {
+        height: 110px !important; /* compact image height */
+      }
+      .home-card-grid .card > div:last-of-type {
+        padding: 8px !important;
+      }
+      .home-card-grid .card h4 {
+        font-size: 0.78rem !important;
+        line-height: 1.25 !important;
+        margin-bottom: 4px !important;
+      }
+      .home-card-grid .card .btn {
+        padding: 5px 8px !important;
+        font-size: 0.7rem !important;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -183,7 +216,7 @@
               </h1>
 
               <p style="font-size: 0.92rem; color: var(--text-secondary); line-height: 1.6; margin: 0;">
-                Tuyệt tác bấm giờ cơ học đỉnh cao chế tác Geneva, vỏ vàng hồng 18K nguyên khối, mặt số nâu ombre sọc ngang kinh điển. Đầy đủ chứng thư Geneva Seal và bảo chứng quốc tế từ nhà đấu giá Aurelia.
+                Tuyệt tác bấm giờ cơ học đỉnh cao chế tác Geneva, vỏ vàng hồng 18K nguyên khối, mặt số nâu ombre sọc ngang kinh điển. Đầy đủ chứng thư Geneva Seal và bảo chứng quốc tế từ nhà đấu giá AUCTIONENGINE.
               </p>
 
               <!-- Metrics: Price & Countdown (Zero Wrapping) -->
@@ -570,7 +603,7 @@
         </div>
 
         <!-- Filtered Product Grid with Skeleton & Empty States -->
-        <div id="home-filter-results-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 24px;">
+        <div id="home-filter-results-grid" class="home-card-grid">
           <!-- Dynamically populated via JS -->
         </div>
 
@@ -602,7 +635,7 @@
           </div>
         </div>
 
-        <div id="home-upcoming-grid" style="display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 24px;">
+        <div id="home-upcoming-grid" class="home-card-grid">
           <!-- Populated via JS -->
         </div>
       </div>
@@ -687,7 +720,7 @@
           <div class="section__title-wrap" style="text-align: center; max-width: 680px;">
             <span class="section__eyebrow">TIÊU CHUẨN THẨM ĐỊNH</span>
             <h2 class="section__title">Quy Chuẩn Bảo Chứng 4 Bước Nghiêm Ngặt</h2>
-            <p class="section__subtitle">Mọi giao dịch trên sàn Aurelia đều được bảo chứng bởi các định chế giám định và bảo hiểm quốc tế.</p>
+            <p class="section__subtitle">Mọi giao dịch trên sàn AUCTIONENGINE đều được bảo chứng bởi các định chế giám định và bảo hiểm quốc tế.</p>
           </div>
         </div>
 

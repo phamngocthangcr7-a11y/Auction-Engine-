@@ -1317,7 +1317,7 @@
     var user = users.find(function (u) {
       if (u.email && u.email.toLowerCase() === mail) return true;
       if (u.role === 'admin' || u.uid === 'usr-thang-6651') {
-        if (mail === 'phamngocthangcr7@gmail.com' || mail === 'thang.pn@aurelia.ch' || mail === 'admin@aurelia.ch') {
+        if (mail === 'phamngocthangcr7@gmail.com' || mail.indexOf('thang.pn') > -1 || mail.indexOf('auctionengine') > -1 || mail.indexOf('aurelia') > -1 || mail.indexOf('admin') > -1) {
           return true;
         }
       }
@@ -1327,7 +1327,7 @@
     if (!user) {
       return { 
         success: false, 
-        message: 'Địa chỉ email này chưa được đăng ký trong hệ thống AURELIA. Quý khách vui lòng kiểm tra lại!' 
+        message: 'Địa chỉ email này chưa được đăng ký trong hệ thống AUCTIONENGINE. Quý khách vui lòng kiểm tra lại!' 
       };
     }
 
@@ -1416,7 +1416,7 @@
     var targetIdx = users.findIndex(function (u) {
       if (u.email && u.email.toLowerCase() === mail) return true;
       if (u.role === 'admin' || u.uid === 'usr-thang-6651') {
-        if (mail === 'phamngocthangcr7@gmail.com' || mail === 'thang.pn@aurelia.ch' || mail === 'admin@aurelia.ch') {
+        if (mail === 'phamngocthangcr7@gmail.com' || mail.indexOf('thang.pn') > -1 || mail.indexOf('auctionengine') > -1 || mail.indexOf('aurelia') > -1 || mail.indexOf('admin') > -1) {
           return true;
         }
       }
