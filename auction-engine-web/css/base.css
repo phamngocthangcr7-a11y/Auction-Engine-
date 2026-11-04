@@ -44,6 +44,10 @@ html {
 
 body {
   min-height: 100vh;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  position: relative;
   background-color: var(--bg-page) !important;
   color: var(--text-primary) !important;
   font-family: var(--font-body);

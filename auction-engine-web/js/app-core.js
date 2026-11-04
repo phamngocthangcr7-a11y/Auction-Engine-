@@ -1169,11 +1169,8 @@
           return parsed;
         }
       }
-      // Default to official student account
-      var users = this.getUsers();
-      var defaultUser = users[0];
-      localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(defaultUser));
-      return defaultUser;
+      // Guest mode by default when no user session exists
+      return null;
     } catch (e) {
       return null;
     }

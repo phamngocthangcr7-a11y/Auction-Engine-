@@ -66,6 +66,54 @@
     .faq-item.open .faq-answer {
       display: block;
     }
+    .protocol-grid-3 {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+    .protocol-grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 900px) {
+      .protocol-grid-3 {
+        grid-template-columns: 1fr;
+        gap: 16px;
+      }
+      .protocol-grid-4 {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 14px;
+      }
+    }
+    @media (max-width: 600px) {
+      .protocol-card {
+        padding: 20px 16px !important;
+        margin-bottom: 20px !important;
+      }
+      .protocol-grid-3 {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+      }
+      .protocol-grid-4 {
+        grid-template-columns: 1fr !important;
+        gap: 12px !important;
+      }
+      .timeline-strip {
+        flex-direction: column !important;
+        align-items: stretch !important;
+        gap: 10px !important;
+      }
+      .timeline-node {
+        min-width: unset !important;
+        width: 100% !important;
+      }
+      .timeline-strip > div:nth-child(even) {
+        text-align: center !important;
+        transform: rotate(90deg) !important;
+        margin: -4px 0 !important;
+      }
+    }
   </style>
 </head>
 <body>
@@ -149,7 +197,7 @@
           Để bảo vệ tính nghiêm túc của mỗi phiên giao dịch, Aurelia áp dụng tỷ lệ ký quỹ bắt buộc 15% giá khởi điểm đối với mọi người tham gia:
         </p>
 
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+        <div class="protocol-grid-3">
           <div style="background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 20px;">
             <div style="font-size: 1.25rem; font-weight: 800; color: var(--text-primary); margin-bottom: 8px;">Tạm Khóa An Toàn</div>
             <p style="font-size: 0.82rem; color: var(--text-secondary); line-height: 1.5; margin: 0;">
@@ -185,7 +233,7 @@
           Mỗi vật phẩm xuất hiện trên sàn Aurelia đều phải trải qua 4 vòng thẩm định độc lập bởi các hội đồng giám định quốc tế:
         </p>
 
-        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px;">
+        <div class="protocol-grid-4">
           <div style="background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 18px;">
             <div class="font-mono" style="font-size: 1.4rem; font-weight: 800; color: var(--accent-emerald); margin-bottom: 6px;">01</div>
             <strong style="font-size: 0.9rem; color: var(--text-primary); display: block; margin-bottom: 6px;">Tiếp Nhận Hồ Sơ</strong>

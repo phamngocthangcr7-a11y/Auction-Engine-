@@ -450,6 +450,13 @@
       var store = window.AureliaApp || window.AuctionStore;
       if (!store) return;
 
+      // Bảo vệ phân quyền Quản trị viên (Super Admin)
+      var currUser = store.getCurrentUser();
+      if (!currUser || (!currUser.isAdmin && currUser.role !== 'admin')) {
+        window.location.href = 'login.html?redirect=admin.html';
+        return;
+      }
+
       // Tab switcher
       function switchAdminTab(tabId) {
         document.querySelectorAll('.admin-menu-item').forEach(function(item) {

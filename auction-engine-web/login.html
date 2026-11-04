@@ -495,10 +495,29 @@
       const params = new URLSearchParams(window.location.search);
       const alertBox = document.getElementById('auth-alert-box');
       const alreadyBanner = document.getElementById('already-logged-banner');
-      const store = window.AuctionStore || window.dbService;
+      const store = window.AureliaApp || window.AuctionStore || window.dbService;
       const curr = store ? store.getCurrentUser() : null;
+      const redirectParam = params.get('redirect') || '';
       
-      if (params.get('logout') === 'true') {
+      if (redirectParam.includes('admin') && !curr) {
+        alertBox.style.display = 'block';
+        alertBox.style.background = 'rgba(16, 185, 129, 0.1)';
+        alertBox.style.border = '1px solid rgba(16, 185, 129, 0.3)';
+        alertBox.style.color = '#34D399';
+        alertBox.innerHTML = `
+          <strong>🛡️ Yêu cầu quyền Quản Trị Viên (Super Admin)</strong><br>
+          Khu vực này dành riêng cho Ban Quản Trị. Quý khách vui lòng đăng nhập bằng tài khoản <strong>Phạm Ngọc Thắng</strong> hoặc bấm nút Đăng Nhập Mẫu bên dưới.
+        `;
+      } else if (redirectParam.includes('dashboard') && !curr) {
+        alertBox.style.display = 'block';
+        alertBox.style.background = 'rgba(59, 130, 246, 0.1)';
+        alertBox.style.border = '1px solid rgba(59, 130, 246, 0.3)';
+        alertBox.style.color = '#93C5FD';
+        alertBox.innerHTML = `
+          <strong>🔒 Yêu cầu Đăng Nhập / Đăng Ký</strong><br>
+          Vui lòng đăng nhập hoặc tạo tài khoản mới để quản lý Hồ Sơ Cá Nhân, Số Dư Ví Ký Quỹ và Bộ Sưu Tập của bạn.
+        `;
+      } else if (params.get('logout') === 'true') {
         alertBox.style.display = 'block';
         alertBox.style.background = 'rgba(239, 68, 68, 0.1)';
         alertBox.style.border = '1px solid rgba(239, 68, 68, 0.3)';

@@ -690,17 +690,9 @@
       function updateDashboardData() {
         var user = store.getCurrentUser();
         if (!user) {
-          user = {
-            uid: 'usr-thang-6651',
-            fullName: 'Phạm Ngọc Thắng',
-            mssv: '6651071071',
-            paddleId: '#PD-6651',
-            email: 'thang.pn@aurelia.ch',
-            phone: '0908 665 107',
-            walletAvailable: 25000000000,
-            walletEscrow: 360000000,
-            avatar: 'assets/images/user_thang.jpg'
-          };
+          // Khách chưa đăng nhập: chuyển hướng sang cổng đăng nhập để bảo mật thông tin cá nhân
+          window.location.href = 'login.html?redirect=dashboard.html';
+          return;
         }
 
         // Header info
