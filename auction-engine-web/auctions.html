@@ -11,12 +11,12 @@
     })();
   </script>
   <meta name="description" content="Khám phá và tra cứu bộ sưu tập đấu giá độc quyền với bộ lọc đa tầng thông minh, sắp xếp linh hoạt và tính năng so sánh đa vật phẩm.">
-  <title>Khám Phá Phiên Đấu Giá • AURELIA</title>
+  <title>Khám Phá Phiên Đấu Giá • AUCTIONENGINE</title>
 
     <!-- Google Fonts: Plus Jakarta Sans, Inter, JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <!-- Core CSS -->
   <link rel="stylesheet" href="css/tokens.css">
@@ -42,6 +42,70 @@
     };
   </script>
 
+  <style>
+    .catalog-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: var(--space-5);
+      align-items: flex-start;
+    }
+    .filter-mobile-toggle-bar {
+      display: none;
+    }
+    @media (max-width: 960px) {
+      .catalog-layout {
+        grid-template-columns: 1fr !important;
+        gap: var(--space-4) !important;
+      }
+      .filter-mobile-toggle-bar {
+        display: flex !important;
+        align-items: center;
+        justify-content: space-between;
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-sm);
+        padding: 10px 14px;
+        margin-bottom: var(--space-3);
+        cursor: pointer;
+        user-select: none;
+      }
+      .filter-mobile-toggle-bar span {
+        font-size: 0.82rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        display: flex;
+        align-items: center;
+        gap: 6px;
+      }
+      .filter-mobile-toggle-bar svg {
+        transition: transform 0.25s ease;
+      }
+      .filter-mobile-toggle-bar.open svg {
+        transform: rotate(180deg);
+      }
+      .filter-sidebar {
+        display: none;
+        margin-bottom: var(--space-4);
+      }
+      .filter-sidebar.open {
+        display: block !important;
+      }
+      .grid--cards {
+        grid-template-columns: 1fr !important;
+        gap: var(--space-4) !important;
+      }
+      .category-pills-bar {
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        -webkit-overflow-scrolling: touch;
+        padding-bottom: 6px !important;
+      }
+      .btn-cat-pill {
+        white-space: nowrap !important;
+        flex-shrink: 0 !important;
+      }
+    }
+  </style>
 </head>
 <body>
   <!-- Header Root -->
@@ -53,12 +117,21 @@
       
       <!-- Breadcrumb -->
       <nav aria-label="Breadcrumb" style="margin-bottom: var(--space-3); font-size: 0.78rem; color: var(--text-muted);">
-        <a href="index.html" style="color: var(--text-muted); text-decoration: none;">Aurelia Genève</a>
+        <a href="index.html" style="color: var(--text-muted); text-decoration: none;">AUCTIONENGINE</a>
         <span style="margin: 0 6px;">/</span>
         <span style="color: var(--text-primary); font-weight: 600;">Danh Mục Đấu Giá</span>
       </nav>
 
-      <div class="catalog-layout" style="display: grid; grid-template-columns: 260px 1fr; gap: var(--space-5);">
+      <!-- Mobile Filter Toggle Button -->
+      <div class="filter-mobile-toggle-bar" id="btn-toggle-mobile-filter" onclick="window.toggleMobileFilters()">
+        <span>
+          <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; color: #059669;"><polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon></svg>
+          Bộ Lọc & Tìm Kiếm Đa Tầng (Chạm để mở/đóng)
+        </span>
+        <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; color: var(--text-muted);"><polyline points="6 9 12 15 18 9"></polyline></svg>
+      </div>
+
+      <div class="catalog-layout">
         
         <!-- 1. ASIDE: FILTER SIDEBAR -->
         <aside class="filter-sidebar" aria-label="Bộ lọc đa tầng" style="background: var(--bg-surface); border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); padding: var(--space-4); height: fit-content;">
@@ -490,6 +563,16 @@
       });
 
     })();
+  </script>
+  <script>
+    window.toggleMobileFilters = function() {
+      var bar = document.getElementById('btn-toggle-mobile-filter');
+      var sidebar = document.querySelector('.filter-sidebar');
+      if (bar && sidebar) {
+        bar.classList.toggle('open');
+        sidebar.classList.toggle('open');
+      }
+    };
   </script>
 </body>
 </html>

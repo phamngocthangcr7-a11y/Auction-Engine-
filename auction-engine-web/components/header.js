@@ -135,7 +135,7 @@ function renderHeader() {
         <!-- Left: Brand Logo + Nav Links -->
         <div class="site-header__left">
           <a href="index.html" class="site-header__logo" title="Trang chủ Aurelia Fine Auctions">
-            <span class="site-header__logo-brand">AURELIA</span>
+            <span class="site-header__logo-brand" style="font-family: var(--font-heading); font-weight: 800; letter-spacing: -0.02em;">AUCTION<span style="color: #F59E0B;">ENGINE</span></span>
             <span class="site-header__logo-sub">SÀN ĐẤU GIÁ TRỰC TUYẾN</span>
           </a>
 
@@ -243,7 +243,7 @@ function renderHeader() {
     <div id="mobile-drawer" class="mobile-drawer" role="dialog" aria-modal="true" aria-label="Menu điều hướng điện thoại">
       <div class="mobile-drawer__header">
         <div style="display: flex; flex-direction: column;">
-          <span style="font-family: var(--font-serif); font-size: 1.35rem; font-weight: 800; letter-spacing: 0.1em; color: var(--text-primary);">AURELIA</span>
+          <span style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text-primary);">AUCTION<span style="color: #F59E0B;">ENGINE</span></span>
           <span style="font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: #059669; font-weight: 700;">SÀN ĐẤU GIÁ TRỰC TUYẾN</span>
         </div>
         <button type="button" class="mobile-drawer__close" onclick="window.closeMobileDrawer()" aria-label="Đóng menu">

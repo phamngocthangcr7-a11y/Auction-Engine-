@@ -17,8 +17,8 @@ function renderFooter() {
           <!-- Col 1: Brand Info -->
           <div class="site-footer__brand-col">
             <div style="margin-bottom: 16px;">
-              <span style="font-family: var(--font-serif); font-size: 1.4rem; font-weight: 800; letter-spacing: 0.08em; color: var(--text-primary); display: block;">
-                AURELIA
+              <span style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text-primary); display: block;">
+                AUCTION<span style="color: #F59E0B;">ENGINE</span>
               </span>
               <span style="font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">
                 SÀN ĐẤU GIÁ TRỰC TUYẾN
