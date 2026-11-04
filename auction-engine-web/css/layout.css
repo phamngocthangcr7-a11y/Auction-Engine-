@@ -247,9 +247,39 @@
 
 .site-footer__grid {
   display: grid;
-  grid-template-columns: 2fr repeat(3, 1fr) 1.5fr;
+  grid-template-columns: 2fr 1fr 1fr 1.2fr;
   gap: var(--space-8);
-  margin-bottom: var(--space-12);
+  margin-bottom: var(--space-10);
+}
+
+.site-footer__security {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+  padding: 18px 0;
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 24px;
+  flex-wrap: wrap;
+  font-size: 0.75rem;
+  color: var(--text-secondary);
+}
+
+.site-footer__sec-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.site-footer__sec-item svg {
+  width: 16px;
+  height: 16px;
+  color: var(--accent-emerald, #059669);
+  flex-shrink: 0;
+  stroke: currentColor;
+  fill: none;
+  stroke-width: 1.75;
 }
 
 .site-footer__col-title {
@@ -369,13 +399,47 @@
     display: none;
   }
 
+  .site-footer {
+    padding-top: var(--space-8) !important;
+    padding-bottom: var(--space-6) !important;
+    margin-top: var(--space-8) !important;
+  }
+
   .site-footer__grid {
-    grid-template-columns: 1fr;
-    gap: var(--space-6);
+    grid-template-columns: 1fr !important;
+    gap: var(--space-6) !important;
+    margin-bottom: var(--space-6) !important;
   }
 
   .site-footer__brand-col {
-    grid-column: span 1;
+    grid-column: span 1 !important;
+  }
+
+  .site-footer__security {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    padding: 14px 0 !important;
+  }
+
+  .site-footer__bottom {
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 12px !important;
+    text-align: left !important;
+  }
+
+  .site-footer__bottom-links {
+    width: 100% !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: flex-start !important;
+    gap: 10px !important;
+  }
+  .site-footer__bottom-links button {
+    margin-top: 4px;
+    white-space: normal !important;
+    text-align: left !important;
   }
 
   .grid--cols-2,

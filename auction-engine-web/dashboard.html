@@ -90,22 +90,146 @@
     .dash-panel.active {
       display: block;
     }
+    .dash-profile-card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-color);
+      border-radius: var(--radius-md);
+      padding: 22px 28px;
+      margin-bottom: 24px;
+      box-shadow: var(--shadow-card);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+    .dash-profile-info {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+    .dash-profile-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .dash-sidebar-heading {
+      font-size: 0.7rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--text-muted);
+      padding: 6px 10px 8px 10px;
+    }
+
     @media (max-width: 900px) {
       .dash-layout {
         grid-template-columns: 1fr;
+        gap: 16px;
       }
       .dash-sidebar {
         position: static;
         overflow-x: auto;
         display: flex;
-        gap: 6px;
-        padding: 10px;
+        gap: 8px;
+        padding: 10px 8px;
+        background: var(--bg-surface);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-md);
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none;
+      }
+      .dash-sidebar::-webkit-scrollbar {
+        display: none;
+      }
+      .dash-sidebar-heading {
+        display: none !important;
       }
       .dash-menu-item {
         white-space: nowrap;
+        flex-shrink: 0;
         width: auto;
-        padding: 8px 12px;
-        font-size: 0.78rem;
+        padding: 8px 14px;
+        font-size: 0.8rem;
+        border-radius: 999px;
+        background: var(--bg-subtle);
+        border: 1px solid var(--border-color);
+      }
+      .dash-menu-item.active {
+        background: var(--accent-navy);
+        color: #FFFFFF !important;
+        border-color: var(--accent-navy);
+      }
+      .dash-menu-item.active svg {
+        stroke: #FFFFFF !important;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .dash-profile-card {
+        padding: 16px;
+        gap: 16px;
+      }
+      .dash-profile-info {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 14px;
+        width: 100%;
+      }
+      .dash-profile-name-row {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 6px !important;
+      }
+      #dash-user-role-badge {
+        white-space: normal !important;
+        line-height: 1.35 !important;
+        max-width: 100% !important;
+        word-break: break-word !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+        font-size: 0.68rem !important;
+        padding: 4px 8px !important;
+      }
+      .dash-profile-meta {
+        flex-direction: column;
+        align-items: flex-start !important;
+        gap: 4px !important;
+      }
+      .dash-profile-meta .meta-sep {
+        display: none;
+      }
+      .dash-profile-actions {
+        width: 100%;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+        gap: 8px;
+      }
+      .dash-profile-actions a.btn-admin-portal {
+        grid-column: span 2;
+        width: 100%;
+        justify-content: center;
+        padding: 9px 12px !important;
+        font-size: 0.8rem !important;
+      }
+      .dash-profile-actions button {
+        width: 100%;
+        min-width: 0;
+        justify-content: center;
+        padding: 8px 4px !important;
+        font-size: 0.78rem !important;
+      }
+      .dash-profile-actions button span {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .dash-profile-actions .btn-switch-user {
+        grid-column: span 2;
+        padding: 7px 10px !important;
+        font-size: 0.76rem !important;
       }
     }
   </style>
@@ -120,8 +244,9 @@
     <div class="container container--wide">
       
       <!-- User Profile Header Banner -->
-      <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 22px 28px; margin-bottom: 24px; box-shadow: var(--shadow-card); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px;">
-        <div style="display: flex; align-items: center; gap: 18px;">
+      <!-- User Profile Header Banner -->
+      <div class="dash-profile-card">
+        <div class="dash-profile-info">
           <img 
             id="dash-user-avatar"
             src="assets/images/user_thang.jpg" 
@@ -130,38 +255,40 @@
             onerror="this.onerror=null; this.src='assets/images/user_avatar.jpg';"
           />
           <div>
-            <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
+            <div class="dash-profile-name-row" style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
               <h1 id="dash-user-name" style="font-family: var(--font-serif); font-size: 1.55rem; font-weight: 800; color: var(--text-primary); margin: 0;">
                 Phạm Ngọc Thắng
               </h1>
-              <span id="dash-user-role-badge" class="badge badge--live" style="font-size: 0.7rem; font-weight: 700; background: #059669; color: #FFFFFF; display: inline-flex; align-items: center; gap: 4px;">
-                <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; stroke: #FFF; fill: none; stroke-width: 2.2;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
-                QUẢN TRỊ VIÊN HỆ THỐNG (SUPER ADMIN) &bull; VIP COLLECTOR
+              <span id="dash-user-role-badge" class="badge badge--live" style="font-size: 0.68rem; font-weight: 700; background: #059669; color: #FFFFFF; display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 4px; white-space: normal; line-height: 1.35; max-width: 100%;">
+                <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; stroke: #FFF; fill: none; stroke-width: 2.2; flex-shrink: 0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                <span>QUẢN TRỊ VIÊN HỆ THỐNG (SUPER ADMIN) &bull; VIP COLLECTOR</span>
               </span>
             </div>
-            <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 4px 0 0 0;">
-              Thẻ Đấu Giá: <strong class="font-mono text-emerald" id="dash-user-paddle">#PD-6651</strong> &bull; 
-              MSSV: <strong class="font-mono" id="dash-user-mssv">6651071071</strong> &bull; 
-              Bảo chứng hạn mức tín nhiệm: <span class="font-mono price-val text-emerald">50.000.000.000 ₫</span>
-            </p>
+            <div class="dash-profile-meta" style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center;">
+              <span>Thẻ Đấu Giá: <strong class="font-mono text-emerald" id="dash-user-paddle">#PD-6651</strong></span>
+              <span class="meta-sep">&bull;</span>
+              <span>MSSV: <strong class="font-mono" id="dash-user-mssv">6651071071</strong></span>
+              <span class="meta-sep">&bull;</span>
+              <span>Hạn mức tín nhiệm: <strong class="font-mono price-val text-emerald">50.000.000.000 ₫</strong></span>
+            </div>
           </div>
         </div>
 
-        <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-          <a href="admin.html" class="btn btn-outline" style="font-size: 0.82rem; padding: 9px 14px; border-color: #059669; color: #059669; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;" title="Chuyển sang bảng điều khiển quản trị sàn đấu giá">
+        <div class="dash-profile-actions">
+          <a href="admin.html" class="btn btn-outline btn-admin-portal" style="border-color: #059669; color: #059669; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;" title="Chuyển sang bảng điều khiển quản trị sàn đấu giá">
             <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2;"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
             <span>Vào Quản Trị (Admin Portal)</span>
           </a>
-          <button type="button" class="btn btn-primary" onclick="window.openWalletModal()" style="font-size: 0.82rem; padding: 9px 16px;">
+          <button type="button" class="btn btn-primary" onclick="window.openWalletModal()">
             <svg viewBox="0 0 24 24" style="width: 14px; height: 14px;"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-            <span>Nạp Thêm Vào Ví</span>
+            <span>Nạp Ví</span>
           </button>
-          <button type="button" class="btn btn-outline" onclick="window.openWithdrawModal()" style="font-size: 0.82rem; padding: 9px 16px;">
+          <button type="button" class="btn btn-outline" onclick="window.openWithdrawModal()">
             <svg viewBox="0 0 24 24" style="width: 14px; height: 14px;"><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            <span>Rút Về Ngân Hàng</span>
+            <span>Rút Tiền</span>
           </button>
-          <button type="button" class="btn btn-outline" onclick="window.openAuthModal()" style="font-size: 0.82rem; padding: 9px 14px;">
-            <span>Đổi Tài Khoản</span>
+          <button type="button" class="btn btn-outline btn-switch-user" onclick="window.openAuthModal()">
+            <span>Đổi Tài Khoản Đang Đăng Nhập</span>
           </button>
         </div>
       </div>
@@ -171,7 +298,7 @@
         
         <!-- SIDEBAR: 9 MANDATORY TABS -->
         <aside class="dash-sidebar" aria-label="Menu chức năng cá nhân">
-          <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); padding: 4px 10px 8px 10px;">
+          <div class="dash-sidebar-heading">
             Hồ Sơ & Tài Chính
           </div>
           <button type="button" class="dash-menu-item active" data-tab="tab-profile">
@@ -200,7 +327,7 @@
             <span class="dash-menu-badge" id="badge-escrow-count">1</span>
           </button>
 
-          <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); padding: 14px 10px 8px 10px;">
+          <div class="dash-sidebar-heading">
             Đấu Giá & Tài Sản
           </div>
           <button type="button" class="dash-menu-item" data-tab="tab-active-auctions">
@@ -253,7 +380,7 @@
               </div>
 
               <form id="form-user-profile" onsubmit="window.saveUserProfile(event)">
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-bottom: 16px;">
                   <div class="form-group">
                     <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 6px;">Họ và Tên</label>
                     <input type="text" id="prof-input-name" class="form-control" value="Phạm Ngọc Thắng" required style="width: 100%; padding: 9px 12px; font-size: 0.88rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-page); color: var(--text-primary);" />
@@ -264,7 +391,7 @@
                   </div>
                 </div>
 
-                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 16px;">
+                <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-bottom: 16px;">
                   <div class="form-group">
                     <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 6px;">Email Liên Hệ</label>
                     <input type="email" id="prof-input-email" class="form-control" value="thang.pn@aurelia.ch" required style="width: 100%; padding: 9px 12px; font-size: 0.88rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-page); color: var(--text-primary);" />
@@ -588,7 +715,7 @@
         var elRoleBadge = document.getElementById('dash-user-role-badge');
         if (elRoleBadge) {
           if (user.role === 'admin' || user.isAdmin) {
-            elRoleBadge.innerHTML = '<svg viewBox="0 0 24 24" style="width: 12px; height: 12px; stroke: #FFF; fill: none; stroke-width: 2.2;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> QUẢN TRỊ VIÊN HỆ THỐNG (SUPER ADMIN) &bull; VIP COLLECTOR';
+            elRoleBadge.innerHTML = '<svg viewBox="0 0 24 24" style="width: 12px; height: 12px; stroke: #FFF; fill: none; stroke-width: 2.2; flex-shrink: 0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> <span>QUẢN TRỊ VIÊN HỆ THỐNG (SUPER ADMIN)</span>';
           } else {
             elRoleBadge.textContent = (user.role || 'VIP COLLECTOR') + ' • KYC LEVEL 3';
           }
