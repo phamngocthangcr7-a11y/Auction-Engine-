@@ -3,6 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Immediate Theme Initializer (Prevents Theme Flash & Enforces Persistence) -->
+  <script>
+    (function() {
+      var t = localStorage.getItem('AURELIA_THEME_V4') || localStorage.getItem('AE_V3_THEME') || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
   <title>Chuyển Hướng Phòng Đấu Giá • AURELIA GENÈVE</title>
   <script src="js/app-core.js"></script>
   <script>

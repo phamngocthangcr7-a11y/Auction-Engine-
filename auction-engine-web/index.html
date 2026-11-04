@@ -3,13 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Immediate Theme Initializer (Prevents Theme Flash & Enforces Persistence) -->
+  <script>
+    (function() {
+      var t = localStorage.getItem('AURELIA_THEME_V4') || localStorage.getItem('AE_V3_THEME') || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
   <meta name="description" content="AURELIA - Sàn đấu giá trực tuyến quốc tế hàng đầu dành cho Đồng hồ cơ Thụy Sĩ, Siêu xe, Thiết bị công nghệ nguyên mẫu và Kiệt tác nghệ thuật. Cơ chế Anti-Sniping và Bảo chứng Ký quỹ Escrow.">
   <title>AURELIA • Sàn Đấu Giá Trực Tuyến Cao Cấp</title>
 
-  <!-- Google Fonts -->
+    <!-- Google Fonts: Plus Jakarta Sans, Inter, JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Core CSS Design System -->
   <link rel="stylesheet" href="css/tokens.css">
@@ -1035,7 +1042,7 @@
                 <span class="rank-pill ${rankCls}">#${idx + 1}</span>
                 <img src="${(r.images && r.images[0]) || 'assets/images/patek_nautilus_gold.jpg'}" style="width:36px;height:36px;border-radius:4px;object-fit:cover;" alt=""/>
                 <div style="flex:1;overflow:hidden;">
-                  <div style="font-size:0.78rem;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${r.title}</div>
+                  <div style="font-size:0.82rem;font-weight:700;color:var(--text-primary);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;margin-bottom:3px;">${r.title}</div>
                   <div style="font-size:0.7rem;color:var(--text-muted);"><strong style="color:#059669;font-family:var(--font-mono);">${store.formatCurrency(r.currentPrice || r.startPrice)}</strong> &bull; ${r.participantsCount || 5} lượt trả giá</div>
                 </div>
               </a>
@@ -1058,7 +1065,7 @@
                 <span class="rank-pill ${rankCls}">#${idx + 1}</span>
                 <img src="${(r.images && r.images[0]) || 'assets/images/patek_nautilus_gold.jpg'}" style="width:36px;height:36px;border-radius:4px;object-fit:cover;" alt=""/>
                 <div style="flex:1;overflow:hidden;">
-                  <div style="font-size:0.78rem;font-weight:700;color:var(--text-primary);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${r.title}</div>
+                  <div style="font-size:0.82rem;font-weight:700;color:var(--text-primary);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;margin-bottom:3px;">${r.title}</div>
                   <div style="font-size:0.7rem;color:#DC2626;font-weight:600;">${watches} lượt theo dõi Watchlist</div>
                 </div>
               </a>

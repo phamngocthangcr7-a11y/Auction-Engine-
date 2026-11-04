@@ -65,7 +65,7 @@
   --space-16: 64px;
 
   /* Typography */
-  --font-serif: 'Newsreader', 'Playfair Display', Georgia, serif;
+  --font-serif: 'Plus Jakarta Sans', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-heading: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-body: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
   --font-mono: 'JetBrains Mono', Menlo, Consolas, monospace;

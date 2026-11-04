@@ -23,7 +23,8 @@ function renderHeader() {
 
   const theme = (window.stateManager && typeof window.stateManager.getTheme === 'function')
     ? window.stateManager.getTheme()
-    : (localStorage.getItem('AURELIA_THEME_V4') || localStorage.getItem('AE_V3_THEME') || 'light');
+    : (localStorage.getItem('AURELIA_THEME_V4') || localStorage.getItem('AE_V3_THEME') || 'dark');
+  document.documentElement.setAttribute('data-theme', theme);
 
   const unreadNotifCount = (store && typeof store.getUnreadNotifCount === 'function')
     ? store.getUnreadNotifCount()

@@ -3,13 +3,20 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- Immediate Theme Initializer (Prevents Theme Flash & Enforces Persistence) -->
+  <script>
+    (function() {
+      var t = localStorage.getItem('AURELIA_THEME_V4') || localStorage.getItem('AE_V3_THEME') || 'dark';
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
   <meta name="description" content="AURELIA Admin Portal - Hệ thống quản trị sàn đấu giá quốc tế, phê duyệt phiên niêm yết, kiểm soát rủi ro và giám sát giao dịch Escrow.">
   <title>Quản Trị Viên (Admin Portal) • AURELIA</title>
 
-  <!-- Google Fonts -->
+    <!-- Google Fonts: Plus Jakarta Sans, Inter, JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,600;1,6..72,400&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <!-- Core CSS Design System -->
   <link rel="stylesheet" href="css/tokens.css">
