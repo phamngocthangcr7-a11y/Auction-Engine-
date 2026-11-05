@@ -50,11 +50,9 @@ function renderHeader() {
       <div class="container container--wide utility-bar__inner">
         
         <!-- Left: Realtime Market State -->
-        <div class="utility-bar__left" title="Sàn trực tiếp: Geneva & Monaco Session đang mở lệnh">
+        <div class="utility-bar__left" title="Sàn Đấu Giá Trực Tuyến AUCTIONENGINE">
           <span class="utility-bar__dot"></span>
-          <span class="utility-text-muted">Thị trường:</span>
-          <span class="utility-text-bold">Geneva & Monaco</span>
-          <span class="utility-text-session" style="color: #64748B;">(Mở lệnh)</span>
+          <span class="utility-text-bold" style="color: #F8FAFC;">Sàn Đấu Giá Trực Tuyến <span style="color: #F59E0B; font-weight: 700;">AUCTIONENGINE</span></span>
         </div>
 
         <!-- Right: Quick PIN + Wallet + User Switcher + Theme -->
