@@ -2,21 +2,15 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>AUCTIONENGINE • Sàn Đấu Giá Trực Tuyến Cao Cấp</title>
+  <title>AUCTIONENGINE — Sàn Đấu Giá Trực Tuyến Cao Cấp</title>
   <script>
     (function() {
-      var isLoggedOut = localStorage.getItem('AURELIA_LOGGED_OUT') === 'true' || localStorage.getItem('AE_AUTH_LOGGED_OUT') === 'true';
-      var sessionUser = localStorage.getItem('ae_active_session_user') || localStorage.getItem('AURELIA_CURRENT_USER_V4');
       var search = window.location.search || '';
-      if (!sessionUser || sessionUser === 'null' || isLoggedOut) {
-        window.location.replace("auction-engine-web/welcome.html" + search);
-      } else {
-        window.location.replace("auction-engine-web/index.html" + search);
-      }
+      window.location.replace("auction-engine-web/welcome.html" + search);
     })();
   </script>
 </head>
-<body style="background:#080B11;color:#F59E0B;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:sans-serif;margin:0;">
-  <p>Đang chuyển hướng vào sàn AUCTIONENGINE...</p>
+<body style="background:#07090E;color:#F59E0B;display:flex;align-items:center;justify-content:center;min-height:100vh;font-family:sans-serif;margin:0;">
+  <p>Đang chuyển hướng tới Trang Bìa Sàn AUCTIONENGINE...</p>
 </body>
 </html>

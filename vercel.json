@@ -3,7 +3,7 @@
   "rewrites": [
     {
       "source": "/",
-      "destination": "/index.html"
+      "destination": "/auction-engine-web/welcome.html"
     },
     {
       "source": "/welcome",

@@ -184,12 +184,12 @@
       top: 0;
       right: 0;
       bottom: 0;
-      width: 60%;
-      background-image: url('assets/images/patek_nautilus_gold.jpg');
+      width: 64%;
+      background-image: url('assets/images/auction_gavel_villa.jpg');
       background-size: cover;
-      background-position: 70% center;
+      background-position: 95% center;
       background-repeat: no-repeat;
-      filter: brightness(1.22) contrast(1.12) saturate(1.18);
+      filter: brightness(1.15) contrast(1.08) saturate(1.1);
       z-index: 0;
     }
 
@@ -835,7 +835,7 @@
       </nav>
 
       <!-- Right: Action Buttons -->
-      <div class="header-actions">
+      <div class="header-actions" id="header-auth-actions">
         <button type="button" class="btn-header-outline" onclick="openAuthModal('register')">
           Đăng Ký Tài Khoản
         </button>
@@ -865,11 +865,11 @@
         </h1>
 
         <p class="hero-desc">
-          Nền tảng đấu giá thời gian thực dành cho đồng hồ cao cấp, siêu xe sưu tầm, công nghệ hiếm và tác phẩm nghệ thuật với cơ chế ký quỹ minh bạch.
+          Nền tảng đấu giá thời gian thực dành cho bất động sản hạng sang, đồng hồ cao cấp, siêu xe sưu tầm và tác phẩm nghệ thuật với cơ chế ký quỹ minh bạch.
         </p>
 
         <div class="hero-buttons">
-          <button type="button" class="btn-hero-primary" onclick="openAuthModal('login')">
+          <button type="button" class="btn-hero-primary" id="btn-hero-primary-action" onclick="openAuthModal('login')">
             <span>Đăng Nhập Để Tham Gia Đấu Giá</span>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </button>
@@ -1318,8 +1318,77 @@
       }
     }, 1000);
 
+
+    function updateWelcomeAuthState() {
+      try {
+        const store = window.AureliaApp || window.AuctionStore;
+        const user = store ? store.getCurrentUser() : null;
+        const headerActions = document.getElementById('header-auth-actions');
+        const heroPrimaryBtn = document.getElementById('btn-hero-primary-action');
+
+        if (user && user.fullName) {
+          const shortName = user.fullName.split(' ').pop();
+          if (headerActions) {
+            headerActions.innerHTML = `
+              <button type="button" class="btn-header-outline" onclick="logoutFromWelcome()">
+                Đăng Xuất
+              </button>
+              <a href="index.html" class="btn-header-gold" style="text-decoration: none;">
+                <span>Vào Sàn (${shortName})</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            `;
+          }
+          if (heroPrimaryBtn) {
+            heroPrimaryBtn.innerHTML = `
+              <span>Vào Sàn Đấu Giá (${user.fullName})</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            `;
+            heroPrimaryBtn.onclick = function() { window.location.href = 'index.html'; };
+          }
+        } else {
+          if (headerActions) {
+            headerActions.innerHTML = `
+              <button type="button" class="btn-header-outline" onclick="openAuthModal('register')">
+                Đăng Ký Tài Khoản
+              </button>
+              <button type="button" class="btn-header-gold" onclick="openAuthModal('login')">
+                <span>Đăng Nhập</span>
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </button>
+            `;
+          }
+          if (heroPrimaryBtn) {
+            heroPrimaryBtn.innerHTML = `
+              <span>Đăng Nhập Để Tham Gia Đấu Giá</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            `;
+            heroPrimaryBtn.onclick = function() { openAuthModal('login'); };
+          }
+        }
+      } catch (err) {
+        console.warn('updateWelcomeAuthState error:', err);
+      }
+    }
+
+    function logoutFromWelcome() {
+      localStorage.setItem('AURELIA_LOGGED_OUT', 'true');
+      localStorage.setItem('AE_AUTH_LOGGED_OUT', 'true');
+      localStorage.removeItem('ae_active_session_user');
+      localStorage.removeItem('AURELIA_CURRENT_USER_V4');
+      localStorage.removeItem('AE_V3_CURRENT_USER');
+      localStorage.removeItem('AE_DB_CURRENT_USER_V2');
+      localStorage.removeItem('AE_DB_CURRENT_USER');
+      sessionStorage.clear();
+      updateWelcomeAuthState();
+      if (window.showToast) {
+        window.showToast('Đã đăng xuất', 'Bạn đang ở trạng thái Khách tham quan sàn đấu giá.', 'info', 3000);
+      }
+    }
+
     // Initial query params check
     window.addEventListener('DOMContentLoaded', () => {
+      updateWelcomeAuthState();
       const params = new URLSearchParams(window.location.search);
       const tab = params.get('tab');
       if (tab === 'register') {
