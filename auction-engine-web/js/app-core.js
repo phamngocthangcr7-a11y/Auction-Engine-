@@ -129,7 +129,7 @@
         durationMinutes: 45,
         durationSeconds: 2700,
         startTime: new Date(now - 7 * 60000).toISOString(),
-        endTime: new Date(now + 38 * 60000).toISOString(),
+        endTime: new Date(now + 360 * 60000).toISOString(),
         featured: true,
         leaderUid: 'usr-tan-2048',
         leaderName: 'Phan Minh Tân',
@@ -137,7 +137,7 @@
         sellerId: 'usr-thang-6651',
         sellerName: 'Phạm Ngọc Thắng',
         sellerPaddleId: '#PD-6651',
-        participantsCount: 8,
+        participantsCount: 22,
         images: [
           'assets/images/patek_nautilus_gold.jpg',
           'assets/images/patek_nautilus_caseback.jpg',
@@ -175,7 +175,7 @@
         durationMinutes: 50,
         durationSeconds: 3000,
         startTime: new Date(now - 8 * 60000).toISOString(),
-        endTime: new Date(now + 42 * 60000).toISOString(),
+        endTime: new Date(now + 360 * 60000).toISOString(),
         featured: true,
         leaderUid: 'usr-bao-3390',
         leaderName: 'Trần Hoàng Bảo',
@@ -183,7 +183,7 @@
         sellerId: 'usr-thang-6651',
         sellerName: 'Phạm Ngọc Thắng',
         sellerPaddleId: '#PD-6651',
-        participantsCount: 12,
+        participantsCount: 18,
         images: [
           'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=1200&q=85',
           'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=85',
@@ -229,7 +229,7 @@
         sellerId: 'usr-thang-6651',
         sellerName: 'Phạm Ngọc Thắng',
         sellerPaddleId: '#PD-6651',
-        participantsCount: 9,
+        participantsCount: 16,
         images: [
           'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?auto=format&fit=crop&w=1200&q=85',
           'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=85',
@@ -275,7 +275,7 @@
         sellerId: 'usr-thang-6651',
         sellerName: 'Phạm Ngọc Thắng',
         sellerPaddleId: '#PD-6651',
-        participantsCount: 7,
+        participantsCount: 28,
         images: [
           'https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=1200&q=85',
           'https://images.unsplash.com/photo-1592198084033-aade902d1aae?auto=format&fit=crop&w=1200&q=85',
@@ -321,7 +321,7 @@
         sellerId: 'usr-thang-6651',
         sellerName: 'Phạm Ngọc Thắng',
         sellerPaddleId: '#PD-6651',
-        participantsCount: 5,
+        participantsCount: 8,
         images: [
           'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=1200&q=85',
           'https://images.unsplash.com/photo-1495707902641-75cac588d2e9?auto=format&fit=crop&w=1200&q=85',
@@ -367,7 +367,7 @@
         sellerId: 'usr-thang-6651',
         sellerName: 'Phạm Ngọc Thắng',
         sellerPaddleId: '#PD-6651',
-        participantsCount: 6,
+        participantsCount: 14,
         images: [
           'assets/images/french_oil_painting.jpg',
           'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1200&q=85',
@@ -413,7 +413,7 @@
         sellerId: 'usr-thang-6651',
         sellerName: 'Phạm Ngọc Thắng',
         sellerPaddleId: '#PD-6651',
-        participantsCount: 8,
+        participantsCount: 12,
         images: [
           'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=1200&q=85',
           'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=85',
@@ -459,7 +459,7 @@
         sellerId: 'usr-thang-6651',
         sellerName: 'Phạm Ngọc Thắng',
         sellerPaddleId: '#PD-6651',
-        participantsCount: 11,
+        participantsCount: 10,
         images: [
           'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1200&q=85',
           'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=85',
@@ -506,7 +506,7 @@
         sellerId: 'usr-thang-6651',
         sellerName: 'Phạm Ngọc Thắng',
         sellerPaddleId: '#PD-6651',
-        participantsCount: 14,
+        participantsCount: 6,
         images: [
           'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1200&q=85',
           'https://images.unsplash.com/photo-1582561424760-0321d75e81fa?auto=format&fit=crop&w=1200&q=85'
@@ -662,40 +662,1482 @@
   }
 
   function getInitialBids() {
-    var now = Date.now();
     return [
-      // Lot 101 - Patek Philippe 5711
-      { id: 'bid-101-2', roomId: 'room-101', roomPin: '839201', uid: 'usr-tan-2048', bidderName: 'Phan Minh Tân', paddleId: '#PD-2048', amount: 2500000000, type: 'MANUAL', timestamp: now - 8 * 60000 },
-      { id: 'bid-101-1', roomId: 'room-101', roomPin: '839201', uid: 'usr-khoi-9912', bidderName: 'Nguyễn Minh Khôi', paddleId: '#PD-9912', amount: 2450000000, type: 'MANUAL', timestamp: now - 14 * 60000 },
-
-      // Lot 102 - Porsche 911 GT3 RS
-      { id: 'bid-102-2', roomId: 'room-102', roomPin: '911300', uid: 'usr-bao-3390', bidderName: 'Trần Hoàng Bảo', paddleId: '#PD-3390', amount: 14900000000, type: 'MANUAL', timestamp: now - 5 * 60000 },
-      { id: 'bid-102-1', roomId: 'room-102', roomPin: '911300', uid: 'usr-khoi-9912', bidderName: 'Nguyễn Minh Khôi', paddleId: '#PD-9912', amount: 14700000000, type: 'MANUAL', timestamp: now - 12 * 60000 },
-
-      // Lot 103 - Rolex Daytona Platinum
-      { id: 'bid-103-2', roomId: 'room-103', roomPin: '582019', uid: 'usr-tan-2048', bidderName: 'Phan Minh Tân', paddleId: '#PD-2048', amount: 1310000000, type: 'MANUAL', timestamp: now - 7 * 60000 },
-      { id: 'bid-103-1', roomId: 'room-103', roomPin: '582019', uid: 'usr-bao-3390', bidderName: 'Trần Hoàng Bảo', paddleId: '#PD-3390', amount: 1280000000, type: 'MANUAL', timestamp: now - 15 * 60000 },
-
-      // Lot 104 - Ferrari F8 Tributo
-      { id: 'bid-104-2', roomId: 'room-104', roomPin: '488900', uid: 'usr-khoi-9912', bidderName: 'Nguyễn Minh Khôi', paddleId: '#PD-9912', amount: 11500000000, type: 'MANUAL', timestamp: now - 6 * 60000 },
-      { id: 'bid-104-1', roomId: 'room-104', roomPin: '488900', uid: 'usr-tan-2048', bidderName: 'Phan Minh Tân', paddleId: '#PD-2048', amount: 11350000000, type: 'MANUAL', timestamp: now - 18 * 60000 },
-
-      // Lot 105 - Leica M6 Titanium
-      { id: 'bid-105-2', roomId: 'room-105', roomPin: '632001', uid: 'usr-bao-3390', bidderName: 'Trần Hoàng Bảo', paddleId: '#PD-3390', amount: 400000000, type: 'MANUAL', timestamp: now - 4 * 60000 },
-      { id: 'bid-105-1', roomId: 'room-105', roomPin: '632001', uid: 'usr-khoi-9912', bidderName: 'Nguyễn Minh Khôi', paddleId: '#PD-9912', amount: 390000000, type: 'MANUAL', timestamp: now - 11 * 60000 },
-
-      // Lot 106 - Monet L'Aube Doree
-      { id: 'bid-106-2', roomId: 'room-106', roomPin: '774120', uid: 'usr-tan-2048', bidderName: 'Phan Minh Tân', paddleId: '#PD-2048', amount: 720000000, type: 'MANUAL', timestamp: now - 9 * 60000 },
-      { id: 'bid-106-1', roomId: 'room-106', roomPin: '774120', uid: 'usr-bao-3390', bidderName: 'Trần Hoàng Bảo', paddleId: '#PD-3390', amount: 700000000, type: 'MANUAL', timestamp: now - 21 * 60000 },
-
-      // Lot 107 - Audemars Piguet Royal Oak
-      { id: 'bid-107-2', roomId: 'room-107', roomPin: '154070', uid: 'usr-khoi-9912', bidderName: 'Nguyễn Minh Khôi', paddleId: '#PD-9912', amount: 3250000000, type: 'MANUAL', timestamp: now - 10 * 60000 },
-      { id: 'bid-107-1', roomId: 'room-107', roomPin: '154070', uid: 'usr-tan-2048', bidderName: 'Phan Minh Tân', paddleId: '#PD-2048', amount: 3200000000, type: 'MANUAL', timestamp: now - 22 * 60000 },
-
-      // Lot 108 - Mercedes-AMG GT Black Series
-      { id: 'bid-108-2', roomId: 'room-108', roomPin: '209441', uid: 'usr-bao-3390', bidderName: 'Trần Hoàng Bảo', paddleId: '#PD-3390', amount: 10100000000, type: 'MANUAL', timestamp: now - 3 * 60000 },
-      { id: 'bid-108-1', roomId: 'room-108', roomPin: '209441', uid: 'usr-khoi-9912', bidderName: 'Nguyễn Minh Khôi', paddleId: '#PD-9912', amount: 9950000000, type: 'MANUAL', timestamp: now - 13 * 60000 }
-    ];
+  {
+    "id": "bid-room-104-1",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-long-5521",
+    "bidderName": "Hoàng Kim Long",
+    "paddleId": "#PD-5521",
+    "amount": 11500000000,
+    "type": "MANUAL",
+    "timestamp": 1793872802078
+  },
+  {
+    "id": "bid-room-104-2",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-bao-3390",
+    "bidderName": "Trần Hoàng Bảo",
+    "paddleId": "#PD-3390",
+    "amount": 11439285714,
+    "type": "MANUAL",
+    "timestamp": 1793872712078
+  },
+  {
+    "id": "bid-room-104-3",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 11378571429,
+    "type": "MANUAL",
+    "timestamp": 1793872622078
+  },
+  {
+    "id": "bid-room-104-4",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 11317857143,
+    "type": "AUTO",
+    "timestamp": 1793872532078
+  },
+  {
+    "id": "bid-room-104-5",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-thang-6651",
+    "bidderName": "Phạm Ngọc Thắng",
+    "paddleId": "#PD-6651",
+    "amount": 11257142857,
+    "type": "MANUAL",
+    "timestamp": 1793872442078
+  },
+  {
+    "id": "bid-room-104-6",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-duc-7740",
+    "bidderName": "Lê Minh Đức",
+    "paddleId": "#PD-7740",
+    "amount": 11196428571,
+    "type": "MANUAL",
+    "timestamp": 1793872352078
+  },
+  {
+    "id": "bid-room-104-7",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-vu-6452",
+    "bidderName": "Vũ Bảo An",
+    "paddleId": "#PD-6452",
+    "amount": 11135714286,
+    "type": "MANUAL",
+    "timestamp": 1793872262078
+  },
+  {
+    "id": "bid-room-104-8",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-trang-1188",
+    "bidderName": "Đặng Thuỳ Trang",
+    "paddleId": "#PD-1188",
+    "amount": 11075000000,
+    "type": "AUTO",
+    "timestamp": 1793872172078
+  },
+  {
+    "id": "bid-room-104-9",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-long-5521",
+    "bidderName": "Hoàng Kim Long",
+    "paddleId": "#PD-5521",
+    "amount": 11014285714,
+    "type": "MANUAL",
+    "timestamp": 1793872082078
+  },
+  {
+    "id": "bid-room-104-10",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-bao-3390",
+    "bidderName": "Trần Hoàng Bảo",
+    "paddleId": "#PD-3390",
+    "amount": 10953571429,
+    "type": "MANUAL",
+    "timestamp": 1793871992078
+  },
+  {
+    "id": "bid-room-104-11",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 10892857143,
+    "type": "MANUAL",
+    "timestamp": 1793871902078
+  },
+  {
+    "id": "bid-room-104-12",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 10832142857,
+    "type": "AUTO",
+    "timestamp": 1793871812078
+  },
+  {
+    "id": "bid-room-104-13",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-thang-6651",
+    "bidderName": "Phạm Ngọc Thắng",
+    "paddleId": "#PD-6651",
+    "amount": 10771428571,
+    "type": "MANUAL",
+    "timestamp": 1793871722078
+  },
+  {
+    "id": "bid-room-104-14",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-duc-7740",
+    "bidderName": "Lê Minh Đức",
+    "paddleId": "#PD-7740",
+    "amount": 10710714286,
+    "type": "MANUAL",
+    "timestamp": 1793871632078
+  },
+  {
+    "id": "bid-room-104-15",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-vu-6452",
+    "bidderName": "Vũ Bảo An",
+    "paddleId": "#PD-6452",
+    "amount": 10650000000,
+    "type": "MANUAL",
+    "timestamp": 1793871542078
+  },
+  {
+    "id": "bid-room-104-16",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-trang-1188",
+    "bidderName": "Đặng Thuỳ Trang",
+    "paddleId": "#PD-1188",
+    "amount": 10589285714,
+    "type": "AUTO",
+    "timestamp": 1793871452078
+  },
+  {
+    "id": "bid-room-104-17",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-long-5521",
+    "bidderName": "Hoàng Kim Long",
+    "paddleId": "#PD-5521",
+    "amount": 10528571429,
+    "type": "MANUAL",
+    "timestamp": 1793871362078
+  },
+  {
+    "id": "bid-room-104-18",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-bao-3390",
+    "bidderName": "Trần Hoàng Bảo",
+    "paddleId": "#PD-3390",
+    "amount": 10467857143,
+    "type": "MANUAL",
+    "timestamp": 1793871272078
+  },
+  {
+    "id": "bid-room-104-19",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 10407142857,
+    "type": "MANUAL",
+    "timestamp": 1793871182078
+  },
+  {
+    "id": "bid-room-104-20",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 10346428571,
+    "type": "AUTO",
+    "timestamp": 1793871092078
+  },
+  {
+    "id": "bid-room-104-21",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-thang-6651",
+    "bidderName": "Phạm Ngọc Thắng",
+    "paddleId": "#PD-6651",
+    "amount": 10285714286,
+    "type": "MANUAL",
+    "timestamp": 1793871002078
+  },
+  {
+    "id": "bid-room-104-22",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-duc-7740",
+    "bidderName": "Lê Minh Đức",
+    "paddleId": "#PD-7740",
+    "amount": 10225000000,
+    "type": "MANUAL",
+    "timestamp": 1793870912078
+  },
+  {
+    "id": "bid-room-104-23",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-vu-6452",
+    "bidderName": "Vũ Bảo An",
+    "paddleId": "#PD-6452",
+    "amount": 10164285714,
+    "type": "MANUAL",
+    "timestamp": 1793870822078
+  },
+  {
+    "id": "bid-room-104-24",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-trang-1188",
+    "bidderName": "Đặng Thuỳ Trang",
+    "paddleId": "#PD-1188",
+    "amount": 10103571429,
+    "type": "AUTO",
+    "timestamp": 1793870732078
+  },
+  {
+    "id": "bid-room-104-25",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-long-5521",
+    "bidderName": "Hoàng Kim Long",
+    "paddleId": "#PD-5521",
+    "amount": 10042857143,
+    "type": "MANUAL",
+    "timestamp": 1793870642078
+  },
+  {
+    "id": "bid-room-104-26",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-bao-3390",
+    "bidderName": "Trần Hoàng Bảo",
+    "paddleId": "#PD-3390",
+    "amount": 9982142857,
+    "type": "MANUAL",
+    "timestamp": 1793870552078
+  },
+  {
+    "id": "bid-room-104-27",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 9921428571,
+    "type": "MANUAL",
+    "timestamp": 1793870462078
+  },
+  {
+    "id": "bid-room-104-28",
+    "roomId": "room-104",
+    "roomPin": "488900",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 9860714286,
+    "type": "AUTO",
+    "timestamp": 1793870372078
+  },
+  {
+    "id": "bid-room-101-1",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-vu-6452",
+    "bidderName": "Vũ Bảo An",
+    "paddleId": "#PD-6452",
+    "amount": 2500000000,
+    "type": "MANUAL",
+    "timestamp": 1793872802078
+  },
+  {
+    "id": "bid-room-101-2",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-trang-1188",
+    "bidderName": "Đặng Thuỳ Trang",
+    "paddleId": "#PD-1188",
+    "amount": 2477272727,
+    "type": "AUTO",
+    "timestamp": 1793872712078
+  },
+  {
+    "id": "bid-room-101-3",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-long-5521",
+    "bidderName": "Hoàng Kim Long",
+    "paddleId": "#PD-5521",
+    "amount": 2454545455,
+    "type": "MANUAL",
+    "timestamp": 1793872622078
+  },
+  {
+    "id": "bid-room-101-4",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-bao-3390",
+    "bidderName": "Trần Hoàng Bảo",
+    "paddleId": "#PD-3390",
+    "amount": 2431818182,
+    "type": "MANUAL",
+    "timestamp": 1793872532078
+  },
+  {
+    "id": "bid-room-101-5",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 2409090909,
+    "type": "MANUAL",
+    "timestamp": 1793872442078
+  },
+  {
+    "id": "bid-room-101-6",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 2386363636,
+    "type": "AUTO",
+    "timestamp": 1793872352078
+  },
+  {
+    "id": "bid-room-101-7",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-thang-6651",
+    "bidderName": "Phạm Ngọc Thắng",
+    "paddleId": "#PD-6651",
+    "amount": 2363636364,
+    "type": "MANUAL",
+    "timestamp": 1793872262078
+  },
+  {
+    "id": "bid-room-101-8",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-duc-7740",
+    "bidderName": "Lê Minh Đức",
+    "paddleId": "#PD-7740",
+    "amount": 2340909091,
+    "type": "MANUAL",
+    "timestamp": 1793872172078
+  },
+  {
+    "id": "bid-room-101-9",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-vu-6452",
+    "bidderName": "Vũ Bảo An",
+    "paddleId": "#PD-6452",
+    "amount": 2318181818,
+    "type": "MANUAL",
+    "timestamp": 1793872082078
+  },
+  {
+    "id": "bid-room-101-10",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-trang-1188",
+    "bidderName": "Đặng Thuỳ Trang",
+    "paddleId": "#PD-1188",
+    "amount": 2295454545,
+    "type": "AUTO",
+    "timestamp": 1793871992078
+  },
+  {
+    "id": "bid-room-101-11",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-long-5521",
+    "bidderName": "Hoàng Kim Long",
+    "paddleId": "#PD-5521",
+    "amount": 2272727273,
+    "type": "MANUAL",
+    "timestamp": 1793871902078
+  },
+  {
+    "id": "bid-room-101-12",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-bao-3390",
+    "bidderName": "Trần Hoàng Bảo",
+    "paddleId": "#PD-3390",
+    "amount": 2250000000,
+    "type": "MANUAL",
+    "timestamp": 1793871812078
+  },
+  {
+    "id": "bid-room-101-13",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 2227272727,
+    "type": "MANUAL",
+    "timestamp": 1793871722078
+  },
+  {
+    "id": "bid-room-101-14",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 2204545455,
+    "type": "AUTO",
+    "timestamp": 1793871632078
+  },
+  {
+    "id": "bid-room-101-15",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-thang-6651",
+    "bidderName": "Phạm Ngọc Thắng",
+    "paddleId": "#PD-6651",
+    "amount": 2181818182,
+    "type": "MANUAL",
+    "timestamp": 1793871542078
+  },
+  {
+    "id": "bid-room-101-16",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-duc-7740",
+    "bidderName": "Lê Minh Đức",
+    "paddleId": "#PD-7740",
+    "amount": 2159090909,
+    "type": "MANUAL",
+    "timestamp": 1793871452078
+  },
+  {
+    "id": "bid-room-101-17",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-vu-6452",
+    "bidderName": "Vũ Bảo An",
+    "paddleId": "#PD-6452",
+    "amount": 2136363636,
+    "type": "MANUAL",
+    "timestamp": 1793871362078
+  },
+  {
+    "id": "bid-room-101-18",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-trang-1188",
+    "bidderName": "Đặng Thuỳ Trang",
+    "paddleId": "#PD-1188",
+    "amount": 2113636364,
+    "type": "AUTO",
+    "timestamp": 1793871272078
+  },
+  {
+    "id": "bid-room-101-19",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-long-5521",
+    "bidderName": "Hoàng Kim Long",
+    "paddleId": "#PD-5521",
+    "amount": 2090909091,
+    "type": "MANUAL",
+    "timestamp": 1793871182078
+  },
+  {
+    "id": "bid-room-101-20",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-bao-3390",
+    "bidderName": "Trần Hoàng Bảo",
+    "paddleId": "#PD-3390",
+    "amount": 2068181818,
+    "type": "MANUAL",
+    "timestamp": 1793871092078
+  },
+  {
+    "id": "bid-room-101-21",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 2045454545,
+    "type": "MANUAL",
+    "timestamp": 1793871002078
+  },
+  {
+    "id": "bid-room-101-22",
+    "roomId": "room-101",
+    "roomPin": "839201",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 2022727273,
+    "type": "AUTO",
+    "timestamp": 1793870912078
+  },
+  {
+    "id": "bid-room-102-1",
+    "roomId": "room-102",
+    "roomPin": "911300",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 14900000000,
+    "type": "MANUAL",
+    "timestamp": 1793872802078
+  },
+  {
+    "id": "bid-room-102-2",
+    "roomId": "room-102",
+    "roomPin": "911300",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 14822222222,
+    "type": "AUTO",
+    "timestamp": 1793872712078
+  },
+  {
+    "id": "bid-room-102-3",
+    "roomId": "room-102",
+    "roomPin": "911300",
+    "uid": "usr-thang-6651",
+    "bidderName": "Phạm Ngọc Thắng",
+    "paddleId": "#PD-6651",
+    "amount": 14744444444,
+    "type": "MANUAL",
+    "timestamp": 1793872622078
+  },
+  {
+    "id": "bid-room-102-4",
+    "roomId": "room-102",
+    "roomPin": "911300",
+    "uid": "usr-duc-7740",
+    "bidderName": "Lê Minh Đức",
+    "paddleId": "#PD-7740",
+    "amount": 14666666667,
+    "type": "MANUAL",
+    "timestamp": 1793872532078
+  },
+  {
+    "id": "bid-room-102-5",
+    "roomId": "room-102",
+    "roomPin": "911300",
+    "uid": "usr-vu-6452",
+    "bidderName": "Vũ Bảo An",
+    "paddleId": "#PD-6452",
+    "amount": 14588888889,
+    "type": "MANUAL",
+    "timestamp": 1793872442078
+  },
+  {
+    "id": "bid-room-102-6",
+    "roomId": "room-102",
+    "roomPin": "911300",
+    "uid": "usr-trang-1188",
+    "bidderName": "Đặng Thuỳ Trang",
+    "paddleId": "#PD-1188",
+    "amount": 14511111111,
+    "type": "AUTO",
+    "timestamp": 1793872352078
+  },
+  {
+    "id": "bid-room-102-7",
+    "roomId": "room-102",
+    "roomPin": "911300",
+    "uid": "usr-long-5521",
+    "bidderName": "Hoàng Kim Long",
+    "paddleId": "#PD-5521",
+    "amount": 14433333333,
+    "type": "MANUAL",
+    "timestamp": 1793872262078
+  },
+  {
+    "id": "bid-room-102-8",
+    "roomId": "room-102",
+    "roomPin": "911300",
+    "uid": "usr-bao-3390",
+    "bidderName": "Trần Hoàng Bảo",
+    "paddleId": "#PD-3390",
+    "amount": 14355555556,
+    "type": "MANUAL",
+    "timestamp": 1793872172078
+  },
+  {
+    "id": "bid-room-102-9",
+    "roomId": "room-102",
+    "roomPin": "911300",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 14277777778,
+    "type": "MANUAL",
+    "timestamp": 1793872082078
+  },
+  {
+    "id": "bid-room-102-10",
+    "roomId": "room-102",
+    "roomPin": "911300",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 14200000000,
+    "type": "AUTO",
+    "timestamp": 1793871992078
+  },
+  {
+    "id": "bid-room-102-11",
+    "roomId": "room-102",
+    "roomPin": "911300",
+    "uid": "usr-thang-6651",
+    "bidderName": "Phạm Ngọc Thắng",
+    "paddleId": "#PD-6651",
+    "amount": 14122222222,
+    "type": "MANUAL",
+    "timestamp": 1793871902078
+  },
+  {
+    "id": "bid-room-102-12",
+    "roomId": "room-102",
+    "roomPin": "911300",
+    "uid": "usr-duc-7740",
+    "bidderName": "Lê Minh Đức",
+    "paddleId": "#PD-7740",
+    "amount": 14044444444,
+    "type": "MANUAL",
+    "timestamp": 1793871812078
+  },
+  {
+    "id": "bid-room-102-13",
+    "roomId": "room-102",
+    "roomPin": "911300",
+    "uid": "usr-vu-6452",
+    "bidderName": "Vũ Bảo An",
+    "paddleId": "#PD-6452",
+    "amount": 13966666667,
+    "type": "MANUAL",
+    "timestamp": 1793871722078
+  },
+  {
+    "id": "bid-room-102-14",
+    "roomId": "room-102",
+    "roomPin": "911300",
+    "uid": "usr-trang-1188",
+    "bidderName": "Đặng Thuỳ Trang",
+    "paddleId": "#PD-1188",
+    "amount": 13888888889,
+    "type": "AUTO",
+    "timestamp": 1793871632078
+  },
+  {
+    "id": "bid-room-102-15",
+    "roomId": "room-102",
+    "roomPin": "911300",
+    "uid": "usr-long-5521",
+    "bidderName": "Hoàng Kim Long",
+    "paddleId": "#PD-5521",
+    "amount": 13811111111,
+    "type": "MANUAL",
+    "timestamp": 1793871542078
+  },
+  {
+    "id": "bid-room-102-16",
+    "roomId": "room-102",
+    "roomPin": "911300",
+    "uid": "usr-bao-3390",
+    "bidderName": "Trần Hoàng Bảo",
+    "paddleId": "#PD-3390",
+    "amount": 13733333333,
+    "type": "MANUAL",
+    "timestamp": 1793871452078
+  },
+  {
+    "id": "bid-room-102-17",
+    "roomId": "room-102",
+    "roomPin": "911300",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 13655555556,
+    "type": "MANUAL",
+    "timestamp": 1793871362078
+  },
+  {
+    "id": "bid-room-102-18",
+    "roomId": "room-102",
+    "roomPin": "911300",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 13577777778,
+    "type": "AUTO",
+    "timestamp": 1793871272078
+  },
+  {
+    "id": "bid-room-103-1",
+    "roomId": "room-103",
+    "roomPin": "582019",
+    "uid": "usr-thang-6651",
+    "bidderName": "Phạm Ngọc Thắng",
+    "paddleId": "#PD-6651",
+    "amount": 1310000000,
+    "type": "MANUAL",
+    "timestamp": 1793872802078
+  },
+  {
+    "id": "bid-room-103-2",
+    "roomId": "room-103",
+    "roomPin": "582019",
+    "uid": "usr-duc-7740",
+    "bidderName": "Lê Minh Đức",
+    "paddleId": "#PD-7740",
+    "amount": 1296875000,
+    "type": "MANUAL",
+    "timestamp": 1793872712078
+  },
+  {
+    "id": "bid-room-103-3",
+    "roomId": "room-103",
+    "roomPin": "582019",
+    "uid": "usr-vu-6452",
+    "bidderName": "Vũ Bảo An",
+    "paddleId": "#PD-6452",
+    "amount": 1283750000,
+    "type": "MANUAL",
+    "timestamp": 1793872622078
+  },
+  {
+    "id": "bid-room-103-4",
+    "roomId": "room-103",
+    "roomPin": "582019",
+    "uid": "usr-trang-1188",
+    "bidderName": "Đặng Thuỳ Trang",
+    "paddleId": "#PD-1188",
+    "amount": 1270625000,
+    "type": "AUTO",
+    "timestamp": 1793872532078
+  },
+  {
+    "id": "bid-room-103-5",
+    "roomId": "room-103",
+    "roomPin": "582019",
+    "uid": "usr-long-5521",
+    "bidderName": "Hoàng Kim Long",
+    "paddleId": "#PD-5521",
+    "amount": 1257500000,
+    "type": "MANUAL",
+    "timestamp": 1793872442078
+  },
+  {
+    "id": "bid-room-103-6",
+    "roomId": "room-103",
+    "roomPin": "582019",
+    "uid": "usr-bao-3390",
+    "bidderName": "Trần Hoàng Bảo",
+    "paddleId": "#PD-3390",
+    "amount": 1244375000,
+    "type": "MANUAL",
+    "timestamp": 1793872352078
+  },
+  {
+    "id": "bid-room-103-7",
+    "roomId": "room-103",
+    "roomPin": "582019",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 1231250000,
+    "type": "MANUAL",
+    "timestamp": 1793872262078
+  },
+  {
+    "id": "bid-room-103-8",
+    "roomId": "room-103",
+    "roomPin": "582019",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 1218125000,
+    "type": "AUTO",
+    "timestamp": 1793872172078
+  },
+  {
+    "id": "bid-room-103-9",
+    "roomId": "room-103",
+    "roomPin": "582019",
+    "uid": "usr-thang-6651",
+    "bidderName": "Phạm Ngọc Thắng",
+    "paddleId": "#PD-6651",
+    "amount": 1205000000,
+    "type": "MANUAL",
+    "timestamp": 1793872082078
+  },
+  {
+    "id": "bid-room-103-10",
+    "roomId": "room-103",
+    "roomPin": "582019",
+    "uid": "usr-duc-7740",
+    "bidderName": "Lê Minh Đức",
+    "paddleId": "#PD-7740",
+    "amount": 1191875000,
+    "type": "MANUAL",
+    "timestamp": 1793871992078
+  },
+  {
+    "id": "bid-room-103-11",
+    "roomId": "room-103",
+    "roomPin": "582019",
+    "uid": "usr-vu-6452",
+    "bidderName": "Vũ Bảo An",
+    "paddleId": "#PD-6452",
+    "amount": 1178750000,
+    "type": "MANUAL",
+    "timestamp": 1793871902078
+  },
+  {
+    "id": "bid-room-103-12",
+    "roomId": "room-103",
+    "roomPin": "582019",
+    "uid": "usr-trang-1188",
+    "bidderName": "Đặng Thuỳ Trang",
+    "paddleId": "#PD-1188",
+    "amount": 1165625000,
+    "type": "AUTO",
+    "timestamp": 1793871812078
+  },
+  {
+    "id": "bid-room-103-13",
+    "roomId": "room-103",
+    "roomPin": "582019",
+    "uid": "usr-long-5521",
+    "bidderName": "Hoàng Kim Long",
+    "paddleId": "#PD-5521",
+    "amount": 1152500000,
+    "type": "MANUAL",
+    "timestamp": 1793871722078
+  },
+  {
+    "id": "bid-room-103-14",
+    "roomId": "room-103",
+    "roomPin": "582019",
+    "uid": "usr-bao-3390",
+    "bidderName": "Trần Hoàng Bảo",
+    "paddleId": "#PD-3390",
+    "amount": 1139375000,
+    "type": "MANUAL",
+    "timestamp": 1793871632078
+  },
+  {
+    "id": "bid-room-103-15",
+    "roomId": "room-103",
+    "roomPin": "582019",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 1126250000,
+    "type": "MANUAL",
+    "timestamp": 1793871542078
+  },
+  {
+    "id": "bid-room-103-16",
+    "roomId": "room-103",
+    "roomPin": "582019",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 1113125000,
+    "type": "AUTO",
+    "timestamp": 1793871452078
+  },
+  {
+    "id": "bid-room-106-1",
+    "roomId": "room-106",
+    "roomPin": "774120",
+    "uid": "usr-vu-6452",
+    "bidderName": "Vũ Bảo An",
+    "paddleId": "#PD-6452",
+    "amount": 720000000,
+    "type": "MANUAL",
+    "timestamp": 1793872802078
+  },
+  {
+    "id": "bid-room-106-2",
+    "roomId": "room-106",
+    "roomPin": "774120",
+    "uid": "usr-trang-1188",
+    "bidderName": "Đặng Thuỳ Trang",
+    "paddleId": "#PD-1188",
+    "amount": 710000000,
+    "type": "AUTO",
+    "timestamp": 1793872712078
+  },
+  {
+    "id": "bid-room-106-3",
+    "roomId": "room-106",
+    "roomPin": "774120",
+    "uid": "usr-long-5521",
+    "bidderName": "Hoàng Kim Long",
+    "paddleId": "#PD-5521",
+    "amount": 700000000,
+    "type": "MANUAL",
+    "timestamp": 1793872622078
+  },
+  {
+    "id": "bid-room-106-4",
+    "roomId": "room-106",
+    "roomPin": "774120",
+    "uid": "usr-bao-3390",
+    "bidderName": "Trần Hoàng Bảo",
+    "paddleId": "#PD-3390",
+    "amount": 690000000,
+    "type": "MANUAL",
+    "timestamp": 1793872532078
+  },
+  {
+    "id": "bid-room-106-5",
+    "roomId": "room-106",
+    "roomPin": "774120",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 680000000,
+    "type": "MANUAL",
+    "timestamp": 1793872442078
+  },
+  {
+    "id": "bid-room-106-6",
+    "roomId": "room-106",
+    "roomPin": "774120",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 670000000,
+    "type": "AUTO",
+    "timestamp": 1793872352078
+  },
+  {
+    "id": "bid-room-106-7",
+    "roomId": "room-106",
+    "roomPin": "774120",
+    "uid": "usr-thang-6651",
+    "bidderName": "Phạm Ngọc Thắng",
+    "paddleId": "#PD-6651",
+    "amount": 660000000,
+    "type": "MANUAL",
+    "timestamp": 1793872262078
+  },
+  {
+    "id": "bid-room-106-8",
+    "roomId": "room-106",
+    "roomPin": "774120",
+    "uid": "usr-duc-7740",
+    "bidderName": "Lê Minh Đức",
+    "paddleId": "#PD-7740",
+    "amount": 650000000,
+    "type": "MANUAL",
+    "timestamp": 1793872172078
+  },
+  {
+    "id": "bid-room-106-9",
+    "roomId": "room-106",
+    "roomPin": "774120",
+    "uid": "usr-vu-6452",
+    "bidderName": "Vũ Bảo An",
+    "paddleId": "#PD-6452",
+    "amount": 640000000,
+    "type": "MANUAL",
+    "timestamp": 1793872082078
+  },
+  {
+    "id": "bid-room-106-10",
+    "roomId": "room-106",
+    "roomPin": "774120",
+    "uid": "usr-trang-1188",
+    "bidderName": "Đặng Thuỳ Trang",
+    "paddleId": "#PD-1188",
+    "amount": 630000000,
+    "type": "AUTO",
+    "timestamp": 1793871992078
+  },
+  {
+    "id": "bid-room-106-11",
+    "roomId": "room-106",
+    "roomPin": "774120",
+    "uid": "usr-long-5521",
+    "bidderName": "Hoàng Kim Long",
+    "paddleId": "#PD-5521",
+    "amount": 620000000,
+    "type": "MANUAL",
+    "timestamp": 1793871902078
+  },
+  {
+    "id": "bid-room-106-12",
+    "roomId": "room-106",
+    "roomPin": "774120",
+    "uid": "usr-bao-3390",
+    "bidderName": "Trần Hoàng Bảo",
+    "paddleId": "#PD-3390",
+    "amount": 610000000,
+    "type": "MANUAL",
+    "timestamp": 1793871812078
+  },
+  {
+    "id": "bid-room-106-13",
+    "roomId": "room-106",
+    "roomPin": "774120",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 600000000,
+    "type": "MANUAL",
+    "timestamp": 1793871722078
+  },
+  {
+    "id": "bid-room-106-14",
+    "roomId": "room-106",
+    "roomPin": "774120",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 590000000,
+    "type": "AUTO",
+    "timestamp": 1793871632078
+  },
+  {
+    "id": "bid-room-107-1",
+    "roomId": "room-107",
+    "roomPin": "154070",
+    "uid": "usr-long-5521",
+    "bidderName": "Hoàng Kim Long",
+    "paddleId": "#PD-5521",
+    "amount": 3250000000,
+    "type": "MANUAL",
+    "timestamp": 1793872802078
+  },
+  {
+    "id": "bid-room-107-2",
+    "roomId": "room-107",
+    "roomPin": "154070",
+    "uid": "usr-bao-3390",
+    "bidderName": "Trần Hoàng Bảo",
+    "paddleId": "#PD-3390",
+    "amount": 3220833333,
+    "type": "MANUAL",
+    "timestamp": 1793872712078
+  },
+  {
+    "id": "bid-room-107-3",
+    "roomId": "room-107",
+    "roomPin": "154070",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 3191666667,
+    "type": "MANUAL",
+    "timestamp": 1793872622078
+  },
+  {
+    "id": "bid-room-107-4",
+    "roomId": "room-107",
+    "roomPin": "154070",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 3162500000,
+    "type": "AUTO",
+    "timestamp": 1793872532078
+  },
+  {
+    "id": "bid-room-107-5",
+    "roomId": "room-107",
+    "roomPin": "154070",
+    "uid": "usr-thang-6651",
+    "bidderName": "Phạm Ngọc Thắng",
+    "paddleId": "#PD-6651",
+    "amount": 3133333333,
+    "type": "MANUAL",
+    "timestamp": 1793872442078
+  },
+  {
+    "id": "bid-room-107-6",
+    "roomId": "room-107",
+    "roomPin": "154070",
+    "uid": "usr-duc-7740",
+    "bidderName": "Lê Minh Đức",
+    "paddleId": "#PD-7740",
+    "amount": 3104166667,
+    "type": "MANUAL",
+    "timestamp": 1793872352078
+  },
+  {
+    "id": "bid-room-107-7",
+    "roomId": "room-107",
+    "roomPin": "154070",
+    "uid": "usr-vu-6452",
+    "bidderName": "Vũ Bảo An",
+    "paddleId": "#PD-6452",
+    "amount": 3075000000,
+    "type": "MANUAL",
+    "timestamp": 1793872262078
+  },
+  {
+    "id": "bid-room-107-8",
+    "roomId": "room-107",
+    "roomPin": "154070",
+    "uid": "usr-trang-1188",
+    "bidderName": "Đặng Thuỳ Trang",
+    "paddleId": "#PD-1188",
+    "amount": 3045833333,
+    "type": "AUTO",
+    "timestamp": 1793872172078
+  },
+  {
+    "id": "bid-room-107-9",
+    "roomId": "room-107",
+    "roomPin": "154070",
+    "uid": "usr-long-5521",
+    "bidderName": "Hoàng Kim Long",
+    "paddleId": "#PD-5521",
+    "amount": 3016666667,
+    "type": "MANUAL",
+    "timestamp": 1793872082078
+  },
+  {
+    "id": "bid-room-107-10",
+    "roomId": "room-107",
+    "roomPin": "154070",
+    "uid": "usr-bao-3390",
+    "bidderName": "Trần Hoàng Bảo",
+    "paddleId": "#PD-3390",
+    "amount": 2987500000,
+    "type": "MANUAL",
+    "timestamp": 1793871992078
+  },
+  {
+    "id": "bid-room-107-11",
+    "roomId": "room-107",
+    "roomPin": "154070",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 2958333333,
+    "type": "MANUAL",
+    "timestamp": 1793871902078
+  },
+  {
+    "id": "bid-room-107-12",
+    "roomId": "room-107",
+    "roomPin": "154070",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 2929166667,
+    "type": "AUTO",
+    "timestamp": 1793871812078
+  },
+  {
+    "id": "bid-room-108-1",
+    "roomId": "room-108",
+    "roomPin": "209441",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 10100000000,
+    "type": "MANUAL",
+    "timestamp": 1793872802078
+  },
+  {
+    "id": "bid-room-108-2",
+    "roomId": "room-108",
+    "roomPin": "209441",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 10010000000,
+    "type": "AUTO",
+    "timestamp": 1793872712078
+  },
+  {
+    "id": "bid-room-108-3",
+    "roomId": "room-108",
+    "roomPin": "209441",
+    "uid": "usr-thang-6651",
+    "bidderName": "Phạm Ngọc Thắng",
+    "paddleId": "#PD-6651",
+    "amount": 9920000000,
+    "type": "MANUAL",
+    "timestamp": 1793872622078
+  },
+  {
+    "id": "bid-room-108-4",
+    "roomId": "room-108",
+    "roomPin": "209441",
+    "uid": "usr-duc-7740",
+    "bidderName": "Lê Minh Đức",
+    "paddleId": "#PD-7740",
+    "amount": 9830000000,
+    "type": "MANUAL",
+    "timestamp": 1793872532078
+  },
+  {
+    "id": "bid-room-108-5",
+    "roomId": "room-108",
+    "roomPin": "209441",
+    "uid": "usr-vu-6452",
+    "bidderName": "Vũ Bảo An",
+    "paddleId": "#PD-6452",
+    "amount": 9740000000,
+    "type": "MANUAL",
+    "timestamp": 1793872442078
+  },
+  {
+    "id": "bid-room-108-6",
+    "roomId": "room-108",
+    "roomPin": "209441",
+    "uid": "usr-trang-1188",
+    "bidderName": "Đặng Thuỳ Trang",
+    "paddleId": "#PD-1188",
+    "amount": 9650000000,
+    "type": "AUTO",
+    "timestamp": 1793872352078
+  },
+  {
+    "id": "bid-room-108-7",
+    "roomId": "room-108",
+    "roomPin": "209441",
+    "uid": "usr-long-5521",
+    "bidderName": "Hoàng Kim Long",
+    "paddleId": "#PD-5521",
+    "amount": 9560000000,
+    "type": "MANUAL",
+    "timestamp": 1793872262078
+  },
+  {
+    "id": "bid-room-108-8",
+    "roomId": "room-108",
+    "roomPin": "209441",
+    "uid": "usr-bao-3390",
+    "bidderName": "Trần Hoàng Bảo",
+    "paddleId": "#PD-3390",
+    "amount": 9470000000,
+    "type": "MANUAL",
+    "timestamp": 1793872172078
+  },
+  {
+    "id": "bid-room-108-9",
+    "roomId": "room-108",
+    "roomPin": "209441",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 9380000000,
+    "type": "MANUAL",
+    "timestamp": 1793872082078
+  },
+  {
+    "id": "bid-room-108-10",
+    "roomId": "room-108",
+    "roomPin": "209441",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 9290000000,
+    "type": "AUTO",
+    "timestamp": 1793871992078
+  },
+  {
+    "id": "bid-room-105-1",
+    "roomId": "room-105",
+    "roomPin": "632001",
+    "uid": "usr-thang-6651",
+    "bidderName": "Phạm Ngọc Thắng",
+    "paddleId": "#PD-6651",
+    "amount": 400000000,
+    "type": "MANUAL",
+    "timestamp": 1793872802078
+  },
+  {
+    "id": "bid-room-105-2",
+    "roomId": "room-105",
+    "roomPin": "632001",
+    "uid": "usr-duc-7740",
+    "bidderName": "Lê Minh Đức",
+    "paddleId": "#PD-7740",
+    "amount": 392500000,
+    "type": "MANUAL",
+    "timestamp": 1793872712078
+  },
+  {
+    "id": "bid-room-105-3",
+    "roomId": "room-105",
+    "roomPin": "632001",
+    "uid": "usr-vu-6452",
+    "bidderName": "Vũ Bảo An",
+    "paddleId": "#PD-6452",
+    "amount": 385000000,
+    "type": "MANUAL",
+    "timestamp": 1793872622078
+  },
+  {
+    "id": "bid-room-105-4",
+    "roomId": "room-105",
+    "roomPin": "632001",
+    "uid": "usr-trang-1188",
+    "bidderName": "Đặng Thuỳ Trang",
+    "paddleId": "#PD-1188",
+    "amount": 377500000,
+    "type": "AUTO",
+    "timestamp": 1793872532078
+  },
+  {
+    "id": "bid-room-105-5",
+    "roomId": "room-105",
+    "roomPin": "632001",
+    "uid": "usr-long-5521",
+    "bidderName": "Hoàng Kim Long",
+    "paddleId": "#PD-5521",
+    "amount": 370000000,
+    "type": "MANUAL",
+    "timestamp": 1793872442078
+  },
+  {
+    "id": "bid-room-105-6",
+    "roomId": "room-105",
+    "roomPin": "632001",
+    "uid": "usr-bao-3390",
+    "bidderName": "Trần Hoàng Bảo",
+    "paddleId": "#PD-3390",
+    "amount": 362500000,
+    "type": "MANUAL",
+    "timestamp": 1793872352078
+  },
+  {
+    "id": "bid-room-105-7",
+    "roomId": "room-105",
+    "roomPin": "632001",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 355000000,
+    "type": "MANUAL",
+    "timestamp": 1793872262078
+  },
+  {
+    "id": "bid-room-105-8",
+    "roomId": "room-105",
+    "roomPin": "632001",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 347500000,
+    "type": "AUTO",
+    "timestamp": 1793872172078
+  },
+  {
+    "id": "bid-room-109-1",
+    "roomId": "room-109",
+    "roomPin": "519302",
+    "uid": "usr-vu-6452",
+    "bidderName": "Vũ Bảo An",
+    "paddleId": "#PD-6452",
+    "amount": 1200000000,
+    "type": "MANUAL",
+    "timestamp": 1793872802078
+  },
+  {
+    "id": "bid-room-109-2",
+    "roomId": "room-109",
+    "roomPin": "519302",
+    "uid": "usr-trang-1188",
+    "bidderName": "Đặng Thuỳ Trang",
+    "paddleId": "#PD-1188",
+    "amount": 1175000000,
+    "type": "AUTO",
+    "timestamp": 1793872712078
+  },
+  {
+    "id": "bid-room-109-3",
+    "roomId": "room-109",
+    "roomPin": "519302",
+    "uid": "usr-long-5521",
+    "bidderName": "Hoàng Kim Long",
+    "paddleId": "#PD-5521",
+    "amount": 1150000000,
+    "type": "MANUAL",
+    "timestamp": 1793872622078
+  },
+  {
+    "id": "bid-room-109-4",
+    "roomId": "room-109",
+    "roomPin": "519302",
+    "uid": "usr-bao-3390",
+    "bidderName": "Trần Hoàng Bảo",
+    "paddleId": "#PD-3390",
+    "amount": 1125000000,
+    "type": "MANUAL",
+    "timestamp": 1793872532078
+  },
+  {
+    "id": "bid-room-109-5",
+    "roomId": "room-109",
+    "roomPin": "519302",
+    "uid": "usr-khoi-9912",
+    "bidderName": "Nguyễn Minh Khôi",
+    "paddleId": "#PD-9912",
+    "amount": 1100000000,
+    "type": "MANUAL",
+    "timestamp": 1793872442078
+  },
+  {
+    "id": "bid-room-109-6",
+    "roomId": "room-109",
+    "roomPin": "519302",
+    "uid": "usr-tan-2048",
+    "bidderName": "Phan Minh Tân",
+    "paddleId": "#PD-2048",
+    "amount": 1075000000,
+    "type": "AUTO",
+    "timestamp": 1793872352078
+  }
+];
   }
 
   function getInitialDeposits() {
@@ -783,6 +2225,7 @@
     this.subscribers = [];
     this.init();
     this.setupSyncListeners();
+    this.setupGlobalRoomSync();
   }
 
   AppCore.prototype.init = function () {
@@ -1045,24 +2488,27 @@
     if (!room) return null;
 
     var bids = this.getBids(room.roomId);
-    var hasValidBids = Boolean(bids && bids.length > 0 && room.leaderUid);
-    var winnerUid = hasValidBids ? room.leaderUid : null;
+    var winningBid = (bids && bids.length > 0) ? bids[0] : null;
+    var finalPrice = winningBid ? winningBid.amount : (room.currentPrice || room.startPrice || 0);
+    var winnerUid = winningBid ? (winningBid.bidderUid || winningBid.uid) : (room.leaderUid || '');
+    var winnerName = winningBid ? winningBid.bidderName : (room.leaderName || '');
+    var winnerPaddleId = winningBid ? winningBid.paddleId : (room.leaderPaddleId || '');
 
     var updated = this.updateRoom(room.roomId, {
       status: 'ENDED',
+      currentPrice: finalPrice,
+      finalPrice: finalPrice,
+      amount: finalPrice,
       winnerUid: winnerUid,
-      winnerName: hasValidBids ? (room.leaderName || null) : null,
-      winnerPaddleId: hasValidBids ? (room.leaderPaddleId || null) : null,
-      settledAt: new Date().toISOString(),
-      settleOutcome: hasValidBids ? 'SOLD' : 'UNSOLD'
+      winnerName: winnerName,
+      winnerPaddleId: winnerPaddleId
     });
 
-    // Refund deposits 100% to all losers
     var deposits = this.getDeposits();
     var users = this.getUsers();
 
     deposits.forEach(function (dep) {
-      if (dep.roomId === room.roomId && dep.status === 'LOCKED') {
+      if ((dep.roomId === room.roomId || dep.roomId === room.roomPin || String(dep.roomId).replace('room-', '') === String(room.roomPin)) && dep.status === 'LOCKED') {
         if (winnerUid && dep.uid === winnerUid) {
           dep.status = 'APPLIED_TO_WIN';
         } else {
@@ -1079,18 +2525,7 @@
     localStorage.setItem(STORAGE_KEYS.DEPOSITS, JSON.stringify(deposits));
     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
 
-    // Update current user if affected
-    var curr = this.getCurrentUser();
-    if (curr) {
-      var synced = users.find(function (u) { return u.uid === curr.uid; });
-      if (synced) {
-        localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(synced));
-      }
-    }
-
-    this.broadcast('AUCTION_SETTLED', { roomId: room.roomId, room: updated, winnerUid: winnerUid, settleOutcome: hasValidBids ? 'SOLD' : 'UNSOLD' });
-    updated.success = true;
-    updated.room = updated;
+    this.broadcast('AUCTION_SETTLED', { roomId: room.roomId, room: updated });
     return updated;
   };
 
@@ -1586,6 +3021,16 @@
   // =========================================================================
   // BIDDING LOGIC & ANTI-SNIPING (+30s)
   // =========================================================================
+  AppCore.prototype.addBid = function (bid) {
+    if (!bid || !bid.roomId) return;
+    var all = this.getBids();
+    if (!all.some(function (b) { return b.id === bid.id; })) {
+      all.unshift(bid);
+      localStorage.setItem(STORAGE_KEYS.BIDS, JSON.stringify(all));
+      this.broadcast('NEW_BID', { roomId: bid.roomId, bid: bid });
+    }
+  };
+
   AppCore.prototype.getBids = function (roomId) {
     try {
       var data = localStorage.getItem(STORAGE_KEYS.BIDS);
@@ -1640,10 +3085,30 @@
     var stepPrice = Number(room.stepPrice || 10000000);
     var minRequired = (room.leaderUid) ? (currentPrice + stepPrice) : room.startPrice;
 
+    // Reject bids less than or equal to current price (Bug 13)
+    if (bidAmount <= currentPrice) {
+      return {
+        success: false,
+        message: 'Mức giá đề xuất (' + this.formatCurrency(bidAmount) + ') phải cao hơn mức giá hiện tại (' + this.formatCurrency(currentPrice) + ') tối thiểu 1 bước giá (+' + this.formatCurrency(stepPrice) + ')!'
+      };
+    }
+
+    // Reject duplicate price with existing bids (Bug 13: earlier timestamp takes precedence)
+    var roomBids = this.getBids(room.roomId);
+    var isDuplicate = roomBids.some(function(b) {
+      return Number(b.amount) === bidAmount;
+    });
+    if (isDuplicate) {
+      return {
+        success: false,
+        message: 'Mức giá ' + this.formatCurrency(bidAmount) + ' đã được người trả giá trước đó ghi nhận. Theo quy chuẩn sàn, người đặt trước được ưu tiên. Vui lòng tăng thêm tối thiểu 1 bước giá!'
+      };
+    }
+
     if (bidAmount < minRequired) {
       return {
         success: false,
-        message: 'Mức giá đề xuất (' + this.formatCurrency(bidAmount) + ') phải tối thiểu bằng: ' + this.formatCurrency(minRequired)
+        message: 'Mức giá trả tối thiểu yêu cầu cho lượt tiếp theo là: ' + this.formatCurrency(minRequired)
       };
     }
 
@@ -1658,11 +3123,12 @@
       }
     }
 
-    // Save Bid
+    // Save Bid with timestamp
     var bids = this.getBids();
     var newBid = {
       id: 'bid-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
       roomId: room.roomId,
+      roomPin: room.roomPin,
       bidderUid: user.uid,
       bidderName: user.fullName,
       paddleId: user.paddleId,
@@ -1680,7 +3146,7 @@
       leaderName: user.fullName,
       leaderPaddleId: user.paddleId,
       endTime: newEndTime,
-      participantsCount: (room.participantsCount || 1) + 1
+      participantsCount: Math.max((room.participantsCount || 1), roomBids.length + 1)
     };
     var updatedRoom = this.updateRoom(room.roomId, patch);
 

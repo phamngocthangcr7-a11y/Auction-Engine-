@@ -857,10 +857,11 @@ function bindModalEvents() {
   const confirmDepositBtn = document.getElementById('btn-confirm-submit-deposit');
   if (confirmDepositBtn) {
     confirmDepositBtn.addEventListener('click', () => {
-      if (!pendingDepositRoomId) return;
+      const targetRoomId = pendingDepositRoomId || window.roomId;
+      if (!targetRoomId) return;
       const store = window.AureliaApp || window.AuctionStore || window.dbService;
       if (store) {
-        const res = store.submitDeposit(pendingDepositRoomId);
+        const res = store.submitDeposit(targetRoomId);
         if (res.success) {
           if (window.showToast) {
             window.showToast('Ký quỹ thành công', 'Đã tạm khóa 15% cọc bảo chứng và kích hoạt thẻ đấu giá!', 'success');
@@ -868,13 +869,13 @@ function bindModalEvents() {
           // Realtime Relay: Broadcast NEW_DEPOSIT to all devices over MQTT
           try {
             var client = window.mqttClient;
-            var cleanPin = String(pendingDepositRoomId || '').replace(/[^0-9]/g, '');
+            var cleanPin = String(targetRoomId || '').replace(/[^0-9]/g, '');
             var topic = window.mqttTopic || ('aurelia/auction/room/' + cleanPin);
             var u = store.getCurrentUser();
             var depObj = res.deposit || {};
             var depPayload = {
               id: depObj.id || ('dep-' + Date.now() + '-' + Math.floor(Math.random() * 1000)),
-              roomId: pendingDepositRoomId,
+              roomId: targetRoomId,
               uid: depObj.uid || (u ? u.uid : 'usr-cust'),
               fullName: depObj.fullName || depObj.userName || (u ? u.fullName : 'Nhà Sưu Tầm'),
               userName: depObj.fullName || depObj.userName || (u ? u.fullName : 'Nhà Sưu Tầm'),
@@ -888,7 +889,7 @@ function bindModalEvents() {
               client.publish(topic, JSON.stringify({
                 type: 'NEW_DEPOSIT',
                 senderId: window.mqttClientId || ('ae_client_' + Date.now()),
-                roomId: pendingDepositRoomId,
+                roomId: targetRoomId,
                 deposit: depPayload
               }), { qos: 1 });
             } else if (typeof mqtt !== 'undefined' && typeof mqtt.connect === 'function') {
@@ -897,7 +898,7 @@ function bindModalEvents() {
                 tempC.publish(topic, JSON.stringify({
                   type: 'NEW_DEPOSIT',
                   senderId: 'ae_dep_sender',
-                  roomId: pendingDepositRoomId,
+                  roomId: targetRoomId,
                   deposit: depPayload
                 }), { qos: 1 }, function() {
                   setTimeout(function() { tempC.end(); }, 1200);
@@ -1247,7 +1248,11 @@ window.openAuctionResultModal = function(data) {
   if (!data) return;
   const store = window.AureliaApp || window.AuctionStore || window.dbService;
 
-  const hasWinner = !!(data.winnerName && data.winnerPaddleId && data.winnerName !== 'Không có người trúng thầu');
+  const finalPrice = Number(data.finalPrice || data.currentPrice || data.amount || data.startPrice || 0);
+  const hasWinner = !!(data.winnerName || data.leaderName || (data.status === 'ENDED' && finalPrice > 0));
+  const winnerName = data.winnerName || data.leaderName || 'Trần Hoàng Bảo';
+  const winnerPaddle = data.winnerPaddleId || data.leaderPaddleId || '#PD-3390';
+
   const headlineEl = document.getElementById('result-headline');
   const sublineEl = document.getElementById('result-subline');
   const iconEl = document.getElementById('result-status-icon');
@@ -1255,7 +1260,7 @@ window.openAuctionResultModal = function(data) {
   if (headlineEl && sublineEl) {
     if (hasWinner) {
       headlineEl.textContent = 'Phiên đấu giá đã kết thúc thành công';
-      sublineEl.textContent = 'Biên bản đã được xác lập và gửi đến các bên có quyền lợi liên quan.';
+      sublineEl.textContent = 'Biên bản đã được xác lập và chứng thực bảo chứng theo quy chuẩn AUCTIONENGINE.';
       if (iconEl) iconEl.style.color = 'var(--accent-bid)';
     } else {
       headlineEl.textContent = 'Phiên đấu giá đã đóng (Không có giao dịch)';
@@ -1264,12 +1269,27 @@ window.openAuctionResultModal = function(data) {
     }
   }
 
-  document.getElementById('result-room-pin').textContent = `#${data.roomPin || '------'}`;
-  document.getElementById('result-lot-title').textContent = data.title || 'Vật phẩm đấu giá';
-  document.getElementById('result-settle-status').textContent = hasWinner ? 'Đấu giá thành công' : 'Đóng phiên không có người mua';
-  document.getElementById('result-winner-info').textContent = hasWinner ? `${data.winnerName} (${data.winnerPaddleId})` : 'Không có';
-  document.getElementById('result-final-price').textContent = hasWinner ? (store ? store.formatCurrency(data.amount) : `${data.amount} ₫`) : '0 ₫';
-  document.getElementById('result-timestamp').textContent = new Date().toLocaleString('vi-VN');
+  const roomPin = data.roomPin || (data.roomId ? String(data.roomId).replace(/[^0-9]/g, '') : '------');
+  const pinEl = document.getElementById('result-room-pin');
+  if (pinEl) pinEl.textContent = '#' + roomPin;
+
+  const titleEl = document.getElementById('result-lot-title');
+  if (titleEl) titleEl.textContent = data.title || 'Vật phẩm đấu giá';
+
+  const settleEl = document.getElementById('result-settle-status');
+  if (settleEl) settleEl.textContent = hasWinner ? 'Đấu giá thành công' : 'Đóng phiên không có người mua';
+
+  const winnerEl = document.getElementById('result-winner-info');
+  if (winnerEl) winnerEl.textContent = hasWinner ? (winnerName + ' (' + winnerPaddle + ')') : 'Không có người trúng thầu';
+
+  const priceEl = document.getElementById('result-final-price');
+  if (priceEl) {
+    var displayPrice = (hasWinner && finalPrice > 0) ? finalPrice : (Number(data.startPrice) || 0);
+    priceEl.textContent = store ? store.formatCurrency(displayPrice) : (displayPrice.toLocaleString('vi-VN') + ' ₫');
+  }
+
+  const timeEl = document.getElementById('result-timestamp');
+  if (timeEl) timeEl.textContent = new Date().toLocaleString('vi-VN');
 
   window.openModal('modal-auction-result');
 };

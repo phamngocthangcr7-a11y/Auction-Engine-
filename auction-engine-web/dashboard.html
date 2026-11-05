@@ -659,10 +659,10 @@
   <div id="modals-root"></div>
 
   <!-- Scripts -->
-  <script src="js/app-core.js"></script>
-  <script src="components/header.js"></script>
-  <script src="components/footer.js"></script>
-  <script src="components/modals.js"></script>
+  <script src="js/app-core.js?v=5.0"></script>
+  <script src="components/header.js?v=5.0"></script>
+  <script src="components/footer.js?v=5.0"></script>
+  <script src="components/modals.js?v=5.0"></script>
 
   <script>
     (function() {
@@ -822,7 +822,7 @@
             activeGrid.innerHTML = activeRooms.map(function(r) {
               var isLeader = r.leaderUid === user.uid || r.leaderPaddleId === user.paddleId;
               var img = (r.images && r.images[0]) ? r.images[0] : 'assets/images/patek_nautilus_gold.jpg';
-              if (img.includes('omega') || (!img.startsWith('http') && !img.startsWith('assets/'))) {
+              if (!img.startsWith('data:image/') && !img.startsWith('http') && !img.startsWith('assets/')) {
                 img = 'assets/images/patek_nautilus_gold.jpg';
               }
               return `
@@ -874,7 +874,7 @@
             if (watchEmpty) watchEmpty.style.display = 'none';
             watchGrid.innerHTML = watchedRooms.map(function(r) {
               var img = (r.images && r.images[0]) ? r.images[0] : 'assets/images/patek_nautilus_gold.jpg';
-              if (img.includes('omega') || (!img.startsWith('http') && !img.startsWith('assets/'))) {
+              if (!img.startsWith('data:image/') && !img.startsWith('http') && !img.startsWith('assets/')) {
                 img = 'assets/images/patek_nautilus_gold.jpg';
               }
               return `
@@ -990,7 +990,7 @@
           listContainer.innerHTML = listedLots.map(function(r) {
             var statusBadge = r.status === 'WAITING' ? '<span class="badge badge--waiting" style="font-size:0.65rem;">CHỜ DUYỆT / CHỜ BẮT ĐẦU</span>' : (r.status === 'REJECTED' ? '<span class="badge" style="background:#FEE2E2;color:#DC2626;font-size:0.65rem;">BỊ TỪ CHỐI</span>' : '<span class="badge badge--live" style="font-size:0.65rem;">ĐÃ DUYỆT</span>');
             var img = (r.images && r.images[0]) ? r.images[0] : 'assets/images/patek_nautilus_gold.jpg';
-            if (img.includes('omega') || (!img.startsWith('http') && !img.startsWith('assets/'))) {
+            if (!img.startsWith('data:image/') && !img.startsWith('http') && !img.startsWith('assets/')) {
               img = 'assets/images/patek_nautilus_gold.jpg';
             }
             return `

@@ -772,7 +772,7 @@
                 <!-- Dành cho Khách (Bidder/Guest) -->
                 <div id="waiting-bidder-actions" style="display: none;">
                   <div id="waiting-bidder-not-deposited">
-                    <button type="button" class="btn btn--primary btn--md" style="width: 100%; font-weight: 600;" onclick="window.openDepositModal(roomId)">
+                    <button type="button" class="btn btn--primary btn--md" style="width: 100%; font-weight: 600;" onclick="window.openDepositModal(window.roomId)">
                       <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                       <span>Nộp Cọc Ký Quỹ (15%) Để Sẵn Sàng Ra Giá</span>
                     </button>
@@ -845,7 +845,7 @@
                     <span class="text-muted">Mức cọc cần ký quỹ:</span>
                     <strong class="font-mono text-emerald" id="deck-deposit-needed-display">---</strong>
                   </div>
-                  <button type="button" class="btn btn--primary btn--md" style="width: 100%; font-weight: 700;" onclick="window.openDepositModal(roomId)">
+                  <button type="button" class="btn btn--primary btn--md" style="width: 100%; font-weight: 700;" onclick="window.openDepositModal(window.roomId)">
                     <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
                     <span>Ký Quỹ Ngay & Nhận Thẻ Trả Giá</span>
                   </button>
@@ -1036,11 +1036,11 @@
   <div id="modals-root"></div>
 
   <!-- Scripts -->
-  <script src="js/app-core.js"></script>
-  <script src="components/header.js"></script>
-  <script src="components/footer.js"></script>
-  <script src="components/modals.js"></script>
-  <script src="js/mqtt.min.js"></script>
+  <script src="js/app-core.js?v=5.0"></script>
+  <script src="components/header.js?v=5.0"></script>
+  <script src="components/footer.js?v=5.0"></script>
+  <script src="components/modals.js?v=5.0"></script>
+  <script src="js/mqtt.min.js?v=5.0"></script>
 
   <!-- Live Room Logic Controller -->
   <script>
@@ -1050,7 +1050,7 @@
       try { if (typeof window.renderFooter === 'function') window.renderFooter(); } catch (e) { console.error('Footer:', e); }
       try { if (typeof window.renderModals === 'function') window.renderModals(); } catch (e) { console.error('Modals:', e); }
 
-      var store = window.AureliaApp || window.AuctionStore;
+      var store = window.AUCTIONENGINEApp || window.AuctionStore;
       if (!store) {
         console.error('AuctionStore is missing!');
         return;

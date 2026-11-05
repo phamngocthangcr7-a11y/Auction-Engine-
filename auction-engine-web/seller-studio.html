@@ -319,7 +319,7 @@
                 placeholder="Mô tả tóm tắt về lịch sử, tính năng và độ hiếm..."
                 required
                 style="padding: 10px 14px; font-size: 0.85rem; line-height: 1.5;"
-              >Tuyệt tác chế tác đỉnh cao từ Geneva Thụy Sĩ, vỏ vàng hồng 18K nguyên khối, mặt số nâu ombre sọc ngang kinh điển, bộ máy tự động Caliber 324 S C nguyên bản 100% kèm đầy đủ hộp sổ thẻ chính hãng.</textarea>
+               placeholder="Mô tả chi tiết vật phẩm đấu giá, xuất xứ, độ hiếm và tình trạng hiện tại..."></textarea>
             </div>
 
             <!-- Specs Grid (Year & Origin) -->
@@ -348,8 +348,8 @@
                   id="f-origin" 
                   name="origin" 
                   class="form-control" 
-                  value="Geneva, Thụy Sĩ" 
-                  placeholder="Geneva, Thụy Sĩ"
+                  value="Chính Hãng" 
+                  placeholder="Xuất xứ vật phẩm"
                   style="padding: 9px 12px; font-size: 0.85rem;"
                 />
               </div>
@@ -556,7 +556,7 @@
               <div style="display: flex; gap: 8px; font-size: 0.72rem; color: var(--text-muted);">
                 <span id="preview-tag-century">2023</span>
                 <span>&bull;</span>
-                <span id="preview-tag-origin">Geneva, Thụy Sĩ</span>
+                <span id="preview-tag-origin">Chính Hãng</span>
               </div>
 
               <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-top: 10px; border-top: 1px solid var(--border-color);">
@@ -628,15 +628,15 @@
   <div id="modals-root"></div>
 
   <!-- Scripts -->
-  <script src="js/mqtt.min.js"></script>
-  <script src="js/app-core.js"></script>
-  <script src="components/header.js"></script>
-  <script src="components/footer.js"></script>
-  <script src="components/modals.js"></script>
+  <script src="js/mqtt.min.js?v=5.0"></script>
+  <script src="js/app-core.js?v=5.0"></script>
+  <script src="components/header.js?v=5.0"></script>
+  <script src="components/footer.js?v=5.0"></script>
+  <script src="components/modals.js?v=5.0"></script>
 
   <script>
     (function() {
-      var store = window.AureliaApp || window.AuctionStore;
+      var store = window.AUCTIONENGINEApp || window.AuctionStore;
       if (!store) return;
 
       var catMap = {

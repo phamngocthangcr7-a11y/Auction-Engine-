@@ -769,10 +769,10 @@
   <div id="modals-root"></div>
 
   <!-- Core Scripts -->
-  <script src="js/app-core.js"></script>
-  <script src="components/header.js"></script>
-  <script src="components/footer.js"></script>
-  <script src="components/modals.js"></script>
+  <script src="js/app-core.js?v=5.0"></script>
+  <script src="components/header.js?v=5.0"></script>
+  <script src="components/footer.js?v=5.0"></script>
+  <script src="components/modals.js?v=5.0"></script>
 
   <!-- Page Logic: Slider, Filtering, Leaderboard & Realtime Clock -->
   <script>
@@ -1076,7 +1076,7 @@
                 <img src="${(r.images && r.images[0]) || 'assets/images/patek_nautilus_gold.jpg'}" style="width:36px;height:36px;border-radius:4px;object-fit:cover;" alt=""/>
                 <div style="flex:1;overflow:hidden;">
                   <div style="font-size:0.82rem;font-weight:700;color:var(--text-primary);line-height:1.35;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;word-break:break-word;margin-bottom:3px;">${r.title}</div>
-                  <div style="font-size:0.7rem;color:var(--text-muted);"><strong style="color:#059669;font-family:var(--font-mono);">${store.formatCurrency(r.currentPrice || r.startPrice)}</strong> &bull; ${r.participantsCount || 5} lượt trả giá</div>
+                  <div style="font-size:0.7rem;color:var(--text-muted);"><strong style="color:#059669;font-family:var(--font-mono);">${store.formatCurrency(r.currentPrice || r.startPrice)}</strong> &bull; ${(store.getBids(r.roomId) || []).length || r.participantsCount || 5} lượt trả giá</div>
                 </div>
               </a>
             `;
