@@ -14,8 +14,9 @@
 
     if (!isProtected) return;
 
-    const isLoggedOut = localStorage.getItem('AE_AUTH_LOGGED_OUT') === 'true';
-    const currentUserRaw = localStorage.getItem('AE_V3_CURRENT_USER') || 
+    const isLoggedOut = localStorage.getItem('AE_AUTH_LOGGED_OUT') === 'true' || localStorage.getItem('AURELIA_LOGGED_OUT') === 'true';
+    const currentUserRaw = localStorage.getItem('AURELIA_CURRENT_USER_V4') ||
+                           localStorage.getItem('AE_V3_CURRENT_USER') || 
                            localStorage.getItem('AE_DB_CURRENT_USER_V2') || 
                            localStorage.getItem('AE_DB_CURRENT_USER');
 

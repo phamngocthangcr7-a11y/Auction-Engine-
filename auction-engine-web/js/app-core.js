@@ -790,13 +790,9 @@
       if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
         localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(getInitialUsers()));
       }
-      if (localStorage.getItem('AURELIA_LOGGED_OUT') !== 'true' && 
-          localStorage.getItem('AE_AUTH_LOGGED_OUT') !== 'true' && 
-          !localStorage.getItem(STORAGE_KEYS.CURRENT_USER)) {
-        var users = this.getUsers();
-        localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(users[0]));
-        localStorage.setItem('AE_V3_CURRENT_USER', JSON.stringify(users[0]));
-      }
+      // Guest mode by default: Khong tu dong dang nhap khi nguoi dung moi truy cap.
+      // Nguoi dung moi hoac nguoi nhan link chia se se o trang thai Khach (Guest - Chua dang nhap)
+      // cho den khi chu dong Dang Nhap hoac Dang Ky tai khoan cua rieng minh.
       if (!localStorage.getItem(STORAGE_KEYS.ROOMS)) {
         localStorage.setItem(STORAGE_KEYS.ROOMS, JSON.stringify(getInitialRooms()));
       }
@@ -1287,7 +1283,10 @@
 
     users.push(newUser);
     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+    localStorage.removeItem('AURELIA_LOGGED_OUT');
+    localStorage.removeItem('AE_AUTH_LOGGED_OUT');
     localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(newUser));
+    localStorage.setItem('AE_V3_CURRENT_USER', JSON.stringify(newUser));
     this.broadcast('USER_REGISTERED', { user: newUser });
     this.broadcast('USER_SWITCHED', { user: newUser });
     return { success: true, user: newUser };
