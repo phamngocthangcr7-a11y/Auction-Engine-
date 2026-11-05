@@ -364,7 +364,7 @@ function renderModals() {
             <svg id="result-status-icon" style="width: 22px; height: 22px; color: var(--accent-bid); flex-shrink: 0;" viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
             <div>
               <div id="result-headline" style="font-weight: 700; color: var(--text-primary); font-size: 0.92rem;">Phiên đấu giá đã kết thúc thành công</div>
-              <div id="result-subline" style="font-size: 0.72rem; color: var(--text-secondary);">Giao dịch được đối soát và bảo hiểm toàn phần theo tiêu chuẩn Thụy Sĩ.</div>
+              <div id="result-subline" style="font-size: 0.72rem; color: var(--text-secondary);">Giao dịch được đối soát và bảo hiểm toàn phần theo quy chuẩn sàn đấu giá quốc tế.</div>
             </div>
           </div>
 
@@ -646,7 +646,7 @@ function renderModals() {
 
             <div style="display: flex; justify-content: space-between; align-items: flex-end; padding-top: 16px; border-top: 1px solid #E2E8F0; font-size: 0.72rem; color: #64748B;">
               <div>
-                <div>Bảo chứng Escrow: Ngân hàng Giám định Thụy Sĩ (UBS Geneva)</div>
+                <div>Bảo chứng Escrow: Quỹ Ký Quỹ Độc Lập Escrow</div>
                 <div>Chữ ký số SHA-256 mã hóa lưu trữ vĩnh viễn trên sổ cái AUCTIONENGINE.</div>
               </div>
               <div style="text-align: center;">
@@ -1182,17 +1182,25 @@ window.switchUser = function(userKey) {
 
 window.logoutUser = function() {
   const store = window.AureliaApp || window.AuctionStore || window.dbService;
-  if (store) {
+  if (store && typeof store.logout === 'function') {
     store.logout();
-    if (window.showToast) {
-      window.showToast('Đã đăng xuất', 'Quý khách đã đăng xuất tài khoản an toàn.', 'info');
-    }
-    window.closeModal('modal-auth');
-    if (typeof window.renderHeader === 'function') window.renderHeader();
-    setTimeout(() => {
-      window.location.reload();
-    }, 400);
+  } else {
+    localStorage.setItem('AURELIA_LOGGED_OUT', 'true');
+    localStorage.setItem('AE_AUTH_LOGGED_OUT', 'true');
+    localStorage.removeItem('ae_active_session_user');
+    localStorage.removeItem('AURELIA_CURRENT_USER_V4');
+    localStorage.removeItem('AE_V3_CURRENT_USER');
   }
+  if (window.showToast) {
+    window.showToast('Đã Đăng Xuất', 'Quý khách đã đăng xuất tài khoản an toàn.', 'info');
+  }
+  if (typeof window.closeModal === 'function') {
+    window.closeModal('modal-auth');
+  }
+  if (typeof window.renderHeader === 'function') window.renderHeader();
+  setTimeout(() => {
+    window.location.href = 'welcome.html';
+  }, 350);
 };
 
 window.openWalletModal = function() {

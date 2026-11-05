@@ -74,7 +74,7 @@ function renderFooter() {
               </div>
             </div>
             <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px; max-width: 380px;">
-              Nhà đấu giá giám định trực tuyến chuyên biệt về đồng hồ Thụy Sĩ độc bản, siêu xe cổ điển, thiết bị công nghệ nguyên mẫu và các tác phẩm nghệ thuật có bảo chứng pháp lý.
+              Nhà đấu giá giám định trực tuyến chuyên biệt về đồng hồ cao cấp độc bản, siêu xe cổ điển, thiết bị công nghệ nguyên mẫu và các tác phẩm nghệ thuật có bảo chứng pháp lý.
             </p>
             <div style="font-size: 0.8rem; color: var(--text-muted); display: flex; align-items: center; gap: 8px;">
               <svg style="width: 15px; height: 15px; color: var(--text-muted); flex-shrink: 0;" viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
@@ -86,7 +86,7 @@ function renderFooter() {
           <div class="site-footer__col">
             <h4 style="font-size: 0.85rem; font-weight: 700; color: var(--text-primary); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 16px;">Danh Mục Giám Định</h4>
             <ul style="list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; font-size: 0.85rem;">
-              <li><a href="auctions.html?category=watches" style="color: var(--text-secondary); text-decoration: none;">Đồng hồ Cơ Thụy Sĩ</a></li>
+              <li><a href="auctions.html?category=watches" style="color: var(--text-secondary); text-decoration: none;">Đồng Hồ Cao Cấp & Cổ Điển</a></li>
               <li><a href="auctions.html?category=hypercars" style="color: var(--text-secondary); text-decoration: none;">Siêu xe & Xe Cổ Điển</a></li>
               <li><a href="auctions.html?category=tech" style="color: var(--text-secondary); text-decoration: none;">Máy ảnh & Công nghệ Hiếm</a></li>
               <li><a href="auctions.html?category=art" style="color: var(--text-secondary); text-decoration: none;">Nghệ thuật & Kỷ vật</a></li>

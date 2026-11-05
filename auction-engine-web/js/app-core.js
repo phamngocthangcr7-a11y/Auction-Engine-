@@ -2711,7 +2711,7 @@
 
     var pinNum = String(Math.floor(1000 + Math.random() * 9000));
     var initBal = Number(initialBalance);
-    if (isNaN(initBal) || initBal <= 0) initBal = 10000000000; // 10 Tỷ ₫ trải nghiệm mặc định
+    if (isNaN(initBal) || initBal <= 0) initBal = 1000000000; // 10 Tỷ ₫ trải nghiệm mặc định
 
     var newUser = {
       uid: 'usr-' + Date.now(),

@@ -286,7 +286,7 @@
                 Danh mục vật phẩm:
               </label>
               <div class="cat-btn-group" id="cat-btn-group">
-                <button type="button" class="cat-select-btn active" data-cat="watches">Đồng hồ Thụy Sĩ</button>
+                <button type="button" class="cat-select-btn active" data-cat="watches">Đồng Hồ Cao Cấp</button>
                 <button type="button" class="cat-select-btn" data-cat="hypercars">Siêu xe & Mô tô</button>
                 <button type="button" class="cat-select-btn" data-cat="tech">Công nghệ & Máy ảnh</button>
                 <button type="button" class="cat-select-btn" data-cat="art">Nghệ thuật & Cổ vật</button>
@@ -305,8 +305,8 @@
                 id="f-title" 
                 name="title" 
                 class="form-control" 
-                placeholder="Ví dụ: Patek Philippe Grand Complications 5270P Platinum" 
-                value="Patek Philippe Nautilus 5711/1R Rose Gold 18K"
+                placeholder="Ví dụ: Patek Philippe Nautilus, Áo đấu có chữ ký, Xe cổ điển..." 
+                value=""
                 required
                 style="padding: 10px 14px; font-size: 0.9rem;"
               />
@@ -339,7 +339,7 @@
                   id="f-century" 
                   name="century" 
                   class="form-control" 
-                  value="2023" 
+                  value="" 
                   placeholder="2023"
                   style="padding: 9px 12px; font-size: 0.85rem;"
                 />
@@ -371,8 +371,8 @@
                 id="f-condition" 
                 name="conditionScore" 
                 class="form-control" 
-                value="Mới 99.9% Like New &bull; Fullset Đầy Đủ Giấy Tờ" 
-                placeholder="Mới 99.9% Fullset"
+                value="" 
+                placeholder="Ví dụ: Mới 99.9% Fullset hoặc Kèm chứng chỉ chính hãng"
                 style="padding: 9px 12px; font-size: 0.85rem;"
               />
             </div>
@@ -417,7 +417,7 @@
                   name="imageUrl" 
                   class="form-control" 
                   placeholder="Hoặc dán URL ảnh trực tiếp..." 
-                  value="assets/images/patek_nautilus_gold.jpg"
+                  value=""
                   style="padding: 8px 12px; font-size: 0.8rem;"
                 />
               
@@ -553,7 +553,7 @@
             <!-- Body Content -->
             <div style="padding: 18px; display: flex; flex-direction: column; gap: 12px;">
               <div>
-                <div id="preview-card-category" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 4px;">ĐỒNG HỒ CƠ THỤY SĨ</div>
+                <div id="preview-card-category" style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 4px;">ĐỒNG HỒ CAO CẤP & CỔ ĐIỂN</div>
                 <h3 id="preview-card-title" style="font-size: 1rem; font-weight: 700; color: var(--text-primary); line-height: 1.35; margin: 0; min-height: 42px;">
                   Patek Philippe Nautilus 5711/1R Rose Gold 18K
                 </h3>
@@ -646,7 +646,7 @@
       if (!store) return;
 
       var catMap = {
-        'watches': 'ĐỒNG HỒ CƠ THỤY SĨ',
+        'watches': 'ĐỒNG HỒ CAO CẤP & CỔ ĐIỂN',
         'hypercars': 'SIÊU XE & MÔ TÔ',
         'tech': 'THIẾT BỊ CÔNG NGHỆ',
         'art': 'TRANH NGHỆ THUẬT & CỔ VẬT',
@@ -758,7 +758,7 @@
       function updateCardPreview() {
         var title = document.getElementById('f-title').value.trim() || 'Tên vật phẩm đấu giá...';
         var century = document.getElementById('f-century').value.trim() || '2023';
-        var origin = document.getElementById('f-origin').value.trim() || 'Thụy Sĩ';
+        var origin = document.getElementById('f-origin').value.trim() || 'Chính Hãng';
         var url = document.getElementById('f-image-url').value.trim();
 
         document.getElementById('preview-card-title').textContent = title;
@@ -777,9 +777,9 @@
       // 5. 1-Click Demo Fill
       document.getElementById('btn-quick-demo-fill').addEventListener('click', function() {
         document.getElementById('f-title').value = 'Patek Philippe Nautilus 5711/1R Rose Gold 18K';
-        document.getElementById('f-short-desc').value = 'Tuyệt tác chế tác đỉnh cao từ Geneva Thụy Sĩ, vỏ vàng hồng 18K nguyên khối, mặt số nâu ombre sọc ngang kinh điển, bộ máy tự động Caliber 324 S C nguyên bản 100% kèm đầy đủ hộp sổ thẻ chính hãng.';
+        document.getElementById('f-short-desc').value = 'Tuyệt tác chế tác đỉnh cao, vỏ vàng hồng 18K nguyên khối, mặt số nâu ombre sọc ngang kinh điển, bộ máy tự động Caliber nguyên bản 100% kèm đầy đủ hộp sổ thẻ chính hãng.';
         document.getElementById('f-century').value = '2024';
-        document.getElementById('f-origin').value = 'Le Brassus, Thụy Sĩ';
+        document.getElementById('f-origin').value = 'Chính Hãng';
         document.getElementById('f-condition').value = 'Mới 100% Nguyên Hộp Sổ Thẻ';
         document.getElementById('f-starting-bid').value = '1500000000';
         document.getElementById('f-min-increment').value = '50000000';
@@ -888,7 +888,7 @@
             'Năm sản xuất': century,
             'Xuất xứ': origin,
             'Tình trạng': condition,
-            'Kiểm định': 'Geneva Certified 100%'
+            'Kiểm định': 'Chứng nhận Đạt Chuẩn 100%'
           },
           appraisal: {
             inspector: 'Hội Đồng Thẩm Định AUCTIONENGINE',

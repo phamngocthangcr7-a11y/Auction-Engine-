@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AUCTIONENGINE • Cổng Đấu Giá Quốc Tế & Xác Thực Hội Viên</title>
-  <meta name="description" content="AUCTIONENGINE - Sàn đấu giá trực tuyến quốc tế hàng đầu dành cho Đồng hồ cơ Thụy Sĩ, Siêu xe, Thiết bị công nghệ nguyên mẫu và Kiệt tác nghệ thuật. Đăng nhập hoặc Đăng ký để nhận Thẻ Đấu Giá #Paddle ID.">
+  <title>AUCTIONENGINE • Sàn Đấu Giá Trực Tuyến Quốc Tế</title>
+  <meta name="description" content="AUCTIONENGINE - Sàn đấu giá trực tuyến quốc tế hàng đầu dành cho Đồng hồ cơ, Siêu xe, Thiết bị công nghệ nguyên mẫu và Kiệt tác nghệ thuật. Đăng nhập hoặc Đăng ký để nhận Thẻ Đấu Giá #Paddle ID.">
 
   <!-- Google Fonts: Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -48,7 +48,7 @@
       position: sticky;
       top: 0;
       z-index: 50;
-      background: rgba(8, 11, 17, 0.92);
+      background: rgba(8, 11, 17, 0.94);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
       border-bottom: 1px solid var(--border-subtle);
@@ -167,7 +167,7 @@
       filter: brightness(1.05);
     }
 
-    /* Hero Showcase Section */
+    /* Hero Showcase Section with Grand Auction Gallery Image */
     .hero-container {
       max-width: 1320px;
       width: calc(100% - 48px);
@@ -178,7 +178,7 @@
       position: relative;
       display: flex;
       align-items: center;
-      background-image: url('https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=1800&q=90');
+      background-image: url('https://images.unsplash.com/photo-1518998053901-5348d3961a04?auto=format&fit=crop&w=1920&q=90');
       background-size: cover;
       background-position: center right;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
@@ -188,7 +188,7 @@
     .hero-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, rgba(8, 11, 17, 0.95) 0%, rgba(8, 11, 17, 0.76) 52%, rgba(8, 11, 17, 0.15) 100%);
+      background: linear-gradient(90deg, rgba(8, 11, 17, 0.94) 0%, rgba(8, 11, 17, 0.72) 48%, rgba(8, 11, 17, 0.18) 100%);
       z-index: 1;
     }
 
@@ -320,11 +320,7 @@
     }
 
     .section-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-end;
       margin-bottom: 24px;
-      gap: 16px;
     }
 
     .section-tag {
@@ -511,7 +507,7 @@
       line-height: 1.5;
     }
 
-    /* Modal Popup Styling */
+    /* Modal Popup Styling - ONLY 2 TABS (Đăng Nhập / Tạo Tài Khoản) */
     .modal-overlay {
       position: fixed;
       inset: 0;
@@ -534,7 +530,7 @@
       border: 1px solid rgba(245, 158, 11, 0.28);
       border-radius: 18px;
       width: 100%;
-      max-width: 460px;
+      max-width: 440px;
       box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8);
       overflow: hidden;
       animation: modalFadeIn 0.2s ease-out;
@@ -571,7 +567,7 @@
 
     .modal-tabs {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: 1fr 1fr;
       background: rgba(0, 0, 0, 0.35);
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
     }
@@ -582,7 +578,7 @@
       border: none;
       border-bottom: 2px solid transparent;
       color: #94A3B8;
-      font-size: 0.82rem;
+      font-size: 0.85rem;
       font-weight: 600;
       cursor: pointer;
       text-align: center;
@@ -620,7 +616,7 @@
       margin-bottom: 6px;
     }
 
-    .form-input, .form-select {
+    .form-input {
       width: 100%;
       padding: 10px 14px;
       font-size: 0.85rem;
@@ -633,15 +629,10 @@
       font-family: inherit;
     }
 
-    .form-input:focus, .form-select:focus {
+    .form-input:focus {
       border-color: #F59E0B;
       box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
       background: rgba(255, 255, 255, 0.08);
-    }
-
-    .form-select option {
-      background: #0F172A;
-      color: #FFF;
     }
 
     .btn-submit-gold {
@@ -742,7 +733,7 @@
     <div class="welcome-header__inner">
       
       <!-- Left: Logo & Brand Name -->
-      <a href="welcome.html" class="header-brand" title="AUCTIONENGINE - Geneva • London • New York">
+      <a href="welcome.html" class="header-brand" title="AUCTIONENGINE International Fine Auctions">
         <svg class="ae-brand-emblem" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 38px; height: 38px; min-width: 38px; min-height: 38px; flex-shrink: 0; filter: drop-shadow(0 2px 8px rgba(245, 158, 11, 0.35));">
   <defs>
     <linearGradient id="aeShieldBg" x1="0" y1="0" x2="38" y2="38" gradientUnits="userSpaceOnUse">
@@ -790,7 +781,7 @@
 </svg>
         <div class="brand-text-wrap">
           <div class="brand-name">AUCTION<span style="color: #F59E0B;">ENGINE</span></div>
-          <div class="brand-sub">GENEVA &bull; LONDON &bull; NEW YORK</div>
+          <div class="brand-sub">SÀN ĐẤU GIÁ TRỰC TUYẾN QUỐC TẾ</div>
         </div>
       </a>
 
@@ -815,7 +806,7 @@
     </div>
   </header>
 
-  <!-- Central Hero Showcase (Sotheby's / Christie's Editorial Layout) -->
+  <!-- Central Hero Showcase (International Auction Salesroom) -->
   <section class="hero-container" id="about-hero">
     <div class="hero-overlay"></div>
     <div class="hero-content">
@@ -830,7 +821,7 @@
       </h1>
 
       <p class="hero-desc">
-        Nền tảng đấu giá thời gian thực dành cho đồng hồ cơ Thụy Sĩ, siêu xe sưu tầm, công nghệ hiếm và tác phẩm nghệ thuật với cơ chế ký quỹ minh bạch.
+        Nền tảng đấu giá thời gian thực dành cho đồng hồ cao cấp, siêu xe sưu tầm, công nghệ hiếm và tác phẩm nghệ thuật với cơ chế ký quỹ minh bạch.
       </p>
 
       <div class="hero-buttons">
@@ -872,11 +863,6 @@
         <div class="section-tag">DANH MỤC TUYỂN CHỌN</div>
         <h2 class="section-title">Phiên Đấu Giá Tiêu Điểm</h2>
       </div>
-      <div>
-        <button type="button" class="btn-header-outline" onclick="openAuthModal('pin')" style="font-size: 0.8rem;">
-          Nhập PIN Phòng &rarr;
-        </button>
-      </div>
     </div>
 
     <!-- 4 Featured Cards Grid -->
@@ -892,14 +878,14 @@
           </div>
         </div>
         <div class="lot-body">
-          <div class="lot-cat">Đồng Hồ Cơ Thụy Sĩ &bull; Lot #839201</div>
+          <div class="lot-cat">Đồng Hồ Cơ &bull; Lot #839201</div>
           <div class="lot-title">Patek Philippe Nautilus 5711/1R-001 Vàng Hồng 18K</div>
           <div class="lot-foot">
             <div>
               <div class="lot-price-label">Giá hiện tại</div>
               <div class="lot-price-val">3.850.000.000 ₫</div>
             </div>
-            <div class="lot-pin-badge">PIN: 839201</div>
+            <div class="lot-pin-badge">#839201</div>
           </div>
         </div>
       </div>
@@ -921,7 +907,7 @@
               <div class="lot-price-label">Giá hiện tại</div>
               <div class="lot-price-val">16.200.000.000 ₫</div>
             </div>
-            <div class="lot-pin-badge">PIN: 940182</div>
+            <div class="lot-pin-badge">#940182</div>
           </div>
         </div>
       </div>
@@ -943,7 +929,7 @@
               <div class="lot-price-label">Giá hiện tại</div>
               <div class="lot-price-val">28.500.000.000 ₫</div>
             </div>
-            <div class="lot-pin-badge">PIN: 551920</div>
+            <div class="lot-pin-badge">#551920</div>
           </div>
         </div>
       </div>
@@ -959,13 +945,13 @@
         </div>
         <div class="lot-body">
           <div class="lot-cat">Tranh Nghệ Thuật &bull; Lot #418290</div>
-          <div class="lot-title">Tranh Sơn Dầu Pháp Thế Kỷ XIX (Geneva Appraisal)</div>
+          <div class="lot-title">Tranh Sơn Dầu Pháp Thế Kỷ XIX (Bảo Chứng Giám Định)</div>
           <div class="lot-foot">
             <div>
               <div class="lot-price-label">Giá hiện tại</div>
               <div class="lot-price-val">1.250.000.000 ₫</div>
             </div>
-            <div class="lot-pin-badge">PIN: 418290</div>
+            <div class="lot-pin-badge">#418290</div>
           </div>
         </div>
       </div>
@@ -1005,7 +991,7 @@
       <div style="display: flex; align-items: center; gap: 8px;">
         <span style="font-weight: 800; color: #F8FAFC;">AUCTIONENGINE</span>
         <span>&bull;</span>
-        <span>Geneva Standard Fine Auctions S.A.</span>
+        <span>International Fine Auctions S.A.</span>
       </div>
       <div>
         <span>Bảo chứng Ký quỹ 15% &bull; Khớp lệnh Realtime &bull; Anti-Sniping Protection</span>
@@ -1014,7 +1000,7 @@
   </footer>
 
   <!-- =======================================================================
-       AUTH MODAL POPUP (ĐĂNG NHẬP / ĐĂNG KÝ / NHẬP PIN PHÒNG)
+       AUTH MODAL POPUP (ĐĂNG NHẬP / TẠO TÀI KHOẢN - 2 TABS CHUẨN MỰC)
        ======================================================================= -->
   <div class="modal-overlay" id="auth-modal" onclick="if(event.target===this) closeAuthModal();">
     <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="modal-title-text">
@@ -1069,22 +1055,19 @@
 </svg>
           <div>
             <div id="modal-title-text" style="font-size: 0.95rem; font-weight: 800; color: #FFFFFF;">CỔNG XÁC THỰC SÀN ĐẤU GIÁ</div>
-            <div style="font-size: 0.65rem; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.08em;">AUCTIONENGINE &bull; Geneva Standard</div>
+            <div style="font-size: 0.65rem; color: #94A3B8; text-transform: uppercase; letter-spacing: 0.08em;">AUCTIONENGINE &bull; INTERNATIONAL</div>
           </div>
         </div>
         <button type="button" class="modal-close-btn" onclick="closeAuthModal()" aria-label="Đóng">&times;</button>
       </div>
 
-      <!-- 3 Tabs -->
+      <!-- 2 Tabs Rõ Ràng & Logic -->
       <div class="modal-tabs">
         <button type="button" class="modal-tab-btn active" id="modal-tab-login" onclick="switchModalTab('login')">
           Đăng Nhập
         </button>
         <button type="button" class="modal-tab-btn" id="modal-tab-register" onclick="switchModalTab('register')">
           Tạo Tài Khoản
-        </button>
-        <button type="button" class="modal-tab-btn" id="modal-tab-pin" onclick="switchModalTab('pin')">
-          Nhập PIN Phòng
         </button>
       </div>
 
@@ -1114,7 +1097,7 @@
           </button>
         </form>
 
-        <!-- TAB 2: TẠO TÀI KHOẢN MỚI -->
+        <!-- TAB 2: TẠO TÀI KHOẢN MỚI (TỰ DO NHẬP SỐ TIỀN VÀO VÍ) -->
         <form id="pane-register" class="auth-tab-panel" onsubmit="submitModalRegister(event)">
           <div class="form-group">
             <label class="form-label" for="inp-reg-name">Họ và Tên</label>
@@ -1132,38 +1115,15 @@
           </div>
 
           <div class="form-group">
-            <label class="form-label" for="inp-reg-tier">Hạng Tài Khoản</label>
-            <select id="inp-reg-tier" class="form-select">
-              <option value="vip">Hạng VIP Bidder (+10 Tỷ ₫ Vốn Ký Quỹ Sẵn)</option>
-              <option value="collector">Hạng Collector (+10 Tỷ ₫ Vốn Ký Quỹ Sẵn)</option>
-              <option value="private">Hạng Private Member (+10 Tỷ ₫ Vốn Ký Quỹ Sẵn)</option>
-            </select>
-          </div>
-
-          <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 8px; padding: 10px 12px; margin-bottom: 16px; font-size: 0.74rem; color: #FEF3C7; line-height: 1.45;">
-            ✨ Tự động cấp ngay <strong>Mã Thẻ #PD-XXXX</strong> ngẫu nhiên và tặng sẵn <strong>10.000.000.000 ₫</strong> vốn trải nghiệm vào Ví để đặt cọc và đấu giá ngay!
+            <label class="form-label" for="inp-reg-balance">Số vốn khởi tạo vào Ví (VNĐ)</label>
+            <input type="text" id="inp-reg-balance" class="form-input" placeholder="1.000.000.000" value="1.000.000.000">
+            <div style="font-size: 0.72rem; color: #94A3B8; margin-top: 5px; line-height: 1.4;">
+              Quý khách tự do nhập số tiền muốn nạp ban đầu vào ví để trải nghiệm đặt cọc và đấu giá (Mặc định 1.000.000.000 ₫ hoặc tùy chỉnh).
+            </div>
           </div>
 
           <button type="submit" class="btn-submit-gold">
-            <span>Tạo Tài Khoản &amp; Nhận 10 Tỷ ₫ Trải Nghiệm</span>
-            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </button>
-        </form>
-
-        <!-- TAB 3: NHẬP PIN PHÒNG -->
-        <form id="pane-pin" class="auth-tab-panel" onsubmit="submitModalPin(event)">
-          <div class="form-group">
-            <label class="form-label" for="inp-pin-name">Tên hiển thị của bạn</label>
-            <input type="text" id="inp-pin-name" class="form-input" placeholder="Ví dụ: Lê Minh Đức (hoặc để trống để nhận tên tự động)">
-          </div>
-
-          <div class="form-group">
-            <label class="form-label" for="inp-pin-code">Mã PIN Phòng Đấu Giá (6 Chữ Số)</label>
-            <input type="text" id="inp-pin-code" class="form-input" placeholder="839201" maxlength="6" pattern="[0-9]{6}" required style="font-family: 'JetBrains Mono', monospace; font-size: 1.15rem; letter-spacing: 0.25em; text-align: center; font-weight: 800;">
-          </div>
-
-          <button type="submit" class="btn-submit-gold">
-            <span>Vào Thẳng Phòng Đấu Giá</span>
+            <span>Tạo Tài Khoản &amp; Vào Sàn Đấu Giá</span>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
           </button>
         </form>
@@ -1173,7 +1133,7 @@
   </div>
 
   <!-- Scripts -->
-  <script src="js/app-core.js?v=6.1"></script>
+  <script src="js/app-core.js?v=6.2"></script>
   <script>
     let pendingRedirect = null;
 
@@ -1205,14 +1165,15 @@
       }
     }
 
-    // Switch Tabs in Modal
+    // Switch Tabs in Modal (ONLY 2 TABS)
     function switchModalTab(tab) {
       document.querySelectorAll('.modal-tab-btn').forEach(b => b.classList.remove('active'));
       document.querySelectorAll('.auth-tab-panel').forEach(p => p.classList.remove('active'));
       hideAlert();
 
-      const btn = document.getElementById('modal-tab-' + tab);
-      const pane = document.getElementById('pane-' + tab);
+      const validTab = (tab === 'register') ? 'register' : 'login';
+      const btn = document.getElementById('modal-tab-' + validTab);
+      const pane = document.getElementById('pane-' + validTab);
       if (btn) btn.classList.add('active');
       if (pane) pane.classList.add('active');
     }
@@ -1253,13 +1214,15 @@
       }
     }
 
-    // Submit Register
+    // Submit Register (Parses Custom Balance Entered By User)
     function submitModalRegister(e) {
       e.preventDefault();
       hideAlert();
       const name = document.getElementById('inp-reg-name').value.trim();
       const email = document.getElementById('inp-reg-email').value.trim();
       const password = document.getElementById('inp-reg-pass').value;
+      const balanceRaw = document.getElementById('inp-reg-balance').value;
+      const balanceNum = Number(String(balanceRaw).replace(/[^0-9]/g, '')) || 1000000000;
       const store = window.AureliaApp || window.AuctionStore;
 
       if (!store) {
@@ -1267,42 +1230,15 @@
         return;
       }
 
-      const res = store.register(name, email, password, 10000000000);
+      const res = store.register(name, email, password, balanceNum);
       if (res && res.success) {
-        showAlert('Chào mừng <strong>' + res.user.fullName + '</strong>! Đã cấp thẻ <strong>' + res.user.paddleId + '</strong> kèm <strong>10 Tỷ ₫</strong> vào ví. Đang vào sàn...', false);
+        showAlert('Chào mừng <strong>' + res.user.fullName + '</strong>! Đã cấp thẻ <strong>' + res.user.paddleId + '</strong> với số vốn <strong>' + balanceNum.toLocaleString('vi-VN') + ' ₫</strong>. Đang vào sàn...', false);
         setTimeout(() => {
           window.location.href = getTargetUrl();
         }, 700);
       } else {
         showAlert(res.message || 'Đăng ký không thành công. Vui lòng thử lại!');
       }
-    }
-
-    // Submit PIN
-    function submitModalPin(e) {
-      e.preventDefault();
-      hideAlert();
-      const guestName = document.getElementById('inp-pin-name').value.trim();
-      const pin = document.getElementById('inp-pin-code').value.trim();
-      const store = window.AureliaApp || window.AuctionStore;
-
-      if (!pin || pin.length !== 6) {
-        showAlert('Mã PIN phải gồm đúng 6 chữ số!');
-        return;
-      }
-
-      if (store && typeof store.guestJoinByPin === 'function') {
-        const res = store.guestJoinByPin(pin, guestName);
-        if (res && res.success) {
-          showAlert('Đã xác thực mã PIN #' + pin + '! Đang vào phòng...', false);
-          setTimeout(() => {
-            window.location.href = 'live-room.html?room=' + encodeURIComponent(pin);
-          }, 400);
-          return;
-        }
-      }
-
-      window.location.href = 'live-room.html?room=' + encodeURIComponent(pin);
     }
 
     // Handle Lot Card Click
@@ -1338,15 +1274,15 @@
     window.addEventListener('DOMContentLoaded', () => {
       const params = new URLSearchParams(window.location.search);
       const tab = params.get('tab');
-      if (tab && ['login', 'register', 'pin'].includes(tab)) {
-        openAuthModal(tab);
+      if (tab === 'register') {
+        openAuthModal('register');
+      } else if (tab === 'login') {
+        openAuthModal('login');
       }
       const room = params.get('room');
       if (room) {
         pendingRedirect = 'live-room.html?room=' + encodeURIComponent(room);
-        openAuthModal('pin');
-        const pinInp = document.getElementById('inp-pin-code');
-        if (pinInp) pinInp.value = room;
+        openAuthModal('login');
       }
     });
   </script>
