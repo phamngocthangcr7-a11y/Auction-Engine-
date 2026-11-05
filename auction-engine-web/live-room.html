@@ -543,6 +543,17 @@
 </head>
 <body>
 
+  <!-- Syncing / Room Connection Overlay (Cross-Device Realtime Sync) -->
+  <div id="room-syncing-overlay" style="display: none; position: fixed; inset: 0; background: #0B0F17; z-index: 99999; flex-direction: column; align-items: center; justify-content: center; padding: 24px; text-align: center;">
+    <div id="sync-spinner" style="width: 48px; height: 48px; border: 4px solid rgba(245, 158, 11, 0.2); border-top-color: #F59E0B; border-radius: 50%; animation: spin 0.8s linear infinite; margin-bottom: 20px;"></div>
+    <h3 id="sync-overlay-title" style="color: #F8FAFC; font-size: 1.25rem; font-weight: 700; margin-bottom: 8px;">Đang Kết Nối Phòng Đấu Giá...</h3>
+    <p id="sync-overlay-desc" style="color: #94A3B8; font-size: 0.88rem; max-width: 460px; line-height: 1.6; margin-bottom: 20px;">Đang đồng bộ dữ liệu phiên đấu giá từ máy Chủ phòng qua mạng thời gian thực AUCTIONENGINE Relay.</p>
+    <div id="sync-overlay-actions" style="display: none; gap: 12px; justify-content: center; flex-wrap: wrap;">
+      <button type="button" class="btn btn-outline" onclick="window.location.href='auctions.html'" style="font-size: 0.85rem; padding: 8px 18px;">Về Danh Mục Phiên</button>
+      <button type="button" class="btn btn-primary" onclick="window.location.reload()" style="font-size: 0.85rem; padding: 8px 18px;">Thử Lại</button>
+    </div>
+  </div>
+
   <!-- Site Header Root -->
   <div id="site-header-root"></div>
 
@@ -1049,11 +1060,99 @@
       var urlParams = new URLSearchParams(window.location.search);
       var roomParam = urlParams.get('room') || urlParams.get('id') || '839201';
       var shareParam = urlParams.get('share');
+      var urlTitle = urlParams.get('t');
+      var urlPrice = urlParams.get('sp');
+      var urlCat = urlParams.get('cat');
 
-      // 1.5. Realtime Cross-Device Synchronization via Public MQTT WebSocket Relay
+      var catTitleMap = {
+        'watches': 'ĐỒNG HỒ CƠ THỤY SĨ',
+        'hypercars': 'SIÊU XE & MÔ TÔ',
+        'tech': 'THIẾT BỊ CÔNG NGHỆ',
+        'art': 'TRANH NGHỆ THUẬT & CỔ VẬT',
+        'memorabilia': 'KỶ VẬT & THỜI TRANG'
+      };
+
+      // 1. Kiểm tra phòng trong LocalStorage của máy hiện tại
+      var currentRoom = store.getRoom(roomParam);
+      if (!currentRoom) {
+        var allRooms = store.getRooms();
+        currentRoom = allRooms.find(function(r) {
+          return String(r.roomPin) === String(roomParam) || String(r.roomId) === String(roomParam);
+        }) || null;
+      }
+
+      // 2. Hydrate ngay nếu đường dẫn có tham số URL (?t=...&sp=...&cat=...) hoặc ?share=...
+      if (!currentRoom && (urlTitle || shareParam)) {
+        var sData = null;
+        if (shareParam) {
+          try {
+            var rawJson = decodeURIComponent(escape(atob(decodeURIComponent(shareParam))));
+            sData = JSON.parse(rawJson);
+          } catch(e) {}
+        }
+
+        var decodedTitle = urlTitle ? decodeURIComponent(urlTitle) : ((sData && sData.t) || 'Vật phẩm đấu giá');
+        var parsedStartPrice = Number(urlPrice) || (sData && Number(sData.sp)) || 1500000000;
+        var parsedCat = urlCat || (sData && sData.c) || 'watches';
+
+        currentRoom = {
+          roomId: (sData && sData.id) || ('room-' + roomParam),
+          id: (sData && sData.id) || ('lot-' + roomParam),
+          lotNumber: String(roomParam).slice(-3),
+          roomPin: String(roomParam),
+          title: decodedTitle,
+          category: parsedCat,
+          categoryName: catTitleMap[parsedCat] || 'TÀI SẢN CAO CẤP',
+          shortDesc: (sData && sData.d) || 'Phiên đấu giá được tạo và chia sẻ trực tiếp từ hệ thống AUCTIONENGINE.',
+          startPrice: parsedStartPrice,
+          currentPrice: (sData && Number(sData.cp)) || parsedStartPrice,
+          stepPrice: (sData && Number(sData.st)) || Math.max(10000000, Math.round(parsedStartPrice * 0.05)),
+          depositAmount: Math.round(parsedStartPrice * 0.15),
+          status: (sData && sData.status) || 'WAITING',
+          durationMinutes: (sData && Number(sData.dur)) || 15,
+          durationSeconds: (sData && Number(sData.durSec)) || 900,
+          startTime: null,
+          endTime: null,
+          featured: false,
+          leaderUid: '',
+          leaderName: '',
+          leaderPaddleId: '',
+          sellerId: (sData && sData.sellerId) || 'usr-host-remote',
+          sellerName: (sData && sData.host) || 'Chủ Phòng AUCTIONENGINE',
+          sellerPaddleId: '#HOST-COMMUNITY',
+          participantsCount: 1,
+          images: (sData && sData.imgs && sData.imgs.length > 0) ? sData.imgs : [
+            'assets/images/user_avatar.jpg'
+          ],
+          specs: (sData && sData.specs) || {
+            'Mã phiên': '#' + roomParam,
+            'Bảo chứng': 'AUCTIONENGINE Verified',
+            'Tình trạng': 'Mới niêm yết lên sàn'
+          },
+          appraisal: {
+            inspector: "AUCTIONENGINE Global Bureau",
+            score: '9.9/10 (Verified)',
+            certNo: 'AE-' + roomParam,
+            provenance: 'Chính chủ niêm yết'
+          }
+        };
+        store.upsertRoom(currentRoom);
+      }
+
+      // 3. Đồng bộ phòng qua MQTT Broker thời gian thực (EMQX Public WebSocket)
       var mqttClient = null;
-      var mqttClientId = 'aurelia_' + Math.random().toString(16).substring(2, 10);
+      var mqttClientId = 'ae_client_' + Math.random().toString(16).substring(2, 10);
       var mqttTopic = 'aurelia/auction/room/' + String(roomParam || '').replace(/[^0-9]/g, '');
+
+      function broadcastRoomToPeers(roomObj) {
+        if (mqttClient && mqttClient.connected && roomObj) {
+          mqttClient.publish(mqttTopic, JSON.stringify({
+            type: 'HOST_ROOM_BROADCAST',
+            senderId: mqttClientId,
+            room: roomObj
+          }), { retain: true, qos: 1 });
+        }
+      }
 
       try {
         if (typeof mqtt !== 'undefined' && typeof mqtt.connect === 'function') {
@@ -1061,22 +1160,52 @@
           mqttClient = mqtt.connect(brokerUrl, {
             clientId: mqttClientId,
             clean: true,
-            connectTimeout: 4000,
+            connectTimeout: 5000,
             reconnectPeriod: 5000
           });
 
           mqttClient.on('connect', function() {
-            console.log('[Realtime Relay] Connected to cross-device broker on topic:', mqttTopic);
-            mqttClient.subscribe(mqttTopic, { qos: 1 });
+            console.log('[Realtime Relay] Kết nối broker EMQX thành công, kênh:', mqttTopic);
+            mqttClient.subscribe(mqttTopic, { qos: 1 }, function() {
+              if (currentRoom) {
+                // Nếu mình là chủ phòng hoặc đã có dữ liệu phòng -> phát sóng lưu lại trên broker
+                broadcastRoomToPeers(currentRoom);
+              } else {
+                // Nếu vào phòng bằng PIN trên máy mới và chưa có dữ liệu -> gửi yêu cầu đồng bộ
+                mqttClient.publish(mqttTopic, JSON.stringify({
+                  type: 'REQUEST_ROOM_SYNC',
+                  senderId: mqttClientId,
+                  pin: roomParam
+                }));
+              }
+            });
           });
 
           mqttClient.on('message', function(t, payload) {
             try {
               var data = JSON.parse(payload.toString());
               if (!data || !data.type) return;
-              if (data.senderId === mqttClientId) return; // Ignore own echoes
+              if (data.senderId === mqttClientId) return; // Bỏ qua echo của chính mình
 
-              if (data.type === 'NEW_BID' && data.bid) {
+              // Đồng bộ phòng từ máy chủ phòng sang máy khách
+              if ((data.type === 'HOST_ROOM_BROADCAST' || data.type === 'ROOM_SYNC') && data.room) {
+                if (String(data.room.roomPin) === String(roomParam)) {
+                  store.upsertRoom(data.room);
+                  currentRoom = data.room;
+                  window.roomId = currentRoom.roomId;
+                  var syncOverlay = document.getElementById('room-syncing-overlay');
+                  if (syncOverlay) syncOverlay.style.display = 'none';
+                  renderRoom();
+                  if (window.showToast) {
+                    window.showToast('Đồng bộ thành công', 'Đã tải dữ liệu phòng #' + roomParam + ' từ Chủ phòng!', 'success', 2000);
+                  }
+                }
+              } else if (data.type === 'REQUEST_ROOM_SYNC') {
+                // Máy khác vừa vào và xin dữ liệu phòng -> Chủ phòng phản hồi ngay
+                if (currentRoom) {
+                  broadcastRoomToPeers(currentRoom);
+                }
+              } else if (data.type === 'NEW_BID' && data.bid) {
                 var currentBids = store.getBids(window.roomId);
                 if (!currentBids.some(function(b) { return b.id === data.bid.id; })) {
                   store.addBid(data.bid);
@@ -1097,112 +1226,38 @@
                 renderRoom();
               }
             } catch (err) {
-              console.warn('[Realtime Relay] Message error:', err);
+              console.warn('[Realtime Relay] Lỗi xử lý tin nhắn MQTT:', err);
             }
           });
         }
       } catch (e) {
-        console.warn('[Realtime Relay] MQTT not initialized:', e);
+        console.warn('[Realtime Relay] Không thể khởi tạo MQTT:', e);
       }
 
-      // Hydrate from Shareable URL if provided
-      if (shareParam) {
-        try {
-          var rawJson = decodeURIComponent(escape(atob(decodeURIComponent(shareParam))));
-          var sData = JSON.parse(rawJson);
-          if (sData && sData.pin) {
-            var hydratedRoom = {
-              roomId: sData.id || ('room-' + sData.pin),
-              id: sData.id || ('lot-' + sData.pin),
-              lotNumber: String(sData.pin).slice(-3),
-              roomPin: String(sData.pin),
-              title: sData.t || 'Phiên Đấu Giá Niêm Yết',
-              category: sData.c || 'watches',
-              categoryName: sData.cn || 'Đồng hồ Cơ Thụy Sĩ',
-              shortDesc: sData.d || 'Phiên đấu giá được tạo và chia sẻ từ hệ thống AUCTIONENGINE Fine Auctions.',
-              startPrice: Number(sData.sp) || 1500000000,
-              currentPrice: Number(sData.cp) || Number(sData.sp) || 1500000000,
-              stepPrice: Number(sData.st) || 50000000,
-              depositAmount: Number(sData.dp) || Math.round((Number(sData.sp) || 1500000000) * 0.15),
-              status: sData.status || 'WAITING',
-              durationMinutes: Number(sData.dur) || 15,
-              durationSeconds: Number(sData.durSec) || ((Number(sData.dur) || 15) * 60),
-              startTime: null,
-              endTime: null,
-              featured: false,
-              leaderUid: '',
-              leaderName: '',
-              leaderPaddleId: '',
-              sellerId: sData.sellerId || 'usr-host-remote',
-              sellerName: sData.host || 'Chủ Phòng AUCTIONENGINE',
-              sellerPaddleId: '#HOST-COMMUNITY',
-              participantsCount: 1,
-              images: (sData.imgs && sData.imgs.length >= 3) ? sData.imgs : [
-                'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=1200&q=85',
-                'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=1200&q=85',
-                'https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?auto=format&fit=crop&w=1200&q=85'
-              ],
-              specs: sData.specs || {
-                'Thương hiệu': 'Geneva Certified Piece',
-                'Xuất xứ': 'Geneva, Thụy Sĩ',
-                'Tình trạng': 'Mới 100% Nguyên bản'
-              },
-              appraisal: {
-                inspector: "AUCTIONENGINE Global Curators Bureau",
-                score: '9.9/10 (Verified)',
-                certNo: 'PP-CH-' + sData.pin,
-                provenance: 'Bộ sưu tập tư nhân Geneva'
-              }
-            };
-            store.upsertRoom(hydratedRoom);
-            roomParam = String(sData.pin);
-            if (window.showToast) {
-              window.showToast('Đã nhận phòng đấu giá', 'Tải thành công phiên đấu giá #' + sData.pin + ' từ liên kết mời!', 'success', 2500);
-            }
+      // 4. Xử lý trường hợp chưa có phòng (máy khách mới vào bằng mã PIN)
+      if (!currentRoom) {
+        var overlay = document.getElementById('room-syncing-overlay');
+        if (overlay) {
+          overlay.style.display = 'flex';
+          document.getElementById('sync-overlay-title').textContent = 'Đang Tìm Phiên Đấu Giá #' + roomParam + '...';
+        }
+
+        // Chờ phản hồi đồng bộ qua MQTT trong 5 giây
+        setTimeout(function() {
+          if (!currentRoom) {
+            var spinner = document.getElementById('sync-spinner');
+            if (spinner) spinner.style.display = 'none';
+            document.getElementById('sync-overlay-title').textContent = '⚠️ Không Tìm Thấy Phòng Đấu Giá #' + roomParam;
+            document.getElementById('sync-overlay-desc').textContent = 'Phòng đấu giá này chưa được tạo hoặc Chủ phòng chưa mở mạng kết nối. Vui lòng kiểm tra lại mã PIN!';
+            var actions = document.getElementById('sync-overlay-actions');
+            if (actions) actions.style.display = 'flex';
           }
-        } catch (e) {
-          console.error('Lỗi giải mã liên kết chia sẻ:', e);
-        }
-      }
-
-      var currentRoom = store.getRoom(roomParam);
-      if (!currentRoom) {
-        var allRooms = store.getRooms();
-        currentRoom = allRooms.find(function(r) {
-          return String(r.roomPin) === String(roomParam) || String(r.roomId) === String(roomParam);
-        }) || (allRooms.length > 0 ? allRooms[0] : null);
-      }
-
-      if (!currentRoom) {
-        if (window.showToast) {
-          window.showToast('Không tìm thấy phòng', 'Phòng đấu giá không tồn tại trên hệ thống!', 'error');
-        } else {
-          alert('Không tìm thấy phòng đấu giá hợp lệ!');
-        }
-        window.location.href = 'index.html';
+        }, 5000);
         return;
       }
 
-      // 3. Auto-Migration of Images for Luxury Watch lots (Never show silver watch on book)
-      (function migrateImagesIfNeeded() {
-        if (!currentRoom) return;
-        var t = (currentRoom.title || '').toLowerCase();
-        var isPatekOrWatch = t.indexOf('patek') !== -1 || t.indexOf('nautilus') !== -1 || t.indexOf('5711') !== -1 || currentRoom.category === 'watches';
-        var hasSilverWatch = currentRoom.images && currentRoom.images.some(function(img) {
-          return img.indexOf('1524805444758') !== -1 || img.indexOf('1522335789203') !== -1;
-        });
-
-        if (hasSilverWatch || (isPatekOrWatch && (!currentRoom.images || currentRoom.images.length < 3))) {
-          currentRoom.images = [
-            'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=1200&q=85',
-            'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=1200&q=85',
-            'https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?auto=format&fit=crop&w=1200&q=85'
-          ];
-          store.upsertRoom(currentRoom);
-        }
-      })();
-
-            window.roomId = currentRoom.roomId;
+      // Đã có phòng hợp lệ
+      window.roomId = currentRoom.roomId;
       var clockInterval = null;
       var soundSystem = null;
       try {

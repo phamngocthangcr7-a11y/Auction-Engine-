@@ -451,27 +451,30 @@ function renderModals() {
             </div>
           </div>
 
-          <!-- WiFi & Mobile Scanning Notice -->
+          <!-- Online Vercel & Mobile Scanning Notice -->
           <div style="background: rgba(5, 150, 105, 0.08); border: 1px solid rgba(5, 150, 105, 0.25); border-radius: var(--radius-sm); padding: 10px 14px; margin-bottom: 12px; font-size: 0.75rem; color: #065F46; text-align: left; line-height: 1.45;">
             <div style="font-weight: 700; margin-bottom: 3px; display: flex; align-items: center; gap: 6px;">
-              <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; stroke: #059669; flex-shrink: 0;"><path d="M5 12.55a11 11 0 0 1 14.08 0"></path><path d="M1.42 9a16 16 0 0 1 21.16 0"></path><path d="M8.53 16.11a6 6 0 0 1 6.95 0"></path><line x1="12" y1="20" x2="12.01" y2="20"></line></svg>
-              <span>Chia sẻ cho Điện thoại & Thiết bị khác (Cùng Wi-Fi):</span>
+              <svg viewBox="0 0 24 24" style="width: 15px; height: 15px; stroke: #059669; flex-shrink: 0;"><circle cx="12" cy="12" r="10"></circle><line x1="2" y1="12" x2="22" y2="12"></line><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"></path></svg>
+              <span>Kết Nối Mọi Thiết Bị (4G / 5G / Wi-Fi Toàn Cầu):</span>
             </div>
-            <div>Mã QR và Link đã được <strong>tự động gắn IP Wi-Fi máy tính (192.168.1.241)</strong> thay vì 127.0.0.1 để điện thoại kết nối thẳng vào phòng, không bị lỗi mạng. Điện thoại chỉ cần bật camera quét là vào ngay!</div>
+            <div>Mã QR và Link đã được <strong>liên kết trực tiếp lên Vercel Online</strong> (https://auction-engine-071.vercel.app). Bất kỳ điện thoại hay máy tính nào chỉ cần bật camera quét là vào thẳng phòng đấu giá ngay!</div>
           </div>
 
           <!-- Base Server / Domain Switcher with 1-Click Fast Buttons -->
           <div class="form-group" style="text-align: left; margin-bottom: 12px;">
             <label class="form-label" for="invite-server-host" style="font-size: 0.74rem; font-weight: 600; display: flex; justify-content: space-between; margin-bottom: 4px;">
               <span>Máy chủ phát hành liên kết:</span>
-              <span style="font-weight: 400; color: var(--text-muted);">IP LAN hoặc Domain</span>
+              <span style="font-weight: 400; color: var(--text-muted);">Vercel Online hoặc IP Wi-Fi</span>
             </label>
             <div class="flex gap-2" style="margin-bottom: 6px;">
-              <input type="text" id="invite-server-host" class="form-control" style="font-size: 0.75rem; font-family: var(--font-mono); padding: 7px 10px;" placeholder="http://192.168.1.241:5500" />
+              <input type="text" id="invite-server-host" class="form-control" style="font-size: 0.75rem; font-family: var(--font-mono); padding: 7px 10px;" placeholder="https://auction-engine-071.vercel.app" />
             </div>
             <div style="display: flex; gap: 6px; flex-wrap: wrap;">
-              <button type="button" id="btn-use-lan-ip" class="btn btn--secondary btn--sm" style="font-size: 0.7rem; padding: 3px 8px; font-weight: 600;">
-                📲 IP Wi-Fi: 192.168.1.241:5500 (Quét ĐT)
+              <button type="button" id="btn-use-vercel" class="btn btn--secondary btn--sm" style="font-size: 0.7rem; padding: 4px 10px; font-weight: 700; background: #059669; color: #FFF; border-color: #059669;">
+                🌐 Vercel Online (Mọi mạng 4G/Wi-Fi)
+              </button>
+              <button type="button" id="btn-use-lan-ip" class="btn btn--outline btn--sm" style="font-size: 0.7rem; padding: 3px 8px;">
+                📲 Wi-Fi LAN: 192.168.1.175:5500
               </button>
               <button type="button" id="btn-use-localhost" class="btn btn--outline btn--sm" style="font-size: 0.7rem; padding: 3px 8px;">
                 💻 Localhost:5500
@@ -1219,52 +1222,22 @@ window.openRoomInviteModal = function(roomId) {
   const pinDisplay = document.getElementById('invite-room-pin-display');
   if (pinDisplay) pinDisplay.textContent = room.roomPin;
 
-  // 1. Tạo gói dữ liệu rút gọn (Compact Share Payload) để mã hóa vào link
-  const sharePayload = {
-    pin: room.roomPin,
-    id: room.roomId || room.id,
-    t: room.title,
-    c: room.category,
-    cn: room.categoryName,
-    d: room.shortDesc || '',
-    sp: room.startPrice,
-    cp: room.currentPrice || room.startPrice,
-    st: room.stepPrice,
-    dp: room.depositAmount,
-    dur: room.durationMinutes || 15,
-    durSec: room.durationSeconds || ((room.durationMinutes || 15) * 60),
-    imgs: (room.images && room.images.length > 0) ? room.images.slice(0, 4) : [],
-    specs: room.specs || {},
-    host: room.sellerName || 'AUCTIONENGINE Curators',
-    sellerId: room.sellerId || 'usr-host-remote',
-    status: room.status || 'WAITING'
-  };
-
-  let encodedShare = '';
-  try {
-    encodedShare = encodeURIComponent(btoa(unescape(encodeURIComponent(JSON.stringify(sharePayload)))));
-  } catch(e) {
-    console.error('Lỗi mã hóa dữ liệu phòng:', e);
-  }
-
-  // 2. Tự động xác định host phù hợp (Public Domain / LAN IP 192.168.1.241 / Localhost)
+  // 1. Tự động xác định host phù hợp (Ưu tiên Vercel Online công khai để điện thoại quét QR kết nối được ngay)
+  const vercelPublicOrigin = 'https://auction-engine-071.vercel.app';
   const isFileProto = window.location.protocol === 'file:';
   const isLocalHost = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
-  const detectedLanIp = '192.168.1.241';
+  const detectedLanIp = '192.168.1.175';
   const currentPort = window.location.port || '5500';
   const hostInput = document.getElementById('invite-server-host');
   
-  // Nếu đang chạy trên Domain công khai (Vercel, Netlify, GitHub Pages, Localtunnel): dùng thẳng origin
-  // Nếu đang chạy local/file trên máy tính: dùng IP LAN để điện thoại quét QR kết nối được
-  let defaultHost = window.location.origin;
-  if (isLocalHost || isFileProto) {
-    defaultHost = `http://${detectedLanIp}:${currentPort}`;
+  // Mặc định luôn ưu tiên link Vercel để quét bằng điện thoại (4G / 5G / Wi-Fi) không bao giờ bị lỗi kết nối
+  let defaultHost = vercelPublicOrigin;
+  if (!isLocalHost && !isFileProto && window.location.origin && window.location.origin !== 'null') {
+    defaultHost = window.location.origin;
   }
 
   if (hostInput) {
-    if (!hostInput.value || (isLocalHost && (hostInput.value.includes('localhost') || hostInput.value.includes('127.0.0.1')))) {
-      hostInput.value = defaultHost;
-    }
+    hostInput.value = defaultHost;
   }
 
   const updateInviteUrls = function() {
@@ -1273,7 +1246,6 @@ window.openRoomInviteModal = function(roomId) {
       baseHost = defaultHost;
     }
 
-    // Đảm bảo đường dẫn luôn bao gồm thư mục /auction-engine-web nếu server đặt tại thư mục gốc BTLWeb
     let folderPath = '/auction-engine-web';
     if (!isFileProto && window.location.pathname) {
       const p = window.location.pathname;
@@ -1284,25 +1256,35 @@ window.openRoomInviteModal = function(roomId) {
       }
     }
 
-    // Tạo link chuẩn 100% không dính 127.0.0.1 hay đĩa D
-    const shareUrl = `${baseHost}${folderPath}/live-room.html?room=${room.roomPin}${encodedShare ? '&share=' + encodedShare : ''}`;
+    // Link ngắn gọn, chuẩn 100%, không chứa chuỗi base64 khổng lồ để quét QR cực nhanh
+    const cleanTitle = encodeURIComponent(String(room.title || '').trim().substring(0, 40));
+    const shareUrl = `${baseHost}${folderPath}/live-room.html?room=${room.roomPin}&t=${cleanTitle}&sp=${room.startPrice || 0}&cat=${room.category || 'watches'}`;
     const urlInput = document.getElementById('invite-url-input');
     if (urlInput) urlInput.value = shareUrl;
 
-    // 3. Render Mã QR Code THẬT quét được bằng điện thoại
+    // Render Mã QR Code to rõ, ô nét, quét bằng camera điện thoại siêu nhạy trong 0.1s
     const qrImg = document.getElementById('invite-qr-img');
     if (qrImg) {
-      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=220x220&margin=8&data=${encodeURIComponent(shareUrl)}`;
+      const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=260x260&margin=6&data=${encodeURIComponent(shareUrl)}`;
       qrImg.src = qrApiUrl;
       qrImg.onerror = function() {
         this.onerror = null;
-        this.src = `https://chart.googleapis.com/chart?chs=220x220&cht=qr&chl=${encodeURIComponent(shareUrl)}&choe=UTF-8`;
+        this.src = `https://chart.googleapis.com/chart?chs=260x260&cht=qr&chl=${encodeURIComponent(shareUrl)}&choe=UTF-8`;
       };
     }
   };
 
+  updateInviteUrls();
+
   if (hostInput) {
     hostInput.oninput = updateInviteUrls;
+  }
+  const btnUseVercel = document.getElementById('btn-use-vercel');
+  if (btnUseVercel) {
+    btnUseVercel.onclick = function() {
+      if (hostInput) hostInput.value = vercelPublicOrigin;
+      updateInviteUrls();
+    };
   }
   const btnUseLan = document.getElementById('btn-use-lan-ip');
   if (btnUseLan) {
@@ -1318,8 +1300,6 @@ window.openRoomInviteModal = function(roomId) {
       updateInviteUrls();
     };
   }
-
-  updateInviteUrls();
 
   // Nút sao chép mã PIN nhanh
   const btnQuickCopyPin = document.getElementById('btn-quick-copy-pin');

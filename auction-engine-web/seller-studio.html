@@ -284,6 +284,7 @@
                 <button type="button" class="cat-select-btn" data-cat="hypercars">Siêu xe & Mô tô</button>
                 <button type="button" class="cat-select-btn" data-cat="tech">Công nghệ & Máy ảnh</button>
                 <button type="button" class="cat-select-btn" data-cat="art">Nghệ thuật & Cổ vật</button>
+                <button type="button" class="cat-select-btn" data-cat="memorabilia">Kỷ vật & Thời trang</button>
               </div>
               <input type="hidden" id="f-category" name="category" value="watches" />
             </div>
@@ -627,6 +628,7 @@
   <div id="modals-root"></div>
 
   <!-- Scripts -->
+  <script src="js/mqtt.min.js"></script>
   <script src="js/app-core.js"></script>
   <script src="components/header.js"></script>
   <script src="components/footer.js"></script>
@@ -641,7 +643,8 @@
         'watches': 'ĐỒNG HỒ CƠ THỤY SĨ',
         'hypercars': 'SIÊU XE & MÔ TÔ',
         'tech': 'THIẾT BỊ CÔNG NGHỆ',
-        'art': 'TRANH NGHỆ THUẬT & CỔ VẬT'
+        'art': 'TRANH NGHỆ THUẬT & CỔ VẬT',
+        'memorabilia': 'KỶ VẬT & THỜI TRANG'
       };
 
       // 1. Preset Thumbnails Click
@@ -785,14 +788,37 @@
         fileInput.addEventListener('change', function(e) {
           var file = e.target.files && e.target.files[0];
           if (file) {
+            var statusEl = document.getElementById('file-upload-status');
+            if (statusEl) statusEl.textContent = 'Đang tối ưu hóa hình ảnh...';
             var reader = new FileReader();
             reader.onload = function(evt) {
-              var dataUrl = evt.target.result;
-              document.getElementById('f-image-url').value = dataUrl;
-              document.getElementById('preview-card-img').src = dataUrl;
-              document.querySelectorAll('.preset-img-thumb').forEach(function(t) { t.classList.remove('selected'); });
-              var statusEl = document.getElementById('file-upload-status');
-              if (statusEl) statusEl.textContent = 'Đã chọn ảnh: ' + file.name + ' (' + Math.round(file.size / 1024) + ' KB)';
+              var img = new Image();
+              img.onload = function() {
+                try {
+                  var canvas = document.createElement('canvas');
+                  var maxDim = 900;
+                  var w = img.width;
+                  var h = img.height;
+                  if (w > maxDim || h > maxDim) {
+                    if (w > h) { h = Math.round(h * maxDim / w); w = maxDim; }
+                    else { w = Math.round(w * maxDim / h); h = maxDim; }
+                  }
+                  canvas.width = w;
+                  canvas.height = h;
+                  var ctx = canvas.getContext('2d');
+                  ctx.drawImage(img, 0, 0, w, h);
+                  var compressed = canvas.toDataURL('image/jpeg', 0.84);
+                  document.getElementById('f-image-url').value = compressed;
+                  document.getElementById('preview-card-img').src = compressed;
+                  document.querySelectorAll('.preset-img-thumb').forEach(function(t) { t.classList.remove('selected'); });
+                  if (statusEl) statusEl.textContent = 'Đã tải ảnh: ' + file.name + ' (Đã nén tối ưu: ' + Math.round(compressed.length / 1024) + ' KB)';
+                } catch(err) {
+                  document.getElementById('f-image-url').value = evt.target.result;
+                  document.getElementById('preview-card-img').src = evt.target.result;
+                  if (statusEl) statusEl.textContent = 'Đã tải ảnh: ' + file.name;
+                }
+              };
+              img.src = evt.target.result;
             };
             reader.readAsDataURL(file);
           }
@@ -867,7 +893,25 @@
 
         if (result && result.success) {
           var roomPin = result.room.roomPin;
-          var targetUrl = 'live-room.html?room=' + roomPin + '&created=true';
+          var cleanTitleParam = encodeURIComponent(title.substring(0, 40));
+          var targetUrl = 'live-room.html?room=' + roomPin + '&t=' + cleanTitleParam + '&sp=' + startPrice + '&cat=' + catKey + '&created=true';
+
+          // Broadcast to public MQTT broker with retain: true so any other phone or device immediately gets the room
+          try {
+            if (typeof mqtt !== 'undefined' && typeof mqtt.connect === 'function') {
+              var c = mqtt.connect('wss://broker.emqx.io:8084/mqtt', { clientId: 'seller_' + Math.random().toString(16).substring(2, 8), clean: true });
+              c.on('connect', function() {
+                var t = 'aurelia/auction/room/' + roomPin;
+                c.publish(t, JSON.stringify({
+                  type: 'HOST_ROOM_BROADCAST',
+                  senderId: 'seller',
+                  room: result.room
+                }), { retain: true, qos: 1 }, function() {
+                  setTimeout(function() { c.end(); }, 1500);
+                });
+              });
+            }
+          } catch(e) {}
 
           var successModal = document.getElementById('modal-create-success');
           document.getElementById('success-room-pin-display').textContent = '#' + roomPin;
@@ -888,16 +932,18 @@
             }
           };
 
-          // Copy Link
+          // Copy Link: Always prioritize the live Vercel link so it can be opened on ANY phone/4G/Wi-Fi
           document.getElementById('btn-copy-room-link').onclick = function() {
-            var fullUrl = window.location.href.split('?')[0];
-            fullUrl = fullUrl.substring(0, fullUrl.lastIndexOf('/')) + '/' + targetUrl;
+            var origin = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.protocol === 'file:')
+              ? 'https://auction-engine-071.vercel.app'
+              : window.location.origin;
+            var fullUrl = origin + '/auction-engine-web/' + targetUrl;
             if (navigator.clipboard) {
               navigator.clipboard.writeText(fullUrl).then(function() {
                 if (window.showToast) {
-                  window.showToast('Đã sao chép link', 'Đường dẫn phòng đấu giá đã được lưu vào bộ nhớ tạm.', 'success');
+                  window.showToast('Đã sao chép link Vercel', 'Link Vercel mở trên mọi điện thoại & thiết bị đã lưu vào bộ nhớ tạm.', 'success');
                 } else {
-                  alert('Đã sao chép link phòng đấu giá vào bộ nhớ tạm.');
+                  alert('Đã sao chép link phòng đấu giá vào bộ nhớ tạm: ' + fullUrl);
                 }
               });
             } else {
