@@ -2317,7 +2317,13 @@
   AppCore.prototype.getRooms = function () {
     try {
       var data = localStorage.getItem(STORAGE_KEYS.ROOMS);
-      return data ? JSON.parse(data) : getInitialRooms();
+      var parsed = data ? JSON.parse(data) : null;
+      if (!parsed || !Array.isArray(parsed) || parsed.length === 0) {
+        var initial = getInitialRooms();
+        localStorage.setItem(STORAGE_KEYS.ROOMS, JSON.stringify(initial));
+        return initial;
+      }
+      return parsed;
     } catch (e) {
       return getInitialRooms();
     }
@@ -2931,9 +2937,16 @@
   AppCore.prototype.getDeposits = function (roomId) {
     try {
       var data = localStorage.getItem(STORAGE_KEYS.DEPOSITS);
-      var all = data ? JSON.parse(data) : getInitialDeposits();
+      var all = data ? JSON.parse(data) : null;
+      if (!all || !Array.isArray(all) || all.length === 0) {
+        all = getInitialDeposits();
+        localStorage.setItem(STORAGE_KEYS.DEPOSITS, JSON.stringify(all));
+      }
       if (roomId) {
-        return all.filter(function (d) { return d.roomId === roomId; });
+        var cleanId = String(roomId).replace('room-', '');
+        return all.filter(function (d) {
+          return d.roomId === roomId || d.roomId === cleanId || String(d.roomId).replace('room-', '') === cleanId;
+        });
       }
       return all;
     } catch (e) {
@@ -3583,6 +3596,61 @@
   // EXPORT TO WINDOW (GLOBAL SINGLETON)
   // =========================================================================
   AppCore.prototype.STORAGE_KEYS = STORAGE_KEYS;
+  
+  AppCore.prototype.setupGlobalRoomSync = function () {
+    var self = this;
+    if (typeof mqtt === 'undefined' || typeof mqtt.connect !== 'function') return;
+
+    try {
+      var gClient = mqtt.connect('wss://broker.emqx.io:8084/mqtt', {
+        clientId: 'ae_g_' + Math.random().toString(16).substring(2, 8),
+        clean: true,
+        connectTimeout: 5000,
+        reconnectPeriod: 10000
+      });
+
+      window.globalMqttClient = gClient;
+
+      gClient.on('connect', function () {
+        gClient.subscribe('aurelia/auction/global/rooms', { qos: 1 });
+      });
+
+      gClient.on('message', function (topic, message) {
+        try {
+          var data = JSON.parse(message.toString());
+          if (!data || !data.room) return;
+
+          if (data.type === 'NEW_GLOBAL_ROOM' || data.type === 'GLOBAL_ROOM_UPDATE') {
+            var incoming = data.room;
+            var rooms = self.getRooms();
+            var idx = rooms.findIndex(function (r) {
+              return r.roomId === incoming.roomId || r.roomPin === incoming.roomPin;
+            });
+
+            if (idx === -1) {
+              rooms.unshift(incoming);
+              localStorage.setItem(STORAGE_KEYS.ROOMS, JSON.stringify(rooms));
+              self.notify('GLOBAL_ROOM_ADDED', incoming);
+              window.dispatchEvent(new CustomEvent('aurelia:rooms-updated', { detail: incoming }));
+              if (window.showToast && !data.silent) {
+                window.showToast('Phiên đấu giá mới!', incoming.title + ' vừa xuất hiện (#PIN: ' + incoming.roomPin + ')', 'info', 4000);
+              }
+            } else {
+              rooms[idx] = Object.assign(rooms[idx], incoming);
+              localStorage.setItem(STORAGE_KEYS.ROOMS, JSON.stringify(rooms));
+              self.notify('GLOBAL_ROOM_UPDATED', incoming);
+              window.dispatchEvent(new CustomEvent('aurelia:rooms-updated', { detail: incoming }));
+            }
+          }
+        } catch (e) {
+          console.warn('[GlobalSync] message error', e);
+        }
+      });
+    } catch (e) {
+      console.warn('[GlobalSync] Init error:', e);
+    }
+  };
+
   var coreInstance = new AppCore();
   window.STORAGE_KEYS = STORAGE_KEYS;
   window.AureliaApp = coreInstance;
