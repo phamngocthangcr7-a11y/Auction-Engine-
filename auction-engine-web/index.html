@@ -1143,6 +1143,14 @@
       renderUpcomingSection();
       renderLeaderboards();
 
+      // Listen to cross-device global room updates
+      window.addEventListener('aurelia:rooms-updated', function() {
+        if (typeof window.applyHomeFilters === 'function') window.applyHomeFilters();
+        if (typeof renderUpcomingSection === 'function') renderUpcomingSection();
+        if (typeof renderLeaderboards === 'function') renderLeaderboards();
+      });
+
+
       // Listen for realtime updates
       if (store && typeof store.subscribe === 'function') {
         store.subscribe(function() {
