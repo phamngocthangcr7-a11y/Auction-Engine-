@@ -1,3 +1,49 @@
+const AE_LOGO_CREST_SVG = `<svg class="ae-brand-emblem" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 38px; height: 38px; min-width: 38px; min-height: 38px; flex-shrink: 0; filter: drop-shadow(0 2px 8px rgba(245, 158, 11, 0.35));">
+  <defs>
+    <linearGradient id="aeFtrShieldBg" x1="0" y1="0" x2="38" y2="38" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1F2430"/>
+      <stop offset="55%" stop-color="#0F131C"/>
+      <stop offset="100%" stop-color="#080A0F"/>
+    </linearGradient>
+    <linearGradient id="aeFtrGoldGrad" x1="0" y1="0" x2="38" y2="38" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="35%" stop-color="#F59E0B"/>
+      <stop offset="85%" stop-color="#D97706"/>
+      <stop offset="100%" stop-color="#B45309"/>
+    </linearGradient>
+    <linearGradient id="aeFtrGavelGrad" x1="10" y1="10" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFBEB"/>
+      <stop offset="60%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+  </defs>
+
+  <path d="M19 1.8L34.5 7.2V19.5C34.5 28.2 27.8 34.6 19 36.8C10.2 34.6 3.5 28.2 3.5 19.5V7.2L19 1.8Z" 
+        fill="url(#aeFtrShieldBg)" 
+        stroke="url(#aeFtrGoldGrad)" 
+        stroke-width="1.8" 
+        stroke-linejoin="round"/>
+
+  <path d="M19 4.2L32 8.7V19C32 26.6 26.3 32.2 19 34.2C11.7 32.2 6 26.6 6 19V8.7L19 4.2Z" 
+        stroke="url(#aeFtrGoldGrad)" 
+        stroke-width="0.65" 
+        stroke-opacity="0.4" 
+        fill="none"/>
+
+  <path d="M19 8.2L12 26.5H15.2L16.9 22H21.1L22.8 26.5H26L19 8.2ZM17.9 19.2L19 14.8L20.1 19.2H17.9Z" 
+        fill="url(#aeFtrGoldGrad)" 
+        fill-rule="evenodd"/>
+
+  <g transform="rotate(42 19 19)">
+    <rect x="15.8" y="7.5" width="6.4" height="9.5" rx="1.2" fill="url(#aeFtrGavelGrad)" stroke="#FEF3C7" stroke-width="0.5"/>
+    <rect x="15.2" y="11" width="7.6" height="2.5" rx="0.4" fill="#FFFBEB"/>
+    <rect x="18.2" y="17" width="1.6" height="13.5" rx="0.8" fill="url(#aeFtrGoldGrad)"/>
+    <circle cx="19" cy="30.5" r="1.3" fill="#FDE68A"/>
+  </g>
+
+  <polygon points="19,3.5 19.8,5.2 21.6,5.2 20.2,6.3 20.7,8 19,6.9 17.3,8 17.8,6.3 16.4,5.2 18.2,5.2" fill="#FFFBEB"/>
+</svg>`;
+
 /**
  * AURELIA FINE AUCTIONS - FOOTER COMPONENT
  * Clean Swiss Editorial Design (Sotheby's × Bring a Trailer)
@@ -16,13 +62,16 @@ function renderFooter() {
         <div class="site-footer__grid">
           <!-- Col 1: Brand Info -->
           <div class="site-footer__brand-col">
-            <div style="margin-bottom: 16px;">
-              <span style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text-primary); display: block;">
-                AUCTION<span style="color: #F59E0B;">ENGINE</span>
-              </span>
-              <span style="font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">
-                SÀN ĐẤU GIÁ TRỰC TUYẾN
-              </span>
+            <div style="display: flex; align-items: center; gap: 12px; margin-bottom: 16px;">
+              ${AE_LOGO_CREST_SVG}
+              <div style="display: flex; flex-direction: column;">
+                <span style="font-family: var(--font-heading); font-size: 1.4rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text-primary); display: block;">
+                  AUCTION<span style="color: #F59E0B;">ENGINE</span>
+                </span>
+                <span style="font-size: 0.6rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--text-muted); font-weight: 700;">
+                  SÀN ĐẤU GIÁ TRỰC TUYẾN
+                </span>
+              </div>
             </div>
             <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.6; margin-bottom: 16px; max-width: 380px;">
               Nhà đấu giá giám định trực tuyến chuyên biệt về đồng hồ Thụy Sĩ độc bản, siêu xe cổ điển, thiết bị công nghệ nguyên mẫu và các tác phẩm nghệ thuật có bảo chứng pháp lý.

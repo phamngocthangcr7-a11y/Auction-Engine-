@@ -1,0 +1,1225 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Cổng Đấu Giá Quốc Tế & Xác Thực • AUCTIONENGINE (Geneva • London • New York)</title>
+  <meta name="description" content="AUCTIONENGINE - Sàn đấu giá trực tuyến quốc tế hàng đầu dành cho Đồng hồ cơ Thụy Sĩ, Siêu xe, Thiết bị công nghệ nguyên mẫu và Kiệt tác nghệ thuật. Đăng nhập hoặc Đăng ký để nhận Thẻ Đấu Giá #Paddle ID.">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Core CSS -->
+  <link rel="stylesheet" href="css/tokens.css">
+  <link rel="stylesheet" href="css/base.css">
+  <link rel="stylesheet" href="css/layout.css">
+  <link rel="stylesheet" href="css/components.css">
+
+  <style>
+    :root {
+      --gold-primary: #F59E0B;
+      --gold-light: #FDE68A;
+      --gold-dark: #D97706;
+      --bg-dark-obsidian: #080B11;
+      --bg-card-glass: rgba(15, 20, 32, 0.88);
+      --border-gold-subtle: rgba(245, 158, 11, 0.22);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark-obsidian);
+      color: #F8FAFC;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+      background-image: 
+        radial-gradient(circle at 15% 20%, rgba(245, 158, 11, 0.08) 0%, transparent 40%),
+        radial-gradient(circle at 85% 75%, rgba(16, 185, 129, 0.05) 0%, transparent 45%),
+        linear-gradient(180deg, #07090E 0%, #0B0F17 50%, #05070B 100%);
+    }
+
+    /* Top Executive Header */
+    .welcome-header {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(8, 11, 17, 0.9);
+      backdrop-filter: blur(16px);
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      height: 72px;
+      display: flex;
+      align-items: center;
+    }
+
+    .welcome-header__inner {
+      width: 100%;
+      max-width: 1360px;
+      margin: 0 auto;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+    }
+
+    .welcome-brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+    }
+
+    .welcome-metrics {
+      display: flex;
+      align-items: center;
+      gap: 18px;
+    }
+
+    .metric-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 0.76rem;
+      font-weight: 600;
+      color: #CBD5E1;
+      padding: 6px 12px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 9999px;
+      white-space: nowrap;
+    }
+
+    .pulse-dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background-color: #10B981;
+      box-shadow: 0 0 8px #10B981;
+      animation: pulseAnim 2s infinite;
+    }
+
+    @keyframes pulseAnim {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.3); }
+    }
+
+    /* Main Split Hero */
+    .welcome-main {
+      flex: 1;
+      max-width: 1360px;
+      width: 100%;
+      margin: 0 auto;
+      padding: 40px 24px 60px 24px;
+      display: grid;
+      grid-template-columns: 58% 42%;
+      gap: 40px;
+      align-items: start;
+    }
+
+    /* Left Column */
+    .welcome-left {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .portal-pill {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 14px;
+      background: linear-gradient(90deg, rgba(245, 158, 11, 0.15), rgba(245, 158, 11, 0.04));
+      border: 1px solid rgba(245, 158, 11, 0.35);
+      border-radius: 20px;
+      color: var(--gold-light);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .welcome-headline {
+      font-family: 'Inter', sans-serif;
+      font-size: 2.35rem;
+      font-weight: 900;
+      line-height: 1.22;
+      letter-spacing: -0.03em;
+      color: #FFFFFF;
+      background: linear-gradient(180deg, #FFFFFF 0%, #E2E8F0 60%, #CBD5E1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .welcome-headline span {
+      background: linear-gradient(135deg, #FDE68A 0%, #F59E0B 50%, #D97706 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .welcome-desc {
+      font-size: 0.95rem;
+      color: #94A3B8;
+      line-height: 1.6;
+    }
+
+    /* 3 Pillars */
+    .pillars-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+      margin-top: 4px;
+    }
+
+    .pillar-card {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 14px 18px;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+      border-radius: 12px;
+      transition: all 0.25s ease;
+    }
+
+    .pillar-card:hover {
+      background: rgba(245, 158, 11, 0.05);
+      border-color: rgba(245, 158, 11, 0.25);
+      transform: translateX(3px);
+    }
+
+    .pillar-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.9rem;
+      font-weight: 800;
+      color: var(--gold-primary);
+      background: rgba(245, 158, 11, 0.12);
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      border: 1px solid rgba(245, 158, 11, 0.3);
+    }
+
+    .pillar-content h4 {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #F8FAFC;
+      margin-bottom: 3px;
+    }
+
+    .pillar-content p {
+      font-size: 0.8rem;
+      color: #94A3B8;
+      line-height: 1.45;
+    }
+
+    /* Live Ticker Cards Section */
+    .live-tickers-title {
+      font-size: 0.82rem;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .live-tickers-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 12px;
+    }
+
+    .ticker-card {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .ticker-card:hover {
+      border-color: var(--gold-primary);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    }
+
+    .ticker-img-wrap {
+      position: relative;
+      height: 90px;
+      width: 100%;
+      overflow: hidden;
+      background: #111;
+    }
+
+    .ticker-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s ease;
+    }
+
+    .ticker-card:hover .ticker-img {
+      transform: scale(1.05);
+    }
+
+    .ticker-time-badge {
+      position: absolute;
+      bottom: 6px;
+      right: 6px;
+      background: rgba(0, 0, 0, 0.85);
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #FEF3C7;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .ticker-body {
+      padding: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .ticker-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #F8FAFC;
+      line-height: 1.3;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .ticker-price {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.82rem;
+      font-weight: 800;
+      color: #34D399;
+    }
+
+    .ticker-meta {
+      font-size: 0.68rem;
+      color: #94A3B8;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    /* Right Column - Auth Card */
+    .welcome-right {
+      position: sticky;
+      top: 96px;
+    }
+
+    .luxury-auth-card {
+      background: var(--bg-card-glass);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid var(--border-gold-subtle);
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.65), 0 0 20px rgba(245, 158, 11, 0.08);
+    }
+
+    .auth-tabs-header {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      background: rgba(0, 0, 0, 0.35);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .auth-tab-btn {
+      padding: 14px 8px;
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      color: #94A3B8;
+      font-size: 0.82rem;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: center;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .auth-tab-btn:hover {
+      color: #FFFFFF;
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .auth-tab-btn.active {
+      color: var(--gold-light);
+      border-bottom-color: var(--gold-primary);
+      background: rgba(245, 158, 11, 0.08);
+      font-weight: 700;
+    }
+
+    .auth-tab-content {
+      padding: 24px;
+    }
+
+    .tab-pane {
+      display: none;
+    }
+
+    .tab-pane.active {
+      display: block;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 0.78rem;
+      font-weight: 600;
+      color: #CBD5E1;
+      margin-bottom: 6px;
+    }
+
+    .form-input, .form-select {
+      width: 100%;
+      padding: 10px 14px;
+      font-size: 0.85rem;
+      color: #F8FAFC;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      border-radius: 8px;
+      outline: none;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .form-input:focus, .form-select:focus {
+      border-color: var(--gold-primary);
+      box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+      background: rgba(255, 255, 255, 0.08);
+    }
+
+    .form-select option {
+      background: #0F172A;
+      color: #FFF;
+    }
+
+    .btn-submit-gold {
+      width: 100%;
+      padding: 12px 18px;
+      background: linear-gradient(135deg, #FDE68A 0%, #F59E0B 50%, #D97706 100%);
+      color: #0F172A;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 800;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
+    }
+
+    .btn-submit-gold:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(245, 158, 11, 0.45);
+      filter: brightness(1.05);
+    }
+
+    .btn-submit-gold:active {
+      transform: translateY(0);
+    }
+
+    .feedback-alert {
+      display: none;
+      padding: 10px 12px;
+      border-radius: 8px;
+      font-size: 0.78rem;
+      line-height: 1.4;
+      margin-bottom: 14px;
+    }
+
+    .feedback-alert.error {
+      display: block;
+      background: rgba(239, 68, 68, 0.12);
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      color: #FCA5A5;
+    }
+
+    .feedback-alert.success {
+      display: block;
+      background: rgba(16, 185, 129, 0.12);
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      color: #6EE7B7;
+    }
+
+    /* 1-Click Demo Login Section */
+    .demo-login-box {
+      background: rgba(0, 0, 0, 0.35);
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      padding: 18px 24px 20px 24px;
+    }
+
+    .demo-login-header {
+      font-size: 0.7rem;
+      font-weight: 800;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--gold-light);
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .demo-btns-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 8px;
+    }
+
+    .btn-demo-acc {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 9px 12px;
+      background: rgba(255, 255, 255, 0.035);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+
+    .btn-demo-acc:hover {
+      background: rgba(245, 158, 11, 0.08);
+      border-color: rgba(245, 158, 11, 0.3);
+      transform: translateX(2px);
+    }
+
+    .demo-acc-left {
+      display: flex;
+      align-items: center;
+      gap: 9px;
+    }
+
+    .demo-acc-name {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: #F8FAFC;
+    }
+
+    .demo-acc-role {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      background: rgba(245, 158, 11, 0.18);
+      color: #FDE68A;
+    }
+
+    .demo-acc-bal {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.74rem;
+      font-weight: 700;
+      color: #34D399;
+    }
+
+    /* Active User Banner if already logged in */
+    .already-logged-banner {
+      display: none;
+      background: linear-gradient(90deg, rgba(16, 185, 129, 0.15), rgba(16, 185, 129, 0.05));
+      border: 1px solid rgba(16, 185, 129, 0.35);
+      border-radius: 12px;
+      padding: 14px 18px;
+      margin-bottom: 20px;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    /* Footer */
+    .welcome-footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.06);
+      background: rgba(5, 7, 11, 0.8);
+      padding: 24px;
+      text-align: center;
+      font-size: 0.78rem;
+      color: #64748B;
+      margin-top: auto;
+    }
+
+    /* Responsive */
+    @media (max-width: 1024px) {
+      .welcome-main {
+        grid-template-columns: 1fr;
+        gap: 32px;
+      }
+      .welcome-right {
+        position: static;
+      }
+      .welcome-metrics {
+        display: none;
+      }
+      .welcome-headline {
+        font-size: 1.95rem;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .live-tickers-grid {
+        grid-template-columns: 1fr;
+      }
+      .welcome-headline {
+        font-size: 1.65rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Executive Header -->
+  <header class="welcome-header">
+    <div class="welcome-header__inner">
+      <a href="welcome.html" class="welcome-brand" title="AUCTIONENGINE - Geneva • London • New York">
+        <svg class="ae-brand-emblem" width="38" height="38" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg" style="width: 38px; height: 38px; min-width: 38px; min-height: 38px; flex-shrink: 0; filter: drop-shadow(0 2px 8px rgba(245, 158, 11, 0.35));">
+  <defs>
+    <linearGradient id="aeShieldBg" x1="0" y1="0" x2="38" y2="38" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#1F2430"/>
+      <stop offset="55%" stop-color="#0F131C"/>
+      <stop offset="100%" stop-color="#080A0F"/>
+    </linearGradient>
+    <linearGradient id="aeGoldGrad" x1="0" y1="0" x2="38" y2="38" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FDE68A"/>
+      <stop offset="35%" stop-color="#F59E0B"/>
+      <stop offset="85%" stop-color="#D97706"/>
+      <stop offset="100%" stop-color="#B45309"/>
+    </linearGradient>
+    <linearGradient id="aeGavelGrad" x1="10" y1="10" x2="28" y2="28" gradientUnits="userSpaceOnUse">
+      <stop offset="0%" stop-color="#FFFBEB"/>
+      <stop offset="60%" stop-color="#FBBF24"/>
+      <stop offset="100%" stop-color="#D97706"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Royal Swiss Hexagonal Shield Outer Rim -->
+  <path d="M19 1.8L34.5 7.2V19.5C34.5 28.2 27.8 34.6 19 36.8C10.2 34.6 3.5 28.2 3.5 19.5V7.2L19 1.8Z" 
+        fill="url(#aeShieldBg)" 
+        stroke="url(#aeGoldGrad)" 
+        stroke-width="1.8" 
+        stroke-linejoin="round"/>
+
+  <!-- Inner Hairline Border -->
+  <path d="M19 4.2L32 8.7V19C32 26.6 26.3 32.2 19 34.2C11.7 32.2 6 26.6 6 19V8.7L19 4.2Z" 
+        stroke="url(#aeGoldGrad)" 
+        stroke-width="0.65" 
+        stroke-opacity="0.4" 
+        fill="none"/>
+
+  <!-- Stylized Serif Letter 'A' -->
+  <path d="M19 8.2L12 26.5H15.2L16.9 22H21.1L22.8 26.5H26L19 8.2ZM17.9 19.2L19 14.8L20.1 19.2H17.9Z" 
+        fill="url(#aeGoldGrad)" 
+        fill-rule="evenodd"/>
+
+  <!-- Interlaced Royal Gavel (Auction Mallet) at 42deg -->
+  <g transform="rotate(42 19 19)">
+    <rect x="15.8" y="7.5" width="6.4" height="9.5" rx="1.2" fill="url(#aeGavelGrad)" stroke="#FEF3C7" stroke-width="0.5"/>
+    <rect x="15.2" y="11" width="7.6" height="2.5" rx="0.4" fill="#FFFBEB"/>
+    <rect x="18.2" y="17" width="1.6" height="13.5" rx="0.8" fill="url(#aeGoldGrad)"/>
+    <circle cx="19" cy="30.5" r="1.3" fill="#FDE68A"/>
+  </g>
+
+  <!-- Crown / Star Accent at Apex -->
+  <polygon points="19,3.5 19.8,5.2 21.6,5.2 20.2,6.3 20.7,8 19,6.9 17.3,8 17.8,6.3 16.4,5.2 18.2,5.2" fill="#FFFBEB"/>
+</svg>
+        <div>
+          <div style="font-family: var(--font-heading, 'Inter', sans-serif); font-size: 1.35rem; font-weight: 900; letter-spacing: -0.02em; color: #FFFFFF; line-height: 1;">
+            AUCTION<span style="color: #F59E0B;">ENGINE</span>
+          </div>
+          <div style="font-size: 0.62rem; letter-spacing: 0.22em; text-transform: uppercase; color: #94A3B8; font-weight: 700; margin-top: 4px;">
+            GENEVA &bull; LONDON &bull; NEW YORK
+          </div>
+        </div>
+      </a>
+
+      <!-- Prestige Indicators -->
+      <div class="welcome-metrics">
+        <div class="metric-badge" title="Mọi phiên đấu giá đều được ký quỹ Escrow 15% minh bạch">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span>Bảo chứng Ký quỹ 15%</span>
+        </div>
+        <div class="metric-badge" title="Độ trễ khớp lệnh microsecond theo tiêu chuẩn sàn tài chính">
+          <span class="pulse-dot"></span>
+          <span style="color: #34D399;">Khớp lệnh Realtime &lt;15ms</span>
+        </div>
+        <div class="metric-badge" title="Tiêu chuẩn giám định độc lập Geneva Seal">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#38BDF8" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="m9 12 2 2 4-4"/></svg>
+          <span>Chứng thư Geneva Seal</span>
+        </div>
+      </div>
+
+      <!-- Quick Action -->
+      <div>
+        <a href="#auth-box" class="btn-submit-gold" style="width: auto; padding: 8px 16px; font-size: 0.8rem; text-decoration: none;">
+          <span>Vào Sàn Đấu Giá</span>
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Viewport Content -->
+  <main class="welcome-main">
+
+    <!-- Cột Trái (58% — Không Gian Nghệ Thuật & Đấu Giá Thượng Lưu) -->
+    <section class="welcome-left">
+
+      <!-- Already Logged In Quick Banner -->
+      <div id="already-logged-banner" class="already-logged-banner">
+        <div>
+          <div style="font-size: 0.85rem; font-weight: 700; color: #34D399; margin-bottom: 2px;">
+            Đang đăng nhập: <span id="banner-user-name">Phạm Ngọc Thắng</span> (<span id="banner-user-paddle">#PD-6651</span>)
+          </div>
+          <div style="font-size: 0.74rem; color: #CBD5E1;">
+            Ví khả dụng: <strong id="banner-user-wallet" style="color: #F59E0B; font-family: 'JetBrains Mono', monospace;">25.000.000.000 ₫</strong>
+          </div>
+        </div>
+        <div style="display: flex; gap: 8px;">
+          <a id="btn-enter-market-direct" href="index.html" class="btn-submit-gold" style="width: auto; padding: 7px 14px; font-size: 0.78rem; text-decoration: none;">
+            Vào Sàn Ngay &rarr;
+          </a>
+          <button type="button" onclick="handleLogout()" style="padding: 7px 12px; background: rgba(239, 68, 68, 0.15); border: 1px solid rgba(239, 68, 68, 0.3); border-radius: 6px; color: #FCA5A5; font-size: 0.75rem; cursor: pointer;">
+            Đổi Tài Khoản
+          </button>
+        </div>
+      </div>
+
+      <div class="portal-pill">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+        <span>PRIVATE CLIENT &amp; COLLECTOR PORTAL &bull; EST. GENEVA</span>
+      </div>
+
+      <h1 class="welcome-headline">
+        Nơi Hội Tụ Những Tuyệt Tác Độc Bản &amp; <span>Đấu Giá Minh Bạch Thời Gian Thực</span>
+      </h1>
+
+      <p class="welcome-desc">
+        Hệ sinh thái đấu giá trực tuyến bảo chứng Sotheby's &amp; Geneva Standard dành riêng cho giới sưu tầm cao cấp. Nơi giá trị được xác lập bằng sự minh bạch tuyệt đối, khớp lệnh realtime và an toàn tài chính.
+      </p>
+
+      <!-- 3 Operational Pillars -->
+      <div class="pillars-grid">
+        <!-- 01 -->
+        <div class="pillar-card">
+          <div class="pillar-num">01</div>
+          <div class="pillar-content">
+            <h4>Định danh &amp; Cấp Thẻ Đấu Giá (#Paddle ID)</h4>
+            <p>Mỗi nhà sưu tầm được cấp một mã biển số định danh bảo mật vĩnh viễn kèm Ví Ký Quỹ Escrow độc lập để giao dịch an toàn.</p>
+          </div>
+        </div>
+        <!-- 02 -->
+        <div class="pillar-card">
+          <div class="pillar-num">02</div>
+          <div class="pillar-content">
+            <h4>Bảo Chứng Ký Quỹ Escrow 15%</h4>
+            <p>Ngăn chặn 100% hiện tượng đặt giá ảo; tiền ký quỹ được bảo toàn và hoàn trả tức thì vào ví ngay khi phiên kết thúc nếu không trúng lot.</p>
+          </div>
+        </div>
+        <!-- 03 -->
+        <div class="pillar-card">
+          <div class="pillar-num">03</div>
+          <div class="pillar-content">
+            <h4>Chống Cướp Cò Phút Chót (Anti-Sniping +30s)</h4>
+            <p>Tự động gia hạn thêm 30 giây khi có lệnh trả giá ở những giây cuối cùng, đảm bảo sự cạnh tranh công bằng tối đa cho mọi nhà sưu tầm.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Dải Xem Trước 3 Phiên Đang Mở Sàn (Live Ticker Cards) -->
+      <div>
+        <div class="live-tickers-title">
+          <span class="pulse-dot"></span>
+          <span>3 PHIÊN ĐANG MỞ SÀN TRỰC TIẾP (LIVE AUCTIONS)</span>
+        </div>
+
+        <div class="live-tickers-grid" style="margin-top: 10px;">
+          <!-- Card 1: Patek -->
+          <div class="ticker-card" onclick="quickJumpToRoom('839201')" title="Bấm để vào phòng đấu giá Patek Philippe Nautilus">
+            <div class="ticker-img-wrap">
+              <img src="assets/images/patek_nautilus_gold.jpg" alt="Patek Philippe" class="ticker-img">
+              <div class="ticker-time-badge">
+                <span class="pulse-dot"></span>
+                <span id="ticker-time-1">04:45</span>
+              </div>
+            </div>
+            <div class="ticker-body">
+              <div class="ticker-title">Patek Philippe 5711/1R</div>
+              <div class="ticker-price">3.850.000.000 ₫</div>
+              <div class="ticker-meta">
+                <span>PIN: <strong>839201</strong></span>
+                <span style="color: #F59E0B;">22 lượt đặt</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Porsche -->
+          <div class="ticker-card" onclick="quickJumpToRoom('940182')" title="Bấm để vào phòng đấu giá Porsche 911 GT3 RS">
+            <div class="ticker-img-wrap">
+              <img src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=600&q=80" alt="Porsche 911 GT3 RS" class="ticker-img">
+              <div class="ticker-time-badge">
+                <span class="pulse-dot"></span>
+                <span id="ticker-time-2">08:12</span>
+              </div>
+            </div>
+            <div class="ticker-body">
+              <div class="ticker-title">Porsche 911 GT3 RS</div>
+              <div class="ticker-price">16.200.000.000 ₫</div>
+              <div class="ticker-meta">
+                <span>PIN: <strong>940182</strong></span>
+                <span style="color: #F59E0B;">18 lượt đặt</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 3: Ferrari -->
+          <div class="ticker-card" onclick="quickJumpToRoom('551920')" title="Bấm để vào phòng đấu giá Ferrari F8 Tributo">
+            <div class="ticker-img-wrap">
+              <img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=600&q=80" alt="Ferrari F8 Tributo" class="ticker-img">
+              <div class="ticker-time-badge">
+                <span class="pulse-dot"></span>
+                <span id="ticker-time-3">12:30</span>
+              </div>
+            </div>
+            <div class="ticker-body">
+              <div class="ticker-title">Ferrari F8 Novitec</div>
+              <div class="ticker-price">28.500.000.000 ₫</div>
+              <div class="ticker-meta">
+                <span>PIN: <strong>551920</strong></span>
+                <span style="color: #F59E0B;">28 lượt đặt</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Cột Phải (42% — Cổng Đăng Nhập, Đăng Ký & Vào Phòng Bằng Mã PIN) -->
+    <section class="welcome-right" id="auth-box">
+      <div class="luxury-auth-card">
+
+        <!-- 3 Tabs Header -->
+        <div class="auth-tabs-header">
+          <button type="button" class="auth-tab-btn active" id="btn-tab-login" onclick="switchAuthTab('login')">
+            Đăng Nhập
+          </button>
+          <button type="button" class="auth-tab-btn" id="btn-tab-register" onclick="switchAuthTab('register')">
+            Tạo Tài Khoản
+          </button>
+          <button type="button" class="auth-tab-btn" id="btn-tab-pin" onclick="switchAuthTab('pin')">
+            Nhập PIN Mời
+          </button>
+        </div>
+
+        <div class="auth-tab-content">
+
+          <!-- Feedback Alert -->
+          <div id="auth-alert" class="feedback-alert"></div>
+
+          <!-- TAB 1: ĐĂNG NHẬP -->
+          <form id="form-login" class="tab-pane active" onsubmit="handleLoginSubmit(event)">
+            <div class="form-group">
+              <label class="form-label" for="login-account">Email hoặc Mã Thẻ Đấu Giá</label>
+              <input type="text" id="login-account" class="form-input" placeholder="thang.pn@aurelia.ch hoặc #PD-6651" required autocomplete="username">
+            </div>
+
+            <div class="form-group">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px;">
+                <label class="form-label" for="login-password" style="margin-bottom: 0;">Mật khẩu</label>
+                <a href="login.html?tab=forgot" style="font-size: 0.72rem; color: var(--gold-light); text-decoration: underline;">Quên mật khẩu?</a>
+              </div>
+              <input type="password" id="login-password" class="form-input" placeholder="Nhập mật khẩu (ví dụ: admin hoặc 123456)" required autocomplete="current-password">
+            </div>
+
+            <button type="submit" class="btn-submit-gold" id="btn-submit-login">
+              <span>Đăng Nhập Vào Sàn Đấu Giá</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </form>
+
+          <!-- TAB 2: TẠO TÀI KHOẢN MỚI (TẶNG 10 TỶ ₫ VỐN KÝ QUỸ) -->
+          <form id="form-register" class="tab-pane" onsubmit="handleRegisterSubmit(event)">
+            <div class="form-group">
+              <label class="form-label" for="reg-name">Họ và Tên hiển thị</label>
+              <input type="text" id="reg-name" class="form-input" placeholder="Ví dụ: Hoàng Gia Bảo" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="reg-email">Email đăng ký</label>
+              <input type="email" id="reg-email" class="form-input" placeholder="collector@gmail.com" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="reg-password">Mật khẩu bảo mật</label>
+              <input type="password" id="reg-password" class="form-input" placeholder="Tối thiểu 6 ký tự" minlength="6" required>
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="reg-tier">Hạng Tài Khoản Trải Nghiệm</label>
+              <select id="reg-tier" class="form-select">
+                <option value="vip">Hạng VIP Bidder (+10 Tỷ ₫ Ký Quỹ Sẵn)</option>
+                <option value="collector">Hạng Collector (+10 Tỷ ₫ Ký Quỹ Sẵn)</option>
+                <option value="private">Hạng Private Member (+10 Tỷ ₫ Ký Quỹ Sẵn)</option>
+              </select>
+            </div>
+
+            <div style="background: rgba(245, 158, 11, 0.08); border: 1px solid rgba(245, 158, 11, 0.25); border-radius: 8px; padding: 10px 12px; margin-bottom: 16px; font-size: 0.74rem; color: #FEF3C7; line-height: 1.45;">
+              ✨ Hệ thống tự động cấp ngay <strong>Mã Thẻ #PD-XXXX</strong> độc quyền và tặng sẵn <strong>10.000.000.000 ₫</strong> vốn trải nghiệm vào Ví để đặt cọc và đấu giá ngay lập tức!
+            </div>
+
+            <button type="submit" class="btn-submit-gold" id="btn-submit-register">
+              <span>Tạo Tài Khoản &amp; Nhận 10 Tỷ ₫ Trải Nghiệm</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </form>
+
+          <!-- TAB 3: VÀO NHANH BẰNG MÃ PIN PHÒNG -->
+          <form id="form-pin" class="tab-pane" onsubmit="handlePinSubmit(event)">
+            <div class="form-group">
+              <label class="form-label" for="pin-guest-name">Tên hiển thị của bạn</label>
+              <input type="text" id="pin-guest-name" class="form-input" placeholder="Ví dụ: Lê Minh Đức (hoặc để trống để nhận tên tự động)">
+            </div>
+
+            <div class="form-group">
+              <label class="form-label" for="pin-room-code">Mã PIN Phòng Đấu Giá (6 Chữ Số)</label>
+              <input type="text" id="pin-room-code" class="form-input" placeholder="839201" maxlength="6" pattern="[0-9]{6}" required style="font-family: 'JetBrains Mono', monospace; font-size: 1.1rem; letter-spacing: 0.25em; text-align: center; font-weight: 800;">
+            </div>
+
+            <div style="background: rgba(16, 185, 129, 0.08); border: 1px solid rgba(16, 185, 129, 0.25); border-radius: 8px; padding: 10px 12px; margin-bottom: 16px; font-size: 0.74rem; color: #A7F3D0; line-height: 1.45;">
+              ⚡ Bạn nhận được link hoặc mã PIN từ bạn bè? Nhập mã 6 số ở trên, hệ thống sẽ tự động tạo phiên đăng nhập khách và đưa thẳng vào phòng đấu giá đó!
+            </div>
+
+            <button type="submit" class="btn-submit-gold" id="btn-submit-pin">
+              <span>Vào Thẳng Phòng Đấu Giá</span>
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+            </button>
+          </form>
+
+        </div>
+
+        <!-- 1-Click Demo Login Box (For Lecturers & Graders) -->
+        <div class="demo-login-box">
+          <div class="demo-login-header">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+            <span>CHUYỂN NHANH TÀI KHOẢN MẪU (1-CLICK DEMO LOGIN):</span>
+          </div>
+
+          <div class="demo-btns-grid">
+            <!-- 1. Thắng Admin -->
+            <button type="button" class="btn-demo-acc" onclick="handleQuickDemoLogin('usr-thang-6651')" title="Đăng nhập tài khoản Phạm Ngọc Thắng (Admin)">
+              <div class="demo-acc-left">
+                <img src="assets/images/user_thang.jpg" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1.5px solid #10B981;" alt="">
+                <div>
+                  <div class="demo-acc-name">Phạm Ngọc Thắng <span class="demo-acc-role" style="background:#059669;color:#FFF;">ADMIN</span></div>
+                  <div style="font-size: 0.65rem; color: #94A3B8;">#PD-6651 &bull; Quản trị viên &amp; Chủ sàn</div>
+                </div>
+              </div>
+              <div class="demo-acc-bal">25 Tỷ ₫</div>
+            </button>
+
+            <!-- 2. Tân VIP Bidder -->
+            <button type="button" class="btn-demo-acc" onclick="handleQuickDemoLogin('usr-tan-2048')" title="Đăng nhập tài khoản Phan Minh Tân (VIP Bidder)">
+              <div class="demo-acc-left">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1.5px solid #F59E0B;" alt="">
+                <div>
+                  <div class="demo-acc-name">Phan Minh Tân <span class="demo-acc-role">VIP BIDDER</span></div>
+                  <div style="font-size: 0.65rem; color: #94A3B8;">#PD-2048 &bull; Nhà sưu tầm</div>
+                </div>
+              </div>
+              <div class="demo-acc-bal">18 Tỷ ₫</div>
+            </button>
+
+            <!-- 3. Bảo Collector -->
+            <button type="button" class="btn-demo-acc" onclick="handleQuickDemoLogin('usr-bao-3390')" title="Đăng nhập tài khoản Trần Hoàng Bảo (Collector)">
+              <div class="demo-acc-left">
+                <img src="https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?auto=format&fit=crop&w=100&q=80" style="width: 28px; height: 28px; border-radius: 50%; object-fit: cover; border: 1.5px solid #38BDF8;" alt="">
+                <div>
+                  <div class="demo-acc-name">Trần Hoàng Bảo <span class="demo-acc-role" style="background:#0284C7;color:#FFF;">COLLECTOR</span></div>
+                  <div style="font-size: 0.65rem; color: #94A3B8;">#PD-3390 &bull; Nhà đầu tư</div>
+                </div>
+              </div>
+              <div class="demo-acc-bal">20 Tỷ ₫</div>
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Luxury Footer -->
+  <footer class="welcome-footer">
+    <div style="max-width: 1360px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px;">
+      <div style="display: flex; align-items: center; gap: 8px;">
+        <span style="font-weight: 800; color: #F8FAFC;">AUCTIONENGINE</span>
+        <span>&bull;</span>
+        <span>Geneva Standard Fine Auctions S.A.</span>
+      </div>
+      <div>
+        <span>Cơ chế Ký quỹ Escrow 15% &bull; Khớp lệnh Realtime &bull; Anti-Sniping Protection</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script src="js/app-core.js?v=6.0"></script>
+  <script>
+    // URL Redirect Target helper
+    function getRedirectTarget() {
+      const params = new URLSearchParams(window.location.search);
+      const redir = params.get('redirect');
+      if (redir) return decodeURIComponent(redir);
+      const room = params.get('room');
+      if (room) return 'live-room.html?room=' + encodeURIComponent(room);
+      return 'index.html';
+    }
+
+    // Switch Tabs
+    function switchAuthTab(tab) {
+      document.querySelectorAll('.auth-tab-btn').forEach(b => b.classList.remove('active'));
+      document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+      hideAlert();
+
+      const btn = document.getElementById('btn-tab-' + tab);
+      const pane = document.getElementById('form-' + tab);
+      if (btn) btn.classList.add('active');
+      if (pane) pane.classList.add('active');
+    }
+
+    function showAlert(msg, isError = true) {
+      const el = document.getElementById('auth-alert');
+      if (!el) return;
+      el.className = 'feedback-alert ' + (isError ? 'error' : 'success');
+      el.innerHTML = msg;
+    }
+
+    function hideAlert() {
+      const el = document.getElementById('auth-alert');
+      if (el) el.style.display = 'none';
+    }
+
+    // Check if user is already logged in
+    function checkCurrentSession() {
+      const store = window.AureliaApp || window.AuctionStore;
+      const user = store ? store.getCurrentUser() : null;
+      const banner = document.getElementById('already-logged-banner');
+      if (user && banner) {
+        banner.style.display = 'flex';
+        const nameEl = document.getElementById('banner-user-name');
+        const paddleEl = document.getElementById('banner-user-paddle');
+        const walletEl = document.getElementById('banner-user-wallet');
+        if (nameEl) nameEl.textContent = user.fullName || 'Thành Viên';
+        if (paddleEl) paddleEl.textContent = user.paddleId || '#PD----';
+        if (walletEl) walletEl.textContent = (user.walletAvailable || 0).toLocaleString('vi-VN') + ' ₫';
+        const directBtn = document.getElementById('btn-enter-market-direct');
+        if (directBtn) directBtn.href = getRedirectTarget();
+      } else if (banner) {
+        banner.style.display = 'none';
+      }
+    }
+
+    // Handle Login
+    function handleLoginSubmit(e) {
+      e.preventDefault();
+      hideAlert();
+      const account = document.getElementById('login-account').value.trim();
+      const password = document.getElementById('login-password').value;
+      const store = window.AureliaApp || window.AuctionStore;
+
+      if (!store) {
+        showAlert('Hệ thống đang khởi tạo, vui lòng thử lại sau 1 giây!');
+        return;
+      }
+
+      const res = store.login(account, password);
+      if (res && res.success) {
+        showAlert('Đăng nhập thành công! Đang chuyển hướng vào sàn...', false);
+        setTimeout(() => {
+          window.location.href = getRedirectTarget();
+        }, 500);
+      } else {
+        showAlert(res.message || 'Tài khoản hoặc mật khẩu không chính xác!');
+      }
+    }
+
+    // Handle Register
+    function handleRegisterSubmit(e) {
+      e.preventDefault();
+      hideAlert();
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+      const store = window.AureliaApp || window.AuctionStore;
+
+      if (!store) {
+        showAlert('Hệ thống đang khởi tạo, vui lòng thử lại sau 1 giây!');
+        return;
+      }
+
+      // Grant 10 Tỷ ₫ demo capital
+      const res = store.register(name, email, password, 10000000000);
+      if (res && res.success) {
+        showAlert('Chào mừng <strong>' + res.user.fullName + '</strong>! Bạn được cấp thẻ <strong>' + res.user.paddleId + '</strong> cùng <strong>10.000.000.000 ₫</strong> vào ví. Đang vào sàn...', false);
+        setTimeout(() => {
+          window.location.href = getRedirectTarget();
+        }, 800);
+      } else {
+        showAlert(res.message || 'Đăng ký không thành công. Vui lòng thử lại!');
+      }
+    }
+
+    // Handle PIN Submit
+    function handlePinSubmit(e) {
+      e.preventDefault();
+      hideAlert();
+      const guestName = document.getElementById('pin-guest-name').value.trim();
+      const pin = document.getElementById('pin-room-code').value.trim();
+      const store = window.AureliaApp || window.AuctionStore;
+
+      if (!pin || pin.length !== 6) {
+        showAlert('Mã PIN phải gồm đúng 6 chữ số!');
+        return;
+      }
+
+      if (store && typeof store.guestJoinByPin === 'function') {
+        const res = store.guestJoinByPin(pin, guestName);
+        if (res && res.success) {
+          showAlert('Đã xác thực mã PIN #' + pin + '! Đang vào phòng đấu giá...', false);
+          setTimeout(() => {
+            window.location.href = 'live-room.html?room=' + encodeURIComponent(pin);
+          }, 400);
+          return;
+        }
+      }
+
+      // Fallback
+      window.location.href = 'live-room.html?room=' + encodeURIComponent(pin);
+    }
+
+    // Handle 1-Click Demo Login
+    function handleQuickDemoLogin(uid) {
+      const store = window.AureliaApp || window.AuctionStore;
+      if (store) {
+        const user = store.quickLogin(uid);
+        if (user) {
+          showAlert('Đã chuyển sang tài khoản <strong>' + user.fullName + '</strong> (' + user.paddleId + '). Đang vào sàn...', false);
+          setTimeout(() => {
+            window.location.href = getRedirectTarget();
+          }, 400);
+        }
+      }
+    }
+
+    // Handle Logout
+    function handleLogout() {
+      const store = window.AureliaApp || window.AuctionStore;
+      if (store && typeof store.logout === 'function') {
+        store.logout();
+      } else {
+        localStorage.setItem('AURELIA_LOGGED_OUT', 'true');
+        localStorage.setItem('AE_AUTH_LOGGED_OUT', 'true');
+        localStorage.removeItem('ae_active_session_user');
+        localStorage.removeItem('AURELIA_CURRENT_USER_V4');
+      }
+      checkCurrentSession();
+      showAlert('Đã đăng xuất tài khoản. Quý khách có thể chọn tài khoản khác hoặc tạo mới.', false);
+    }
+
+    // Quick jump to room from live ticker cards
+    function quickJumpToRoom(pin) {
+      const store = window.AureliaApp || window.AuctionStore;
+      const user = store ? store.getCurrentUser() : null;
+      if (user) {
+        window.location.href = 'live-room.html?room=' + encodeURIComponent(pin);
+      } else {
+        switchAuthTab('pin');
+        const pinInput = document.getElementById('pin-room-code');
+        if (pinInput) {
+          pinInput.value = pin;
+          pinInput.focus();
+        }
+        document.getElementById('auth-box').scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    // Realtime Ticker Clocks (Countdown Ticking)
+    let t1 = 4 * 60 + 45;
+    let t2 = 8 * 60 + 12;
+    let t3 = 12 * 60 + 30;
+
+    function formatTime(s) {
+      const m = Math.floor(s / 60);
+      const sec = s % 60;
+      return (m < 10 ? '0' : '') + m + ':' + (sec < 10 ? '0' : '') + sec;
+    }
+
+    setInterval(() => {
+      if (t1 > 0) t1--; else t1 = 300;
+      if (t2 > 0) t2--; else t2 = 450;
+      if (t3 > 0) t3--; else t3 = 600;
+
+      const el1 = document.getElementById('ticker-time-1');
+      const el2 = document.getElementById('ticker-time-2');
+      const el3 = document.getElementById('ticker-time-3');
+      if (el1) el1.textContent = formatTime(t1);
+      if (el2) el2.textContent = formatTime(t2);
+      if (el3) el3.textContent = formatTime(t3);
+    }, 1000);
+
+    // Initial check on load
+    window.addEventListener('DOMContentLoaded', () => {
+      checkCurrentSession();
+      const params = new URLSearchParams(window.location.search);
+      const tabParam = params.get('tab');
+      if (tabParam && ['login', 'register', 'pin'].includes(tabParam)) {
+        switchAuthTab(tabParam);
+      }
+      const roomParam = params.get('room');
+      if (roomParam) {
+        switchAuthTab('pin');
+        const pinInput = document.getElementById('pin-room-code');
+        if (pinInput) pinInput.value = roomParam;
+      }
+    });
+  </script>
+</body>
+</html>

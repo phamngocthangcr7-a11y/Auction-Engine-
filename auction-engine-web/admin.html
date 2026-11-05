@@ -3,11 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Immediate Theme Initializer (Prevents Theme Flash & Enforces Persistence) -->
+  <!-- Immediate Theme Initializer & Admin Auth Guard -->
   <script>
     (function() {
       var t = localStorage.getItem('AURELIA_THEME_V4') || localStorage.getItem('AE_V3_THEME') || 'dark';
       document.documentElement.setAttribute('data-theme', t);
+
+      var isLoggedOut = localStorage.getItem('AURELIA_LOGGED_OUT') === 'true' || localStorage.getItem('AE_AUTH_LOGGED_OUT') === 'true';
+      var sessionUser = localStorage.getItem('ae_active_session_user') || localStorage.getItem('AURELIA_CURRENT_USER_V4');
+      if (isLoggedOut || !sessionUser || sessionUser === 'null' || sessionUser === 'undefined') {
+        window.location.replace('welcome.html?redirect=admin.html');
+      } else {
+        try {
+          var u = JSON.parse(sessionUser);
+          if (u.role !== 'admin' && !u.isAdmin && u.uid !== 'usr-thang-6651' && u.paddleId !== '#PD-6651') {
+            window.location.replace('index.html');
+          }
+        } catch(e) {}
+      }
     })();
   </script>
   <meta name="description" content="AURELIA Admin Portal - Hệ thống quản trị sàn đấu giá quốc tế, phê duyệt phiên niêm yết, kiểm soát rủi ro và giám sát giao dịch Escrow.">

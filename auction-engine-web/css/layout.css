@@ -242,7 +242,7 @@
 .site-header__left {
   display: flex;
   align-items: center;
-  gap: var(--space-8);
+  gap: 20px;
   flex-shrink: 0;
 }
 
@@ -273,11 +273,11 @@
 .site-header__nav {
   display: flex;
   align-items: center;
-  gap: var(--space-6);
+  gap: 16px;
 }
 
 .nav-link {
-  font-size: 0.85rem;
+  font-size: 13.5px;
   font-weight: 500;
   color: var(--text-secondary);
   transition: color var(--transition-fast);
@@ -292,9 +292,10 @@
 }
 
 .site-header__search {
-  flex: 1;
-  max-width: 280px;
+  width: 190px;
+  max-width: 190px;
   position: relative;
+  flex-shrink: 0;
 }
 
 .site-header__actions {

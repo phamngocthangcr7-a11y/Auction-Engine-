@@ -3,11 +3,17 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <!-- Immediate Theme Initializer (Prevents Theme Flash & Enforces Persistence) -->
+  <!-- Immediate Theme Initializer & Auth Guard -->
   <script>
     (function() {
       var t = localStorage.getItem('AURELIA_THEME_V4') || localStorage.getItem('AE_V3_THEME') || 'dark';
       document.documentElement.setAttribute('data-theme', t);
+
+      var isLoggedOut = localStorage.getItem('AURELIA_LOGGED_OUT') === 'true' || localStorage.getItem('AE_AUTH_LOGGED_OUT') === 'true';
+      var sessionUser = localStorage.getItem('ae_active_session_user') || localStorage.getItem('AURELIA_CURRENT_USER_V4');
+      if (isLoggedOut || !sessionUser || sessionUser === 'null' || sessionUser === 'undefined') {
+        window.location.replace('welcome.html?redirect=seller-studio.html');
+      }
     })();
   </script>
   <meta name="description" content="Tạo phiên đấu giá trực tuyến thế hệ mới - Cấp mã PIN 6 số, bảo chứng ký quỹ 15% và mời người tham gia trả giá thời gian thực.">

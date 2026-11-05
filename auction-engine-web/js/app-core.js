@@ -2584,24 +2584,25 @@
       if (localStorage.getItem('AURELIA_LOGGED_OUT') === 'true' || localStorage.getItem('AE_AUTH_LOGGED_OUT') === 'true') {
         return null;
       }
-      var data = localStorage.getItem(STORAGE_KEYS.CURRENT_USER) || localStorage.getItem('AE_V3_CURRENT_USER');
+      var data = localStorage.getItem('ae_active_session_user') || localStorage.getItem(STORAGE_KEYS.CURRENT_USER) || localStorage.getItem('AE_V3_CURRENT_USER');
       if (data && data !== 'null' && data !== 'undefined') {
         var parsed = JSON.parse(data);
         if (parsed && (parsed.uid || parsed.paddleId)) {
           // Auto-upgrade user profile to official Phạm Ngọc Thắng (Admin - #PD-6651 - 25 Tỷ)
-          if (parsed.uid === 'usr-thang-6651' || parsed.paddleId === '#PD-7256' || (parsed.fullName && parsed.fullName.includes('Thắng'))) {
+          if (parsed.uid === 'usr-thang-6651' || parsed.paddleId === '#PD-6651' || parsed.paddleId === '#PD-7256' || (parsed.fullName && parsed.fullName.includes('Thắng'))) {
             parsed.fullName = 'Phạm Ngọc Thắng';
             parsed.mssv = '6651071071';
             parsed.paddleId = '#PD-6651';
             parsed.role = 'admin';
             parsed.isAdmin = true;
             parsed.avatar = 'assets/images/user_thang.jpg';
-            if (!parsed.email) parsed.email = 'thang.pn@aurelia.ch';
+            if (!parsed.email) parsed.email = 'thang.pn@auctionengine.vn';
             if (!parsed.password) parsed.password = 'admin';
             if (!parsed.walletAvailable || parsed.walletAvailable < 20000000000) {
               parsed.walletAvailable = 25000000000;
             }
             localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(parsed));
+            localStorage.setItem('ae_active_session_user', JSON.stringify(parsed));
           }
           return parsed;
         }
@@ -2623,6 +2624,7 @@
     if (target) {
       localStorage.removeItem('AURELIA_LOGGED_OUT');
       localStorage.removeItem('AE_AUTH_LOGGED_OUT');
+      localStorage.setItem('ae_active_session_user', JSON.stringify(target));
       localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(target));
       localStorage.setItem('AE_V3_CURRENT_USER', JSON.stringify(target));
       this.broadcast('USER_SWITCHED', { user: target });
@@ -2648,8 +2650,8 @@
                         (u.paddleId && u.paddleId.toLowerCase() === query) ||
                         (u.mssv && String(u.mssv).toLowerCase() === query);
       if (matchDirect) return true;
-      if (u.role === 'admin' || u.uid === 'usr-thang-6651') {
-        if (query === 'admin' || query === 'superadmin' || query === 'phamngocthangcr7@gmail.com' || query === 'thang') {
+      if (u.role === 'admin' || u.uid === 'usr-thang-6651' || u.paddleId === '#PD-6651') {
+        if (query === 'admin' || query === 'superadmin' || query === 'phamngocthangcr7@gmail.com' || query === 'thang' || query === 'thang.pn@auctionengine.vn' || query === 'thang.pn@aurelia.ch') {
           return true;
         }
       }
@@ -2665,6 +2667,7 @@
       }
       localStorage.removeItem('AURELIA_LOGGED_OUT');
       localStorage.removeItem('AE_AUTH_LOGGED_OUT');
+      localStorage.setItem('ae_active_session_user', JSON.stringify(target));
       localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(target));
       localStorage.setItem('AE_V3_CURRENT_USER', JSON.stringify(target));
       this.broadcast('USER_SWITCHED', { user: target });
@@ -2676,6 +2679,7 @@
   AppCore.prototype.logout = function () {
     localStorage.setItem('AURELIA_LOGGED_OUT', 'true');
     localStorage.setItem('AE_AUTH_LOGGED_OUT', 'true');
+    localStorage.removeItem('ae_active_session_user');
     localStorage.removeItem(STORAGE_KEYS.CURRENT_USER);
     localStorage.removeItem('AE_V3_CURRENT_USER');
     localStorage.removeItem('AE_DB_CURRENT_USER_V2');
@@ -2707,7 +2711,7 @@
 
     var pinNum = String(Math.floor(1000 + Math.random() * 9000));
     var initBal = Number(initialBalance);
-    if (isNaN(initBal) || initBal < 0) initBal = 5000000000; // 5 Tỷ ₫ mặc định
+    if (isNaN(initBal) || initBal <= 0) initBal = 10000000000; // 10 Tỷ ₫ trải nghiệm mặc định
 
     var newUser = {
       uid: 'usr-' + Date.now(),
@@ -2726,11 +2730,45 @@
     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
     localStorage.removeItem('AURELIA_LOGGED_OUT');
     localStorage.removeItem('AE_AUTH_LOGGED_OUT');
+    localStorage.setItem('ae_active_session_user', JSON.stringify(newUser));
     localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(newUser));
     localStorage.setItem('AE_V3_CURRENT_USER', JSON.stringify(newUser));
     this.broadcast('USER_REGISTERED', { user: newUser });
     this.broadcast('USER_SWITCHED', { user: newUser });
     return { success: true, user: newUser };
+  };
+
+  AppCore.prototype.guestJoinByPin = function (pin, guestName) {
+    var p = String(pin || '').trim();
+    if (!p) return { success: false, message: 'Vui lòng nhập Mã PIN 6 số của phòng đấu giá!' };
+    var curr = this.getCurrentUser();
+    if (curr) {
+      return { success: true, user: curr, pin: p };
+    }
+    var name = String(guestName || '').trim() || ('Nhà Sưu Tầm #' + p.slice(-3));
+    var pinNum = String(Math.floor(1000 + Math.random() * 9000));
+    var guestUser = {
+      uid: 'usr-guest-' + Date.now(),
+      fullName: name,
+      email: 'guest.' + Date.now() + '@auctionengine.vn',
+      password: 'guest',
+      paddleId: '#PD-' + pinNum,
+      walletAvailable: 10000000000, // 10 Tỷ ₫ trải nghiệm
+      walletEscrow: 0,
+      role: 'GUEST_BIDDER',
+      avatar: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=200&q=80',
+      createdAt: new Date().toISOString()
+    };
+    var users = this.getUsers();
+    users.push(guestUser);
+    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+    localStorage.removeItem('AURELIA_LOGGED_OUT');
+    localStorage.removeItem('AE_AUTH_LOGGED_OUT');
+    localStorage.setItem('ae_active_session_user', JSON.stringify(guestUser));
+    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(guestUser));
+    localStorage.setItem('AE_V3_CURRENT_USER', JSON.stringify(guestUser));
+    this.broadcast('USER_SWITCHED', { user: guestUser });
+    return { success: true, user: guestUser, pin: p };
   };
 
   // =========================================================================
