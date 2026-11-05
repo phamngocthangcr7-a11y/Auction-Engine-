@@ -111,8 +111,9 @@ function renderHeader() {
               type="text" 
               id="header-quick-pin" 
               maxlength="6" 
-              placeholder="Mã PIN" 
+              placeholder="Nhập Mã PIN" 
               title="Nhập 6 số PIN để vào thẳng phòng đấu giá (Nhấn Enter)"
+              style="width: 115px !important; min-width: 115px !important; padding: 4px 10px !important; text-align: center !important; background: transparent !important; border: none !important; color: #F8FAFC !important; font-family: var(--font-mono) !important; font-size: 0.74rem !important; font-weight: 700 !important; outline: none !important;"
               onkeydown="if(event.key==='Enter'){event.preventDefault(); window.submitHeaderPin();}"
             />
             <button 
@@ -182,11 +183,11 @@ function renderHeader() {
         
         <!-- Left: Brand Logo + Nav Links -->
         <div class="site-header__left">
-          <a href="index.html" class="site-header__logo" title="Trang chủ AUCTIONENGINE Fine Auctions" style="display: flex; align-items: center; gap: 10px; text-decoration: none; flex-shrink: 0;">
+          <a href="index.html" class="site-header__logo brand-logo" title="Trang chủ AUCTIONENGINE Fine Auctions" style="display: inline-flex !important; flex-direction: row !important; align-items: center !important; gap: 12px !important; text-decoration: none !important; white-space: nowrap !important;">
             ${AE_LOGO_CREST_SVG}
-            <div style="display: flex; flex-direction: column;">
+            <div class="brand-text-wrap" style="display: flex !important; flex-direction: column !important; justify-content: center !important; line-height: 1.15 !important;">
               <span class="site-header__logo-brand" style="font-family: var(--font-heading); font-weight: 800; letter-spacing: -0.02em;">AUCTION<span style="color: #F59E0B;">ENGINE</span></span>
-              <span class="site-header__logo-sub">SÀN ĐẤU GIÁ TRỰC TUYẾN</span>
+              <span class="site-header__logo-sub" style="font-size: 0.58rem; letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-muted); font-weight: 600;">SÀN ĐẤU GIÁ TRỰC TUYẾN</span>
             </div>
           </a>
 
