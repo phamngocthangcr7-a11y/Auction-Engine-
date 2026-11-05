@@ -167,7 +167,7 @@
       filter: brightness(1.05);
     }
 
-    /* Full-Screen Edge-to-Edge Hero Showcase */
+    /* Full-Screen Edge-to-Edge Luxury Hero Showcase */
     .hero-section {
       width: 100%;
       min-height: 88vh;
@@ -175,31 +175,42 @@
       display: flex;
       align-items: center;
       overflow: hidden;
-      background-color: #080B11;
-      background-image: url('assets/images/auction_grand_hall.jpg');
-      background-size: cover;
-      background-position: center right;
-      background-repeat: no-repeat;
+      background-color: #07090E;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .hero-bg-visual {
+      position: absolute;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      width: 60%;
+      background-image: url('assets/images/patek_nautilus_gold.jpg');
+      background-size: cover;
+      background-position: 70% center;
+      background-repeat: no-repeat;
+      filter: brightness(1.22) contrast(1.12) saturate(1.18);
+      z-index: 0;
     }
 
     .hero-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(90deg, 
-        rgba(8, 11, 17, 0.96) 0%, 
-        rgba(8, 11, 17, 0.90) 36%, 
-        rgba(8, 11, 17, 0.70) 65%, 
-        rgba(8, 11, 17, 0.40) 100%
-      ),
-      linear-gradient(180deg, 
-        rgba(8, 11, 17, 0.5) 0%, 
-        transparent 25%, 
-        transparent 75%, 
-        #080B11 100%
-      );
-      backdrop-filter: blur(1.5px);
-      -webkit-backdrop-filter: blur(1.5px);
+      background: 
+        radial-gradient(ellipse at 75% 50%, rgba(245, 158, 11, 0.16) 0%, transparent 60%),
+        linear-gradient(90deg, 
+          #07090E 0%, 
+          #07090E 38%, 
+          rgba(7, 9, 14, 0.92) 48%, 
+          rgba(7, 9, 14, 0.5) 62%, 
+          transparent 75%
+        ),
+        linear-gradient(180deg, 
+          rgba(7, 9, 14, 0.45) 0%, 
+          transparent 15%, 
+          transparent 85%, 
+          #07090E 100%
+        );
       z-index: 1;
     }
 
@@ -212,57 +223,12 @@
       z-index: 2;
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      gap: 48px;
+      justify-content: flex-start;
     }
 
     .hero-content {
-      max-width: 680px;
+      max-width: 720px;
       flex: 1;
-    }
-
-    .hero-right-card {
-      max-width: 360px;
-      width: 100%;
-      flex-shrink: 0;
-    }
-
-    .hero-glass-badge {
-      background: rgba(15, 23, 42, 0.72);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(245, 158, 11, 0.3);
-      border-radius: 16px;
-      padding: 22px 24px;
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 30px rgba(245, 158, 11, 0.08);
-    }
-
-    .hero-live-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: rgba(16, 185, 129, 0.15);
-      border: 1px solid rgba(16, 185, 129, 0.35);
-      border-radius: 9999px;
-      padding: 3px 10px;
-      font-size: 0.68rem;
-      font-weight: 800;
-      color: #34D399;
-      letter-spacing: 0.06em;
-    }
-
-    .hero-live-dot {
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #10B981;
-      box-shadow: 0 0 8px #10B981;
-      animation: pulseDot 2s infinite ease-in-out;
-    }
-
-    @keyframes pulseDot {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.4; transform: scale(0.85); }
     }
 
     .hero-pill {
@@ -770,14 +736,22 @@
       .standards-grid {
         grid-template-columns: 1fr;
       }
-      .hero-right-card {
-        display: none;
-      }
       .hero-inner-container {
         padding: 50px 20px;
       }
       .hero-headline {
         font-size: 2.3rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .hero-bg-visual {
+        width: 100% !important;
+        opacity: 0.35 !important;
+        background-position: center right !important;
+      }
+      .hero-overlay {
+        background: linear-gradient(180deg, rgba(7, 9, 14, 0.75) 0%, rgba(7, 9, 14, 0.95) 100%) !important;
       }
     }
 
@@ -874,8 +848,9 @@
     </div>
   </header>
 
-  <!-- Full-Bleed Executive Hero Showcase (International Auction Salesroom) -->
+  <!-- Full-Bleed Executive Luxury Hero Showcase (Patek Philippe Haute Horlogerie) -->
   <section class="hero-section" id="about-hero">
+    <div class="hero-bg-visual"></div>
     <div class="hero-overlay"></div>
     <div class="hero-inner-container">
       <div class="hero-content">
@@ -924,34 +899,7 @@
 
       </div>
 
-      <!-- Right Column: Subtle Glass Status Badge Card -->
-      <div class="hero-right-card">
-        <div class="hero-glass-badge">
-          <div style="display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px;">
-            <span class="hero-live-pill">
-              <span class="hero-live-dot"></span>
-              KHÁN PHÒNG TRỰC TIẾP
-            </span>
-            <span style="font-family: var(--font-mono); font-size: 0.72rem; color: #FDE68A; font-weight: 700;">#LIVE-SALES</span>
-          </div>
-          <div style="font-size: 1.05rem; font-weight: 800; color: #FFFFFF; line-height: 1.35; margin-bottom: 8px;">
-            Sàn Đấu Giá Trực Tuyến Độc Bản
-          </div>
-          <p style="font-size: 0.8rem; color: #CBD5E1; line-height: 1.5; margin: 0 0 16px 0;">
-            Khớp lệnh thời gian thực, bảo chứng ký quỹ pháp lý minh bạch và công bằng tuyệt đối cho mọi nhà sưu tầm.
-          </p>
-          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; padding-top: 12px; border-top: 1px solid rgba(255, 255, 255, 0.1); font-size: 0.75rem;">
-            <div>
-              <span style="color: #94A3B8; display: block; margin-bottom: 2px;">Thời gian khớp:</span>
-              <strong style="color: #10B981; font-family: var(--font-mono);">&lt; 15ms Realtime</strong>
-            </div>
-            <div>
-              <span style="color: #94A3B8; display: block; margin-bottom: 2px;">Bảo hiểm:</span>
-              <strong style="color: #FBBF24; font-family: var(--font-mono);">100% Escrow</strong>
-            </div>
-          </div>
-        </div>
-      </div>
+
 
     </div>
   </section>
