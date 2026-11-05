@@ -50,23 +50,24 @@ function renderHeader() {
       <div class="container container--wide utility-bar__inner">
         
         <!-- Left: Realtime Market State -->
-        <div class="utility-bar__left">
+        <div class="utility-bar__left" title="Sàn trực tiếp: Geneva & Monaco Session đang mở lệnh">
           <span class="utility-bar__dot"></span>
-          <span class="utility-text-muted">Thị trường trực tiếp:</span>
-          <span class="utility-text-bold">Geneva & Monaco Session đang mở lệnh</span>
+          <span class="utility-text-muted">Thị trường:</span>
+          <span class="utility-text-bold">Geneva & Monaco</span>
+          <span class="utility-text-session" style="color: #64748B;">(Mở lệnh)</span>
         </div>
 
         <!-- Right: Quick PIN + Wallet + User Switcher + Theme -->
         <div class="utility-bar__right">
           
           <!-- Quick PIN Input -->
-          <div class="utility-bar__pin-group">
-            <svg onclick="window.openPinModal()" title="Bấm để mở danh sách phòng đấu giá & mã PIN" viewBox="0 0 24 24" style="width: 13px; height: 13px; color: #94A3B8; cursor: pointer;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
+          <div class="utility-bar__pin-group" title="Nhập mã PIN 6 số để vào thẳng phòng đấu giá">
+            <svg onclick="window.openPinModal()" title="Bấm để mở danh sách phòng đấu giá & mã PIN" viewBox="0 0 24 24" style="width: 12px; height: 12px; color: #94A3B8; cursor: pointer; flex-shrink: 0;"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
             <input 
               type="text" 
               id="header-quick-pin" 
               maxlength="6" 
-              placeholder="PIN 6 số" 
+              placeholder="Mã PIN" 
               title="Nhập 6 số PIN để vào thẳng phòng đấu giá (Nhấn Enter)"
               onkeydown="if(event.key==='Enter'){event.preventDefault(); window.submitHeaderPin();}"
             />
@@ -76,7 +77,7 @@ function renderHeader() {
               title="Bấm để vào phòng đấu giá"
               class="utility-pin-btn"
             >
-              Vào Phòng
+              Vào
             </button>
           </div>
 
@@ -84,17 +85,20 @@ function renderHeader() {
 
           ${currentUser ? `
             <!-- Wallet Balance -->
-            <button type="button" class="utility-bar__link" onclick="window.openWalletModal()" title="Ví ký quỹ: Bấm để nạp thêm hoặc kiểm tra số dư">
-              <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
-              <span>Ví khả dụng: <strong style="color: #34D399; font-family: var(--font-mono); white-space: nowrap;">${formatMoney(walletAvailable)}</strong></span>
+            <button type="button" class="utility-wallet-btn" onclick="window.openWalletModal()" title="Ví ký quỹ: Bấm để nạp thêm hoặc kiểm tra số dư">
+              <svg viewBox="0 0 24 24" style="width: 13px; height: 13px; color: #34D399; flex-shrink: 0;"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+              <span><span class="utility-wallet-label">Ví: </span><strong style="color: #34D399; font-family: var(--font-mono); white-space: nowrap;">${formatMoney(walletAvailable)}</strong></span>
             </button>
 
             <span class="utility-sep">|</span>
 
             <!-- Current User Profile -->
-            <button type="button" class="utility-bar__link" onclick="window.openAuthModal()" title="Hồ sơ tài khoản & Thẻ đấu giá" style="display: inline-flex; align-items: center; gap: 6px;">
-              <img src="${currentUser.avatar || 'assets/images/user_thang.jpg'}" alt="Avatar" style="width: 18px; height: 18px; border-radius: 50%; object-fit: cover; border: 1.5px solid #10B981;" onerror="this.style.display='none';" />
-              <span>${userName} (<strong>${paddleId}</strong>${currentUser && currentUser.mssv ? ` &bull; <span style="color: #94A3B8;">MSSV: ${currentUser.mssv}</span>` : ''}${currentUser && (currentUser.role === 'admin' || currentUser.isAdmin) ? ` &bull; <span style="color: #34D399; font-weight: 700;">ADMIN</span>` : ''})</span>
+            <button type="button" class="utility-user-profile-btn" onclick="window.openAuthModal()" title="Hồ sơ tài khoản: ${userName} • MSSV: ${currentUser.mssv || '---'} • Thẻ ${paddleId}">
+              <img src="${currentUser.avatar || 'assets/images/user_thang.jpg'}" alt="Avatar" style="width: 18px; height: 18px; border-radius: 50%; object-fit: cover; border: 1.5px solid #10B981; flex-shrink: 0;" onerror="this.style.display='none';" />
+              <span class="utility-user-name">${userName}</span>
+              <span class="utility-user-paddle">(<strong>${paddleId}</strong>)</span>
+              ${currentUser && currentUser.mssv ? `<span class="utility-user-mssv" style="color: #94A3B8;">&bull; MSSV: ${currentUser.mssv}</span>` : ''}
+              ${currentUser && (currentUser.role === 'admin' || currentUser.isAdmin) ? `<span class="utility-user-admin" style="color: #34D399; font-weight: 700;">&bull; ADMIN</span>` : ''}
             </button>
 
             <span class="utility-sep">|</span>
