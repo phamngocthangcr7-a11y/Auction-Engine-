@@ -273,16 +273,18 @@
             </div>
             <div class="dash-profile-meta" style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center;">
               <span>Thẻ Đấu Giá: <strong class="font-mono text-emerald" id="dash-user-paddle">#PD-6651</strong></span>
+              <span id="dash-user-mssv-wrap" style="display: none;">
+                <span class="meta-sep">&bull;</span>
+                <span>MSSV: <strong class="font-mono" id="dash-user-mssv">---</strong></span>
+              </span>
               <span class="meta-sep">&bull;</span>
-              <span>MSSV: <strong class="font-mono" id="dash-user-mssv">6651071071</strong></span>
-              <span class="meta-sep">&bull;</span>
-              <span>Hạn mức tín nhiệm: <strong class="font-mono price-val text-emerald">50.000.000.000 ₫</strong></span>
+              <span>Hạn mức tín nhiệm: <strong class="font-mono price-val text-emerald" id="dash-user-credit">50.000.000.000 ₫</strong></span>
             </div>
           </div>
         </div>
 
         <div class="dash-profile-actions">
-          <a href="admin.html" class="btn btn-outline btn-admin-portal" style="border-color: #059669; color: #059669; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;" title="Chuyển sang bảng điều khiển quản trị sàn đấu giá">
+          <a href="admin.html" id="dash-btn-admin" class="btn btn-outline btn-admin-portal" style="border-color: #059669; color: #059669; font-weight: 700; display: none; align-items: center; gap: 6px;" title="Chuyển sang bảng điều khiển quản trị sàn đấu giá">
             <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2;"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
             <span>Vào Quản Trị (Admin Portal)</span>
           </a>
@@ -381,9 +383,9 @@
           <div class="dash-panel active" id="tab-profile">
             <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 28px; box-shadow: var(--shadow-card);">
               <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 20px;">
-                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #059669; font-weight: 700; margin-bottom: 4px;">Hồ Sơ & Danh Tính Thụy Sĩ</div>
-                <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0 0 4px 0;">Hồ Sơ Thành Viên & Chứng Thực KYC</h3>
-                <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">Thông tin pháp lý được lưu ký bảo mật vĩnh viễn theo quy chuẩn sàn đấu giá AUCTIONENGINE.</p>
+                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #059669; font-weight: 700; margin-bottom: 4px;">THÔNG TIN CÁ NHÂN & TÀI KHOẢN</div>
+                <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0 0 4px 0;">Hồ Sơ Thành Viên & Xác Thực Tài Khoản</h3>
+                <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">Thông tin cá nhân được bảo mật an toàn theo tiêu chuẩn AUCTIONENGINE.</p>
               </div>
 
               <form id="form-user-profile" onsubmit="window.saveUserProfile(event)">
@@ -392,9 +394,9 @@
                     <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 6px;">Họ và Tên</label>
                     <input type="text" id="prof-input-name" class="form-control" value="Phạm Ngọc Thắng" required style="width: 100%; padding: 9px 12px; font-size: 0.88rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-page); color: var(--text-primary);" />
                   </div>
-                  <div class="form-group">
+                  <div class="form-group" id="prof-group-mssv" style="display: none;">
                     <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 6px;">Mã Số Sinh Viên (MSSV)</label>
-                    <input type="text" id="prof-input-mssv" class="form-control font-mono" value="6651071071" readonly style="width: 100%; padding: 9px 12px; font-size: 0.88rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-muted);" />
+                    <input type="text" id="prof-input-mssv" class="form-control font-mono" value="" readonly style="width: 100%; padding: 9px 12px; font-size: 0.88rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-muted);" />
                   </div>
                 </div>
 
@@ -697,26 +699,62 @@
       function updateDashboardData() {
         var user = store.getCurrentUser();
         if (!user) {
-          // Khách chưa đăng nhập: chuyển hướng sang cổng đăng nhập để bảo mật thông tin cá nhân
-          window.location.href = 'login.html?redirect=dashboard.html';
+          window.location.href = 'index.html?modal=auth';
           return;
         }
 
         // Header info
         var elName = document.getElementById('dash-user-name');
-        if (elName) elName.textContent = user.fullName;
+        if (elName) elName.textContent = user.fullName || 'Thành Viên';
         var elPaddle = document.getElementById('dash-user-paddle');
-        if (elPaddle) elPaddle.textContent = user.paddleId || '#PD-6651';
+        if (elPaddle) elPaddle.textContent = user.paddleId || '#PD-0000';
+        var elMssvWrap = document.getElementById('dash-user-mssv-wrap');
         var elMssv = document.getElementById('dash-user-mssv');
-        if (elMssv && user.mssv) elMssv.textContent = user.mssv;
+        if (elMssvWrap && elMssv) {
+          if (user.mssv) {
+            elMssvWrap.style.display = 'inline-flex';
+            elMssv.textContent = user.mssv;
+          } else {
+            elMssvWrap.style.display = 'none';
+          }
+        }
         var elAvatar = document.getElementById('dash-user-avatar');
-        if (elAvatar && user.avatar) elAvatar.src = user.avatar;
+        if (elAvatar) elAvatar.src = user.avatar || 'assets/images/user_avatar.jpg';
         var elRoleBadge = document.getElementById('dash-user-role-badge');
         if (elRoleBadge) {
           if (user.role === 'admin' || user.isAdmin) {
             elRoleBadge.innerHTML = '<svg viewBox="0 0 24 24" style="width: 12px; height: 12px; stroke: #FFF; fill: none; stroke-width: 2.2; flex-shrink: 0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg> <span>QUẢN TRỊ VIÊN HỆ THỐNG (SUPER ADMIN)</span>';
           } else {
-            elRoleBadge.textContent = (user.role || 'VIP COLLECTOR') + ' • KYC LEVEL 3';
+            elRoleBadge.textContent = 'THÀNH VIÊN ĐẤU GIÁ (MEMBER)';
+          }
+        }
+        var elAdminBtn = document.getElementById('dash-btn-admin');
+        if (elAdminBtn) {
+          elAdminBtn.style.display = (user.role === 'admin' || user.isAdmin) ? 'inline-flex' : 'none';
+        }
+        var elCredit = document.getElementById('dash-user-credit');
+        if (elCredit) {
+          var cred = user.creditLimit || (user.walletAvailable ? user.walletAvailable * 2 : 5000000000);
+          elCredit.textContent = store.formatCurrency(cred);
+        }
+
+        // Populate Form Inputs for current user
+        var inpName = document.getElementById('prof-input-name');
+        if (inpName) inpName.value = user.fullName || '';
+        var inpEmail = document.getElementById('prof-input-email');
+        if (inpEmail) inpEmail.value = user.email || '';
+        var inpPhone = document.getElementById('prof-input-phone');
+        if (inpPhone) inpPhone.value = user.phone || '0908 665 107';
+        var inpAddr = document.getElementById('prof-input-address');
+        if (inpAddr) inpAddr.value = user.address || 'Hồ Chí Minh, Việt Nam';
+        var grpMssv = document.getElementById('prof-group-mssv');
+        var inpMssv = document.getElementById('prof-input-mssv');
+        if (grpMssv && inpMssv) {
+          if (user.mssv) {
+            grpMssv.style.display = 'block';
+            inpMssv.value = user.mssv;
+          } else {
+            grpMssv.style.display = 'none';
           }
         }
 
@@ -735,7 +773,7 @@
         if (withdrawMax) withdrawMax.textContent = store.formatCurrency(avail);
 
         // 3. Top-up history
-        var txs = store.getTransactions ? store.getTransactions().filter(function(t) { return t.type === 'TOPUP'; }) : [];
+        var txs = store.getTransactions ? store.getTransactions().filter(function(t) { return t.type === 'TOPUP' && (!t.uid || t.uid === user.uid); }) : [];
         var topupTbody = document.getElementById('dash-topup-tbody');
         if (topupTbody) {
           topupTbody.innerHTML = txs.map(function(t) {
@@ -752,7 +790,7 @@
         }
 
         // 4. Escrow deposit history
-        var deposits = store.getDeposits ? store.getDeposits() : [];
+        var deposits = (store.getDeposits ? store.getDeposits() : []).filter(function(d) { return d.uid === user.uid || d.paddleId === user.paddleId; });
         var escrowTbody = document.getElementById('dash-escrow-tbody');
         if (escrowTbody) {
           escrowTbody.innerHTML = deposits.map(function(d) {

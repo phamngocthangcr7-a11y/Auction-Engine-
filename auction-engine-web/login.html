@@ -473,7 +473,9 @@
     // 2. Lấy URL redirect nếu có (VD: vào phòng cụ thể trước khi đăng nhập)
     function getRedirectUrl() {
       const params = new URLSearchParams(window.location.search);
-      return params.get('redirect') || 'index.html';
+      const r = params.get('redirect');
+      if (r && !r.includes('login') && !r.includes('logout')) return r;
+      return 'index.html';
     }
 
     // 3. Hiển thị thông báo đăng xuất nếu URL có ?logout=true
@@ -521,6 +523,7 @@
         if (alreadyBanner) {
           alreadyBanner.style.display = 'block';
           document.getElementById('logged-user-name').textContent = `${curr.fullName} (${curr.paddleId})`;
+          setTimeout(() => { window.location.href = getRedirectUrl(); }, 600);
           
           const redirectUrl = getRedirectUrl();
           const continueBtn = document.getElementById('btn-continue-redirect');

@@ -1056,6 +1056,27 @@
         return;
       }
 
+      var STORAGE_KEYS = window.STORAGE_KEYS || (store && store.STORAGE_KEYS) || {
+        ROOMS: 'AURELIA_ROOMS_V4',
+        USERS: 'AURELIA_USERS_V4',
+        CURRENT_USER: 'AURELIA_CURRENT_USER_V4',
+        DEPOSITS: 'AURELIA_DEPOSITS_V4',
+        BIDS: 'AURELIA_BIDS_V4'
+      };
+
+      function checkIsHost(room, user) {
+        if (!room) return false;
+        var rPin = String(room.roomPin || roomParam || '').replace(/[^0-9]/g, '');
+        if (urlParams.get('created') === 'true') return true;
+        if (sessionStorage.getItem('AE_HOST_ROOM_' + rPin) === 'true') return true;
+        if (localStorage.getItem('AE_HOST_ROOM_' + rPin) === 'true') return true;
+        if (!user) return false;
+        if (user.role === 'admin' || user.isAdmin) return true;
+        if (user.uid === room.sellerId) return true;
+        if (user.paddleId && user.paddleId === room.sellerPaddleId) return true;
+        return false;
+      }
+
       // 2. Identify Room from URL & Hydrate if Shared
       var urlParams = new URLSearchParams(window.location.search);
       var roomParam = urlParams.get('room') || urlParams.get('id') || '839201';
@@ -1177,11 +1198,12 @@
             window.mqttTopic = mqttTopic;
             window.mqttClientId = mqttClientId;
             mqttClient.subscribe(mqttTopic, { qos: 1 }, function() {
-              if (currentRoom) {
-                // Nếu mình là chủ phòng hoặc đã có dữ liệu phòng -> phát sóng lưu lại trên broker
+              var isCurrentHost = checkIsHost(currentRoom, store.getCurrentUser());
+              if (isCurrentHost && currentRoom) {
+                // CHỈ Chủ phòng mới được phát sóng dữ liệu gốc lên broker
                 broadcastRoomToPeers(currentRoom);
               } else {
-                // Nếu vào phòng bằng PIN trên máy mới và chưa có dữ liệu -> gửi yêu cầu đồng bộ
+                // Người tham gia chỉ gửi yêu cầu đồng bộ dữ liệu từ Chủ phòng
                 mqttClient.publish(mqttTopic, JSON.stringify({
                   type: 'REQUEST_ROOM_SYNC',
                   senderId: mqttClientId,
@@ -1200,6 +1222,15 @@
               // Đồng bộ phòng từ máy chủ phòng sang máy khách
               if ((data.type === 'HOST_ROOM_BROADCAST' || data.type === 'ROOM_SYNC') && data.room) {
                 if (String(data.room.roomPin) === String(roomParam)) {
+                  // BẢO VỆ PHIÊN ĐANG LIVE: Không cho phép gói tin WAITING ghi đè làm reset thời gian
+                  if (currentRoom && currentRoom.status === 'LIVE' && data.room.status === 'WAITING' && data.senderId !== mqttClientId) {
+                    console.warn('[Sync Guard] Bỏ qua gói tin WAITING vì phòng đang LIVE');
+                    if (checkIsHost(currentRoom, store.getCurrentUser())) {
+                      broadcastRoomToPeers(currentRoom);
+                    }
+                    return;
+                  }
+
                   store.upsertRoom(data.room);
                   currentRoom = data.room;
                   window.roomId = currentRoom.roomId;
@@ -1238,41 +1269,77 @@
                 }
               } else if (data.type === 'REQUEST_ROOM_SYNC') {
                 // Máy khác vừa vào và xin dữ liệu phòng -> Chủ phòng phản hồi ngay
-                if (currentRoom) {
+                if (currentRoom && checkIsHost(currentRoom, store.getCurrentUser())) {
                   broadcastRoomToPeers(currentRoom);
                 }
               } else if (data.type === 'NEW_DEPOSIT' && data.deposit) {
-                var allDeps = store.getDeposits();
                 var dep = data.deposit;
+                var cleanPin = String(roomParam || '').replace(/[^0-9]/g, '');
+                var normalizedDep = {
+                  id: dep.id || ('dep-' + Date.now() + '-' + Math.floor(Math.random() * 1000)),
+                  roomId: dep.roomId || window.roomId || ('room-' + cleanPin),
+                  uid: dep.uid,
+                  fullName: dep.fullName || dep.userName || 'Nhà Sưu Tầm',
+                  userName: dep.fullName || dep.userName || 'Nhà Sưu Tầm',
+                  paddleId: dep.paddleId || '---',
+                  amount: Number(dep.amount) || (currentRoom ? currentRoom.depositAmount : 150000),
+                  status: dep.status || 'LOCKED',
+                  timestamp: dep.timestamp || Date.now()
+                };
+
+                var allDeps = store.getDeposits();
                 var exists = allDeps.some(function(d) {
-                  return d.id === dep.id || (d.uid === dep.uid && (d.roomId === dep.roomId || d.roomId === window.roomId || String(d.roomId).replace('room-', '') === String(roomParam)));
+                  return d.id === normalizedDep.id || (d.uid === normalizedDep.uid && (
+                    d.roomId === normalizedDep.roomId || 
+                    d.roomId === window.roomId || 
+                    String(d.roomId).replace('room-', '') === cleanPin ||
+                    String(normalizedDep.roomId).replace('room-', '') === cleanPin
+                  ));
                 });
                 if (!exists) {
-                  allDeps.push(dep);
+                  allDeps.push(normalizedDep);
                   localStorage.setItem(STORAGE_KEYS.DEPOSITS, JSON.stringify(allDeps));
+                } else {
+                  var idx = allDeps.findIndex(function(d) {
+                    return d.id === normalizedDep.id || (d.uid === normalizedDep.uid && String(d.roomId).replace('room-', '') === cleanPin);
+                  });
+                  if (idx !== -1) {
+                    allDeps[idx] = Object.assign(allDeps[idx], normalizedDep);
+                    localStorage.setItem(STORAGE_KEYS.DEPOSITS, JSON.stringify(allDeps));
+                  }
                 }
                 var r = store.getRoom(window.roomId);
                 if (r) {
                   var count = allDeps.filter(function(d) {
-                    return d.roomId === r.roomId || d.roomId === r.roomPin || String(d.roomId).replace('room-', '') === String(r.roomPin);
+                    return d.roomId === r.roomId || d.roomId === r.roomPin || String(d.roomId).replace('room-', '') === cleanPin;
                   }).length;
                   store.updateRoom(window.roomId, {
                     participantsCount: Math.max((r.participantsCount || 1), count)
                   });
                 }
                 renderRoom();
+                window.switchRoomTab('deposits');
                 if (soundSystem) soundSystem.playGavelStrike(1, 180);
                 if (window.showToast) {
-                  var bName = dep.fullName || dep.userName || 'Nhà sưu tầm';
-                  var pId = dep.paddleId || '---';
-                  window.showToast('Người tham gia ký quỹ mới', bName + ' (' + pId + ') vừa nộp cọc 15%!', 'info', 3500);
+                  window.showToast('Người tham gia ký quỹ mới', normalizedDep.fullName + ' (' + normalizedDep.paddleId + ') vừa nộp cọc 15%!', 'info', 3500);
+                }
+                // Nếu mình là Chủ phòng thì phát lại gói lưu trữ để cập nhật broker
+                if (checkIsHost(currentRoom, store.getCurrentUser())) {
+                  broadcastRoomToPeers(currentRoom);
                 }
               } else if (data.type === 'AUCTION_STARTED') {
+                var sTime = data.startTime || (data.room && data.room.startTime) || new Date().toISOString();
+                var eTime = data.endTime || (data.room && data.room.endTime) || new Date(Date.now() + 15 * 60000).toISOString();
                 store.updateRoom(window.roomId, {
                   status: 'LIVE',
-                  startTime: data.startTime || (data.room && data.room.startTime) || new Date().toISOString(),
-                  endTime: data.endTime || (data.room && data.room.endTime) || new Date(Date.now() + 15 * 60000).toISOString()
+                  startTime: sTime,
+                  endTime: eTime
                 });
+                if (currentRoom) {
+                  currentRoom.status = 'LIVE';
+                  currentRoom.startTime = sTime;
+                  currentRoom.endTime = eTime;
+                }
                 renderRoom();
                 if (soundSystem) soundSystem.playGavelStrike(1, 250);
                 if (window.showToast) {
@@ -1617,16 +1684,7 @@
         panelLive.style.display = 'none';
         panelEnded.style.display = 'none';
 
-        var isHost = (currentUser && (
-          currentUser.uid === room.sellerId ||
-          currentUser.paddleId === room.sellerPaddleId ||
-          currentUser.role === 'admin' ||
-          currentUser.isAdmin ||
-          currentUser.role === 'HOST'
-        )) || 
-        (urlParams.get('created') === 'true') || 
-        (sessionStorage.getItem('AE_HOST_ROOM_' + room.roomPin) === 'true') ||
-        (localStorage.getItem('AE_HOST_ROOM_' + room.roomPin) === 'true');
+        var isHost = checkIsHost(room, currentUser);
         var hasDeposited = currentUser && deposits.some(function(d) { return d.uid === currentUser.uid && d.status === 'LOCKED'; });
 
         if (room.status === 'WAITING') {
@@ -1917,6 +1975,7 @@
         btnStart.addEventListener('click', function() {
           var updated = store.startAuction(window.roomId);
           if (updated) {
+            currentRoom = updated;
             if (mqttClient && mqttClient.connected) {
               mqttClient.publish(mqttTopic, JSON.stringify({
                 type: 'AUCTION_STARTED',
@@ -1926,6 +1985,7 @@
                 startTime: updated.startTime,
                 endTime: updated.endTime
               }), { retain: true, qos: 1 });
+              broadcastRoomToPeers(updated);
             }
             if (soundSystem) soundSystem.playGavelStrike(1, 250);
             if (window.showToast) {

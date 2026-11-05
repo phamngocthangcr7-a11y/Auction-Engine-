@@ -158,9 +158,11 @@ function renderHeader() {
             <a href="dashboard.html" class="nav-link ${currentPath.includes('dashboard') ? 'active' : ''}">
               Không Gian Cá Nhân
             </a>
+            ${(currentUser && (currentUser.role === 'admin' || currentUser.isAdmin)) ? `
             <a href="admin.html" class="nav-link ${currentPath.includes('admin') ? 'active' : ''}" style="color: #059669; font-weight: 700;">
               Quản Trị (Admin)
             </a>
+            ` : ''}
           </nav>
         </div>
 
@@ -329,10 +331,12 @@ function renderHeader() {
           <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
           <span>Không Gian Cá Nhân</span>
         </a>
+        ${(currentUser && (currentUser.role === 'admin' || currentUser.isAdmin)) ? `
         <a href="admin.html" class="mobile-nav-item ${currentPath.includes('admin') ? 'active' : ''}" style="color: #059669; font-weight: 700;">
           <svg viewBox="0 0 24 24" style="stroke: #059669;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
           <span>Quản Trị (Admin)</span>
         </a>
+        ` : ''}
         <a href="guide-about.html" class="mobile-nav-item ${currentPath.includes('guide-about') ? 'active' : ''}">
           <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
           <span>Quy Chuẩn Đấu Giá</span>

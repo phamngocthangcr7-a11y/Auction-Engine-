@@ -721,7 +721,13 @@ function bindModalEvents() {
           }
           window.closeModal('modal-auth');
           if (typeof window.renderHeader === 'function') window.renderHeader();
-          setTimeout(() => window.location.reload(), 400);
+          setTimeout(() => {
+            if (window.location.pathname.includes('login.html')) {
+              window.location.href = 'index.html';
+            } else {
+              window.location.reload();
+            }
+          }, 350);
         } else {
           if (window.showToast) {
             window.showToast('Đăng nhập thất bại', (res && res.message) || 'Thông tin tài khoản không chính xác!', 'error');
@@ -751,7 +757,13 @@ function bindModalEvents() {
           }
           window.closeModal('modal-auth');
           if (typeof window.renderHeader === 'function') window.renderHeader();
-          setTimeout(() => window.location.reload(), 400);
+          setTimeout(() => {
+            if (window.location.pathname.includes('login.html')) {
+              window.location.href = 'index.html';
+            } else {
+              window.location.reload();
+            }
+          }, 350);
         } else {
           if (window.showToast) {
             window.showToast('Đăng ký không thành công', (res && res.message) || 'Vui lòng kiểm tra lại thông tin.', 'error');
@@ -858,13 +870,39 @@ function bindModalEvents() {
             var client = window.mqttClient;
             var cleanPin = String(pendingDepositRoomId || '').replace(/[^0-9]/g, '');
             var topic = window.mqttTopic || ('aurelia/auction/room/' + cleanPin);
-            if (client && client.connected && res.deposit) {
+            var u = store.getCurrentUser();
+            var depObj = res.deposit || {};
+            var depPayload = {
+              id: depObj.id || ('dep-' + Date.now() + '-' + Math.floor(Math.random() * 1000)),
+              roomId: pendingDepositRoomId,
+              uid: depObj.uid || (u ? u.uid : 'usr-cust'),
+              fullName: depObj.fullName || depObj.userName || (u ? u.fullName : 'Nhà Sưu Tầm'),
+              userName: depObj.fullName || depObj.userName || (u ? u.fullName : 'Nhà Sưu Tầm'),
+              paddleId: depObj.paddleId || (u ? u.paddleId : '#PD-0000'),
+              amount: depObj.amount || 150000,
+              status: depObj.status || 'LOCKED',
+              timestamp: depObj.timestamp || Date.now()
+            };
+
+            if (client && client.connected) {
               client.publish(topic, JSON.stringify({
                 type: 'NEW_DEPOSIT',
                 senderId: window.mqttClientId || ('ae_client_' + Date.now()),
                 roomId: pendingDepositRoomId,
-                deposit: res.deposit
+                deposit: depPayload
               }), { qos: 1 });
+            } else if (typeof mqtt !== 'undefined' && typeof mqtt.connect === 'function') {
+              var tempC = mqtt.connect('wss://broker.emqx.io:8084/mqtt', { clientId: 'ae_dep_' + Math.random().toString(16).substring(2, 8), clean: true });
+              tempC.on('connect', function() {
+                tempC.publish(topic, JSON.stringify({
+                  type: 'NEW_DEPOSIT',
+                  senderId: 'ae_dep_sender',
+                  roomId: pendingDepositRoomId,
+                  deposit: depPayload
+                }), { qos: 1 }, function() {
+                  setTimeout(function() { tempC.end(); }, 1200);
+                });
+              });
             }
           } catch(e) {
             console.warn('[MQTT Deposit Broadcast Error]:', e);

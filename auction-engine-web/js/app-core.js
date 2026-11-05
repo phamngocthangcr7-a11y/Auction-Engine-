@@ -2116,7 +2116,9 @@
   // =========================================================================
   // EXPORT TO WINDOW (GLOBAL SINGLETON)
   // =========================================================================
+  AppCore.prototype.STORAGE_KEYS = STORAGE_KEYS;
   var coreInstance = new AppCore();
+  window.STORAGE_KEYS = STORAGE_KEYS;
   window.AureliaApp = coreInstance;
   window.AuctionStore = coreInstance; // Alias for backward compatibility
   window.AuctionApp = coreInstance;   // Alias for backward compatibility
