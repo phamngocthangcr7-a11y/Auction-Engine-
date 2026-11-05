@@ -656,8 +656,8 @@
             return false;
           }
           if (checkedCats.length > 0 && !checkedCats.includes(r.category)) return false;
-          var effStatus = (r.status === 'PENDING_APPROVAL') ? 'WAITING' : r.status;
-          if (checkedStatuses.length > 0 && !checkedStatuses.includes(effStatus) && !checkedStatuses.includes(r.status)) return false;
+          var effStatus = (typeof getLotStatus === 'function') ? getLotStatus(r) : ((r.status === 'PENDING_APPROVAL') ? 'WAITING' : r.status);
+          if (checkedStatuses.length > 0 && !checkedStatuses.includes(effStatus)) return false;
           if (price < minPrice || (maxPrice < Infinity && price > maxPrice)) return false;
           return true;
         });

@@ -9,7 +9,7 @@
   <!-- Google Fonts: Inter & JetBrains Mono -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
     :root {
@@ -36,7 +36,7 @@
     body {
       background-color: var(--bg-dark);
       color: #F8FAFC;
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      font-family: 'Be Vietnam Pro', 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
@@ -913,98 +913,10 @@
       </div>
     </div>
 
-    <!-- 4 Featured Cards Grid -->
-    <div class="lots-grid">
-      
-      <!-- Card 1: Patek -->
-      <div class="lot-card" onclick="handleLotClick('839201')" title="Bấm để tham gia phiên đấu giá Patek Philippe Nautilus">
-        <div class="lot-img-wrap">
-          <img src="assets/images/patek_nautilus_gold.jpg" alt="Patek Philippe" class="lot-img">
-          <div class="lot-time-pill">
-            <span class="pulse-dot"></span>
-            <span id="timer-lot-1">04:45</span>
-          </div>
-        </div>
-        <div class="lot-body">
-          <div class="lot-cat">Đồng Hồ Cơ &bull; Lot #839201</div>
-          <div class="lot-title">Patek Philippe Nautilus 5711/1R-001 Vàng Hồng 18K</div>
-          <div class="lot-foot">
-            <div>
-              <div class="lot-price-label">Giá hiện tại</div>
-              <div class="lot-price-val">3.850.000.000 ₫</div>
-            </div>
-            <div class="lot-pin-badge">#839201</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 2: Porsche -->
-      <div class="lot-card" onclick="handleLotClick('940182')" title="Bấm để tham gia phiên đấu giá Porsche 911 GT3 RS">
-        <div class="lot-img-wrap">
-          <img src="https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=800&q=85" alt="Porsche 911 GT3 RS" class="lot-img">
-          <div class="lot-time-pill">
-            <span class="pulse-dot"></span>
-            <span id="timer-lot-2">08:12</span>
-          </div>
-        </div>
-        <div class="lot-body">
-          <div class="lot-cat">Siêu Xe &amp; Mô Tô Hiếm &bull; Lot #940182</div>
-          <div class="lot-title">Porsche 911 GT3 RS Weissach Package 2024</div>
-          <div class="lot-foot">
-            <div>
-              <div class="lot-price-label">Giá hiện tại</div>
-              <div class="lot-price-val">16.200.000.000 ₫</div>
-            </div>
-            <div class="lot-pin-badge">#940182</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 3: Ferrari -->
-      <div class="lot-card" onclick="handleLotClick('551920')" title="Bấm để tham gia phiên đấu giá Ferrari F8 Novitec">
-        <div class="lot-img-wrap">
-          <img src="https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=800&q=85" alt="Ferrari F8" class="lot-img">
-          <div class="lot-time-pill">
-            <span class="pulse-dot"></span>
-            <span id="timer-lot-3">12:30</span>
-          </div>
-        </div>
-        <div class="lot-body">
-          <div class="lot-cat">Siêu Xe &amp; Mô Tô Hiếm &bull; Lot #551920</div>
-          <div class="lot-title">Ferrari F8 Tributo Novitec N-Largo Special Edition</div>
-          <div class="lot-foot">
-            <div>
-              <div class="lot-price-label">Giá hiện tại</div>
-              <div class="lot-price-val">28.500.000.000 ₫</div>
-            </div>
-            <div class="lot-pin-badge">#551920</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Card 4: Art -->
-      <div class="lot-card" onclick="handleLotClick('418290')" title="Bấm để tham gia phiên đấu giá Tranh Sơn Dầu Pháp">
-        <div class="lot-img-wrap">
-          <img src="assets/images/french_oil_painting.jpg" alt="Tranh Sơn Dầu" class="lot-img">
-          <div class="lot-time-pill">
-            <span class="pulse-dot"></span>
-            <span id="timer-lot-4">18:15</span>
-          </div>
-        </div>
-        <div class="lot-body">
-          <div class="lot-cat">Tranh Nghệ Thuật &bull; Lot #418290</div>
-          <div class="lot-title">Tranh Sơn Dầu Pháp Thế Kỷ XIX (Bảo Chứng Giám Định)</div>
-          <div class="lot-foot">
-            <div>
-              <div class="lot-price-label">Giá hiện tại</div>
-              <div class="lot-price-val">1.250.000.000 ₫</div>
-            </div>
-            <div class="lot-pin-badge">#418290</div>
-          </div>
-        </div>
-      </div>
-
-    </div>
+    <!-- 4 Featured Cards Grid (Dynamic from Store - Bug 2) -->
+    <div class="lots-grid" id="welcome-lots-grid">
+      <!-- Populated dynamically via renderWelcomeLots() from real localStorage lots -->
+    </div>    </div>
   </section>
 
   <!-- Escrow Standards Section -->
@@ -1289,14 +1201,67 @@
       }
     }
 
+    // Render real lots dynamically from localStorage (Bug 2)
+    function renderWelcomeLots() {
+      const store = window.AureliaApp || window.AuctionStore;
+      const grid = document.getElementById('welcome-lots-grid');
+      if (!grid) return;
+
+      const rooms = store ? store.getRooms() : [];
+      // Prioritize WAITING lots first as requested
+      const sorted = rooms.slice().sort((a, b) => {
+        const sA = (typeof getLotStatus === 'function') ? getLotStatus(a) : a.status;
+        const sB = (typeof getLotStatus === 'function') ? getLotStatus(b) : b.status;
+        if (sA === 'WAITING' && sB !== 'WAITING') return -1;
+        if (sA !== 'WAITING' && sB === 'WAITING') return 1;
+        return 0;
+      });
+
+      const displayLots = sorted.slice(0, 4);
+      if (displayLots.length === 0) {
+        grid.innerHTML = '<div style="color:#94A3B8;text-align:center;grid-column:1/-1;padding:30px;">Chưa có phiên đấu giá nào được mở.</div>';
+        return;
+      }
+
+      grid.innerHTML = displayLots.map((lot, idx) => {
+        const img = (lot.images && lot.images[0]) || 'assets/images/patek_nautilus_gold.jpg';
+        const price = store ? store.formatCurrency(lot.currentPrice || lot.startPrice) : (lot.startPrice ? lot.startPrice.toLocaleString('vi-VN') + ' ₫' : '---');
+        const st = (typeof getLotStatus === 'function') ? getLotStatus(lot) : lot.status;
+        const statusBadge = st === 'LIVE' ? '<span class="pulse-dot"></span><span>LIVE ĐANG DIỄN RA</span>' : '<span style="color:#F59E0B;font-weight:700;">● PHÒNG CHỜ • SẮP MỞ</span>';
+        return `
+          <div class="lot-card" onclick="handleLotClick('${lot.roomPin || lot.roomId}')" title="Bấm để tham gia phiên đấu giá ${lot.title}">
+            <div class="lot-img-wrap">
+              <img src="${img}" alt="${lot.title}" class="lot-img" loading="lazy">
+              <div class="lot-time-pill" style="gap:6px;">
+                ${statusBadge}
+              </div>
+            </div>
+            <div class="lot-body">
+              <div class="lot-cat">${lot.categoryName || 'Tài sản cao cấp'} &bull; Lot #${lot.lotNumber || (idx + 101)}</div>
+              <div class="lot-title">${lot.title}</div>
+              <div class="lot-foot">
+                <div>
+                  <div class="lot-price-label">Giá khởi điểm / Hiện tại</div>
+                  <div class="lot-price-val font-mono">${price}</div>
+                </div>
+                <div class="lot-pin-badge">#${lot.roomPin || lot.roomId}</div>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
     // Handle Lot Card Click
     function handleLotClick(pin) {
       const store = window.AureliaApp || window.AuctionStore;
       const user = store ? store.getCurrentUser() : null;
+      const target = 'live-room.html?room=' + encodeURIComponent(pin);
       if (user) {
-        window.location.href = 'live-room.html?room=' + encodeURIComponent(pin);
+        window.location.href = target;
       } else {
-        pendingRedirect = 'live-room.html?room=' + encodeURIComponent(pin);
+        pendingRedirect = target;
+        sessionStorage.setItem('redirectAfterLogin', target);
         openAuthModal('login');
       }
     }
@@ -1388,6 +1353,7 @@
 
     // Initial query params check
     window.addEventListener('DOMContentLoaded', () => {
+      renderWelcomeLots();
       updateWelcomeAuthState();
       const params = new URLSearchParams(window.location.search);
       const tab = params.get('tab');

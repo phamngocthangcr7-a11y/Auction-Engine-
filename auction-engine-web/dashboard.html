@@ -331,7 +331,7 @@
           <button type="button" class="dash-menu-item" data-tab="tab-topup-history">
             <div style="display: flex; align-items: center; gap: 10px;">
               <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
-              <span>3. Lịch Sử Nạp Tiền</span>
+              <span>3. Lịch Sử Nạp & Rút Tiền</span>
             </div>
           </button>
           <button type="button" class="dash-menu-item" data-tab="tab-escrow-history">
@@ -393,6 +393,32 @@
                 <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0 0 4px 0;">Hồ Sơ Thành Viên & Xác Thực Tài Khoản</h3>
                 <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">Thông tin cá nhân được bảo mật an toàn theo tiêu chuẩn AUCTIONENGINE.</p>
               </div>
+              <!-- Avatar Change Section (Bug 16) -->
+              <div style="background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 18px; margin-bottom: 22px;">
+                <div style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); margin-bottom: 12px;">
+                  Ảnh Đại Diện Thành Viên (Avatar)
+                </div>
+                <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+                  <img id="prof-current-avatar-preview" src="assets/images/user_thang.jpg" style="width: 72px; height: 72px; border-radius: 50%; object-fit: cover; border: 2px solid #059669; box-shadow: 0 4px 12px rgba(5,150,105,0.25);" alt="Avatar"/>
+                  <div style="flex: 1;">
+                    <input type="file" id="prof-avatar-file-input" accept="image/*" style="display: none;" onchange="window.handleAvatarUpload(event)"/>
+                    <button type="button" class="btn btn-outline" onclick="document.getElementById('prof-avatar-file-input').click()" style="font-size: 0.8rem; margin-bottom: 10px; display: inline-flex; align-items: center; gap: 6px;">
+                      <svg viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                      <span>Tải Ảnh Lên Từ Máy Tính</span>
+                    </button>
+                    <div style="font-size: 0.72rem; color: var(--text-muted); margin-bottom: 8px;">Hoặc chọn nhanh từ 6 ảnh đại diện mẫu:</div>
+                    <div style="display: flex; gap: 8px; flex-wrap: wrap;" id="preset-avatars-list">
+                      <img src="assets/images/user_thang.jpg" onclick="window.selectPresetAvatar(this.src)" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 2px solid var(--border-color);" title="Super Admin Thắng"/>
+                      <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=200&q=80" onclick="window.selectPresetAvatar(this.src)" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 2px solid var(--border-color);" title="Lady Collector"/>
+                      <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80" onclick="window.selectPresetAvatar(this.src)" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 2px solid var(--border-color);" title="Gentleman Collector"/>
+                      <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80" onclick="window.selectPresetAvatar(this.src)" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 2px solid var(--border-color);" title="Young Investor"/>
+                      <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=200&q=80" onclick="window.selectPresetAvatar(this.src)" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 2px solid var(--border-color);" title="Executive Collector"/>
+                      <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=200&q=80" onclick="window.selectPresetAvatar(this.src)" style="width: 36px; height: 36px; border-radius: 50%; object-fit: cover; cursor: pointer; border: 2px solid var(--border-color);" title="Senior Connoisseur"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
 
               <form id="form-user-profile" onsubmit="window.saveUserProfile(event)">
                 <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-bottom: 16px;">
@@ -411,10 +437,7 @@
                     <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 6px;">Email Liên Hệ</label>
                     <input type="email" id="prof-input-email" class="form-control" value="thang.pn@auctionengine.vn" required style="width: 100%; padding: 9px 12px; font-size: 0.88rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-page); color: var(--text-primary);" />
                   </div>
-                  <div class="form-group">
-                    <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 6px;">Số Điện Thoại</label>
-                    <input type="tel" id="prof-input-phone" class="form-control font-mono" value="0908 665 107" required style="width: 100%; padding: 9px 12px; font-size: 0.88rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-page); color: var(--text-primary);" />
-                  </div>
+                  
                 </div>
 
                 <div class="form-group" style="margin-bottom: 20px;">
@@ -479,7 +502,7 @@
             <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-card);">
               <div style="padding: 18px 24px; border-bottom: 1px solid var(--border-color);">
                 <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #059669; font-weight: 700; margin-bottom: 2px;">Sổ Cái Dòng Tiền</div>
-                <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0;">Lịch Sử Nạp Hạn Mức Ví (Top-up Ledger)</h3>
+                <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0;">Lịch Sử Nạp & Rút Tiền Vào Ví (Cash Flow Ledger)</h3>
               </div>
               <div style="overflow-x: auto;">
                 <table style="width: 100%; border-collapse: collapse; font-size: 0.84rem;">
@@ -795,25 +818,55 @@
           }).join('');
         }
 
-        // 4. Escrow deposit history
+        // 4. Đặt Cọc & Hoàn Tiền 100% (Bug 14 / Bug 15)
         var deposits = (store.getDeposits ? store.getDeposits() : []).filter(function(d) { return d.uid === user.uid || d.paddleId === user.paddleId; });
         var escrowTbody = document.getElementById('dash-escrow-tbody');
         if (escrowTbody) {
-          escrowTbody.innerHTML = deposits.map(function(d) {
-            var room = store.getRoom(d.roomId);
-            var statusLabel = d.status === 'LOCKED' ? '<span class="badge badge--waiting" style="font-size:0.65rem;">ĐANG TẠM KHÓA</span>' : '<span class="badge badge--live" style="font-size:0.65rem;">ĐÃ HOÀN TIỀN 100%</span>';
-            return `
-              <tr style="border-bottom: 1px solid var(--border-color);">
-                <td style="padding: 12px 18px; font-weight: 700; color: var(--text-primary);">${room ? room.title : 'Lot #' + d.roomId}</td>
-                <td style="padding: 12px 18px; font-family: var(--font-mono); font-weight: 600;">#${d.roomPin || (room ? room.roomPin : '---')}</td>
-                <td style="padding: 12px 18px; text-align: right; font-family: var(--font-mono); font-weight: 800; color: #059669;">${store.formatCurrency(d.amount)}</td>
-                <td style="padding: 12px 18px; text-align: center;">${statusLabel}</td>
-                <td style="padding: 12px 18px; text-align: right;">
-                  <a href="live-room.html?room=${d.roomPin || (room ? room.roomPin : d.roomId)}" class="btn btn-outline" style="font-size: 0.72rem; padding: 4px 8px;">Vào Phòng</a>
-                </td>
-              </tr>
-            `;
-          }).join('');
+          if (deposits.length === 0) {
+            escrowTbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--text-muted);">Bạn chưa có giao dịch ký quỹ nào.</td></tr>';
+          } else {
+            var rows = [];
+            deposits.forEach(function(d) {
+              var room = store.getRoom(d.roomId);
+              var pin = d.roomPin || (room ? room.roomPin : '---');
+              var title = room ? room.title : ('Phiên #' + pin);
+              
+              // Row 1: Đặt cọc ký quỹ 15%
+              rows.push(`
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                  <td style="padding: 12px 18px; font-weight: 700; color: var(--text-primary);">${title}</td>
+                  <td style="padding: 12px 18px; font-family: var(--font-mono); font-weight: 600;">#${pin}</td>
+                  <td style="padding: 12px 18px; text-align: right; font-family: var(--font-mono); font-weight: 800; color: #EF4444;">-${store.formatCurrency(d.amount)}</td>
+                  <td style="padding: 12px 18px; text-align: center;">
+                    <span class="badge badge--waiting" style="font-size:0.65rem;">KÝ QUỸ 15%</span>
+                  </td>
+                  <td style="padding: 12px 18px; text-align: right;">
+                    <a href="live-room.html?room=${pin}" class="btn btn-outline" style="font-size: 0.72rem; padding: 4px 8px;">Vào Phòng</a>
+                  </td>
+                </tr>
+              `);
+
+              // Row 2: Tự động sinh dòng +X ₫ | ĐÃ HOÀN TIỀN CỌC 100% VỀ TÀI KHOẢN (Bug 14 / Bug 15)
+              if (d.status === 'REFUNDED' || (room && (room.status === 'ENDED' || ((typeof getLotStatus === 'function') && getLotStatus(room) === 'ENDED')) && room.winnerUid !== user.uid)) {
+                rows.push(`
+                  <tr style="border-bottom: 1px solid var(--border-color); background: rgba(5,150,105,0.03);">
+                    <td style="padding: 12px 18px; font-weight: 700; color: #059669; padding-left: 28px;">
+                      ↳ + ${store.formatCurrency(d.amount)} | ĐÃ HOÀN TIỀN CỌC 100% VỀ TÀI KHOẢN (Kết thúc phiên #${pin})
+                    </td>
+                    <td style="padding: 12px 18px; font-family: var(--font-mono); font-weight: 600;">#${pin}</td>
+                    <td style="padding: 12px 18px; text-align: right; font-family: var(--font-mono); font-weight: 800; color: #059669;">+${store.formatCurrency(d.amount)}</td>
+                    <td style="padding: 12px 18px; text-align: center;">
+                      <span class="badge badge--live" style="font-size:0.65rem; background: #059669; color: #FFF;">ĐÃ HOÀN CỌC 100%</span>
+                    </td>
+                    <td style="padding: 12px 18px; text-align: right;">
+                      <span style="font-size: 0.75rem; color: #059669; font-weight: 700;">ĐÃ HOÀN TẤT</span>
+                    </td>
+                  </tr>
+                `);
+              }
+            });
+            escrowTbody.innerHTML = rows.join('');
+          }
           var badgeEscrow = document.getElementById('badge-escrow-count');
           if (badgeEscrow) badgeEscrow.textContent = deposits.length;
         }
@@ -943,20 +996,11 @@
                   </div>
                 </div>
 
-                <div style="display:flex;gap:10px;flex-wrap:wrap;">
-                  <button type="button" class="btn btn-outline" onclick="window.openCertificateModal('${r.roomId}')" style="font-size:0.8rem;display:inline-flex;align-items:center;gap:6px;">
-                    <svg viewBox="0 0 24 24" style="width:14px;height:14px;"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
-                    <span>Xem & In Biên Bản</span>
-                  </button>
-                  ${!isPaid ? `
-                    <button type="button" class="btn btn-primary" onclick="window.executePaySettlement('${r.roomId}')" style="font-size:0.8rem;">
-                      <span>Thanh Toán Phần Còn Lại</span>
-                    </button>
-                  ` : `
-                    <button type="button" class="btn btn-outline" disabled style="font-size:0.8rem;color:#059669;border-color:#059669;opacity:1;background:rgba(5,150,105,0.06);">
-                      ✓ Đã Hoàn Tất Nghĩa Vụ
-                    </button>
-                  `}
+                <div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">
+                  <span class="badge badge--live" style="font-size:0.75rem;padding:6px 14px;background:rgba(5,150,105,0.1);color:#059669;border:1px solid #059669;font-weight:700;">
+                    ✓ ĐÃ THANH TOÁN 100% • SỞ HỮU CHÍNH THỨC
+                  </span>
+                  <a href="live-room.html?room=${r.roomPin || r.roomId}" class="btn btn-outline" style="font-size:0.75rem;padding:6px 12px;text-decoration:none;">Xem Lại Phòng &rarr;</a>
                 </div>
               </div>
             `;
@@ -977,7 +1021,7 @@
                   <div style="font-size:0.7rem;font-weight:700;color:var(--text-muted);text-transform:uppercase;">${item.categoryName}</div>
                   <h4 style="font-size:0.95rem;font-weight:700;color:var(--text-primary);margin:4px 0 8px 0;line-height:1.35;">${item.title}</h4>
                   <div style="font-size:0.75rem;color:var(--text-muted);margin-bottom:14px;">
-                    Định giá thị trường: <strong class="font-mono text-emerald price-val">${store.formatCurrency(item.estimatedValue)}</strong>
+                    Định giá sở hữu: <strong class="font-mono text-emerald price-val">${store.formatCurrency(item.estimatedValue || 8500000000)}</strong>
                   </div>
                 </div>
                 <button type="button" class="btn btn-primary" onclick="window.executeResell('${item.id}')" style="font-size:0.78rem;width:100%;display:inline-flex;align-items:center;justify-content:center;gap:6px;">
@@ -1032,6 +1076,48 @@
         store.toggleWatchlist(roomId);
         updateDashboardData();
         if (window.renderHeader) window.renderHeader();
+      };
+
+      
+      // Avatar Management (Bug 16)
+      window.handleAvatarUpload = function(event) {
+        var file = event.target.files && event.target.files[0];
+        if (!file) return;
+        var reader = new FileReader();
+        reader.onload = function(e) {
+          var base64 = e.target.result;
+          window.applyNewAvatar(base64);
+        };
+        reader.readAsDataURL(file);
+      };
+
+      window.selectPresetAvatar = function(url) {
+        window.applyNewAvatar(url);
+      };
+
+      window.applyNewAvatar = function(avatarUrl) {
+        var store = window.AureliaApp || window.AuctionStore;
+        var user = store ? store.getCurrentUser() : null;
+        if (!user) return;
+
+        user.avatar = avatarUrl;
+        var users = store.getUsers();
+        var target = users.find(function(u) { return u.uid === user.uid; });
+        if (target) target.avatar = avatarUrl;
+
+        localStorage.setItem(store.STORAGE_KEYS.USERS, JSON.stringify(users));
+        localStorage.setItem(store.STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
+
+        // Update DOM immediately
+        var preview = document.getElementById('prof-current-avatar-preview');
+        if (preview) preview.src = avatarUrl;
+        var dashAvatar = document.getElementById('dash-user-avatar');
+        if (dashAvatar) dashAvatar.src = avatarUrl;
+        if (typeof window.renderHeader === 'function') window.renderHeader();
+
+        if (window.showToast) {
+          window.showToast('Cập Nhật Ảnh Đại Diện', 'Ảnh đại diện của bạn đã được cập nhật thành công!', 'success', 3000);
+        }
       };
 
       window.saveUserProfile = function(e) {

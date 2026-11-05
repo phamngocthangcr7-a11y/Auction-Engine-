@@ -199,10 +199,7 @@ function renderHeader() {
             <a href="auctions.html" class="nav-link ${currentPath.includes('auctions') ? 'active' : ''}">
               Khám Phá & Bộ Lọc
             </a>
-            <a href="seller-studio.html" class="nav-link ${currentPath.includes('seller-studio') || currentPath.includes('create-room') ? 'active' : ''}">
-              Tạo Phiên Bán
-            </a>
-            <a href="index.html#leaderboard-section" class="nav-link">
+                        <a href="index.html#leaderboard-section" class="nav-link">
               Bảng Xếp Hạng
             </a>
             <a href="dashboard.html" class="nav-link ${currentPath.includes('dashboard') ? 'active' : ''}">

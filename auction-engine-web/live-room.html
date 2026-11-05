@@ -811,17 +811,7 @@
                     Cần có ít nhất 1 lượt trả giá hợp lệ để chốt phiên sớm.
                   </p>
 
-                  <div class="flex gap-2">
-                    <button type="button" class="btn btn--outline btn--sm" style="flex: 1; font-size: 0.74rem; font-weight: 600;" onclick="window.simulateMockBid()" title="Mô phỏng 1 khách ký quỹ ra giá +1 bước giá">
-                      <svg viewBox="0 0 24 24" style="width: 13px; height: 13px; color: var(--accent-emerald);"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-                      <span>⚡ Khách Trả Giá (+1 Bước)</span>
-                    </button>
-                    <button type="button" class="btn btn--outline btn--sm" id="btn-fast-forward-15s" style="flex: 1; font-size: 0.74rem; font-weight: 600;" title="Tua đồng hồ xuống 15 giây cuối để thử nghiệm Anti-Sniping">
-                      <svg viewBox="0 0 24 24" style="width: 13px; height: 13px;"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-                      <span>⏱️ Tua 15 Giây Cuối</span>
-                    </button>
                   </div>
-                </div>
 
                 <!-- Sub-panel: Khách chưa đăng nhập -->
                 <div id="live-guest-auth" style="display: none; background: var(--bg-canvas); border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); padding: var(--space-4); text-align: center;">
@@ -910,16 +900,7 @@
                     <span>Xác Nhận Đặt Giá</span>
                   </button>
 
-                  <!-- Testing Helpers -->
-                  <div style="background: var(--bg-canvas); border: 1px solid var(--border-hairline); border-radius: var(--radius-sm); padding: 8px 12px; font-size: 0.72rem; display: flex; align-items: center; justify-content: space-between;">
-                    <label class="flex items-center gap-2" style="cursor: pointer; color: var(--text-secondary); margin: 0;">
-                      <input type="checkbox" id="chk-rival-bot" style="accent-color: var(--accent-primary);">
-                      <span>Bật đối thủ tự động (Rival Bot)</span>
-                    </label>
-                    <button type="button" class="btn btn--outline btn--sm" id="btn-fast-forward-bidder" style="padding: 2px 6px; font-size: 0.68rem;">
-                      Tua 15s
-                    </button>
-                  </div>
+                  
                 </div>
 
               </div>
@@ -1073,16 +1054,8 @@
       };
 
       function checkIsHost(room, user) {
-        if (!room) return false;
-        var rPin = String(room.roomPin || roomParam || '').replace(/[^0-9]/g, '');
-        if (urlParams.get('created') === 'true') return true;
-        if (sessionStorage.getItem('AE_HOST_ROOM_' + rPin) === 'true') return true;
-        if (localStorage.getItem('AE_HOST_ROOM_' + rPin) === 'true') return true;
-        if (!user) return false;
-        if (user.role === 'admin' || user.isAdmin) return true;
-        if (user.uid === room.sellerId) return true;
-        if (user.paddleId && user.paddleId === room.sellerPaddleId) return true;
-        return false;
+        if (!room || !user) return false;
+        return Boolean(user.uid && room.sellerId && String(user.uid) === String(room.sellerId));
       }
 
       // 2. Identify Room from URL & Hydrate if Shared
@@ -1389,25 +1362,24 @@
         console.warn('[Realtime Relay] Không thể khởi tạo MQTT:', e);
       }
 
-      // 4. Xử lý trường hợp chưa có phòng (máy khách mới vào bằng mã PIN)
+      // 4. Mở phòng ngay lập tức 0ms từ store (Bug 8)
+      if (!currentRoom) {
+        var allRooms = store.getRooms();
+        currentRoom = allRooms.find(function(r) {
+          return String(r.roomPin) === String(roomParam) || String(r.roomId) === String(roomParam);
+        }) || allRooms[0] || null;
+      }
       if (!currentRoom) {
         var overlay = document.getElementById('room-syncing-overlay');
         if (overlay) {
           overlay.style.display = 'flex';
-          document.getElementById('sync-overlay-title').textContent = 'Đang Tìm Phiên Đấu Giá #' + roomParam + '...';
+          var spinner = document.getElementById('sync-spinner');
+          if (spinner) spinner.style.display = 'none';
+          document.getElementById('sync-overlay-title').textContent = '⚠️ Không Tìm Thấy Phòng Đấu Giá #' + roomParam;
+          document.getElementById('sync-overlay-desc').textContent = 'Phòng đấu giá này chưa được tạo hoặc chưa mở kết nối. Vui lòng kiểm tra lại mã PIN!';
+          var actions = document.getElementById('sync-overlay-actions');
+          if (actions) actions.style.display = 'flex';
         }
-
-        // Chờ phản hồi đồng bộ qua MQTT trong 5 giây
-        setTimeout(function() {
-          if (!currentRoom) {
-            var spinner = document.getElementById('sync-spinner');
-            if (spinner) spinner.style.display = 'none';
-            document.getElementById('sync-overlay-title').textContent = '⚠️ Không Tìm Thấy Phòng Đấu Giá #' + roomParam;
-            document.getElementById('sync-overlay-desc').textContent = 'Phòng đấu giá này chưa được tạo hoặc Chủ phòng chưa mở mạng kết nối. Vui lòng kiểm tra lại mã PIN!';
-            var actions = document.getElementById('sync-overlay-actions');
-            if (actions) actions.style.display = 'flex';
-          }
-        }, 5000);
         return;
       }
 
@@ -2118,17 +2090,7 @@
               }
             }
 
-            // Trigger rival bot if checked
-            var chkBot = document.getElementById('chk-rival-bot');
-            if (chkBot && chkBot.checked) {
-              setTimeout(function() {
-                var updated = store.getRoom(window.roomId);
-                if (updated && updated.status === 'LIVE') {
-                  store.simulateBotRivalBid(window.roomId);
-                  renderRoom();
-                }
-              }, 4000);
-            }
+
           } else {
             if (window.showToast) {
               window.showToast('Không thể trả giá', res.message || 'Mức giá không hợp lệ hoặc bạn chưa ký quỹ!', 'error');
@@ -2139,18 +2101,7 @@
         });
       }
 
-      // Fast forward 15s (Anti-sniping demonstration)
-      function triggerFastForward() {
-        store.fastForward(window.roomId, 15);
-        if (window.showToast) {
-          window.showToast('Tua thời gian', 'Đồng hồ phiên đấu giá đã được tua xuống 15 giây cuối!', 'info');
-        }
-        renderRoom();
-      }
-      var ff1 = document.getElementById('btn-fast-forward-15s');
-      var ff2 = document.getElementById('btn-fast-forward-bidder');
-      if (ff1) ff1.addEventListener('click', triggerFastForward);
-      if (ff2) ff2.addEventListener('click', triggerFastForward);
+
 
       // Top invite button
       var btnTopInvite = document.getElementById('btn-top-invite');

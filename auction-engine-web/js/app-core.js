@@ -14,19 +14,38 @@
   'use strict';
 
   var STORAGE_KEYS = {
-    ROOMS: 'AURELIA_ROOMS_V4',
-    USERS: 'AURELIA_USERS_V4',
-    CURRENT_USER: 'AURELIA_CURRENT_USER_V4',
-    DEPOSITS: 'AURELIA_DEPOSITS_V4',
-    BIDS: 'AURELIA_BIDS_V4',
-    EVENTS: 'AURELIA_EVENTS_V4',
-    WATCHLIST: 'AURELIA_WATCHLIST_V4',
-    NOTIFICATIONS: 'AURELIA_NOTIFICATIONS_V4',
-    AUDIT_LOGS: 'AURELIA_AUDIT_LOGS_V4',
-    CATEGORIES: 'AURELIA_CATEGORIES_V4',
-    TRANSACTIONS: 'AURELIA_TRANSACTIONS_V4',
-    THEME: 'AURELIA_THEME_V4'
+    ROOMS: 'AE_ROOMS_V10_FINAL',
+    USERS: 'AE_USERS_V10_FINAL',
+    CURRENT_USER: 'AE_CURRENT_USER_V10_FINAL',
+    DEPOSITS: 'AE_DEPOSITS_V10_FINAL',
+    BIDS: 'AE_BIDS_V10_FINAL',
+    EVENTS: 'AE_EVENTS_V10_FINAL',
+    WATCHLIST: 'AE_WATCHLIST_V10_FINAL',
+    NOTIFICATIONS: 'AE_NOTIFICATIONS_V10_FINAL',
+    AUDIT_LOGS: 'AE_AUDIT_LOGS_V10_FINAL',
+    CATEGORIES: 'AE_CATEGORIES_V10_FINAL',
+    TRANSACTIONS: 'AE_TRANSACTIONS_V10_FINAL',
+    VAULT: 'AE_VAULT_V10_FINAL',
+    THEME: 'AE_THEME_V10_FINAL'
   };
+
+  // Global Unified Lot Status Helper (Bug 6 / Nhóm 2)
+  function getLotStatus(lot) {
+    if (!lot) return 'ENDED';
+    var now = Date.now();
+    if (lot.status === 'ENDED') return 'ENDED';
+    if (lot.status === 'LIVE') {
+      if (lot.endTime && now >= new Date(lot.endTime).getTime()) {
+        return 'ENDED';
+      }
+      return 'LIVE';
+    }
+    if (lot.status === 'WAITING' || lot.status === 'PENDING_APPROVAL' || !lot.status) {
+      return 'WAITING';
+    }
+    return lot.status;
+  }
+  window.getLotStatus = getLotStatus;
 
   // Safe BroadcastChannel with fallback
   var broadcastChannel = null;
@@ -125,11 +144,11 @@
         currentPrice: 2500000000,
         stepPrice: 50000000,
         depositAmount: 360000000, // 15%
-        status: 'LIVE',
+        status: 'WAITING',
         durationMinutes: 45,
         durationSeconds: 2700,
-        startTime: new Date(now - 7 * 60000).toISOString(),
-        endTime: new Date(now + 360 * 60000).toISOString(),
+        startTime: null,
+        endTime: null,
         featured: true,
         leaderUid: 'usr-tan-2048',
         leaderName: 'Phan Minh Tân',
@@ -138,10 +157,11 @@
         sellerName: 'Phạm Ngọc Thắng',
         sellerPaddleId: '#PD-6651',
         participantsCount: 22,
+        likedBy: [],
+        baseLikes: 46,
+        likesCount: 46,
         images: [
-          'assets/images/patek_nautilus_gold.jpg',
-          'assets/images/patek_nautilus_caseback.jpg',
-          'assets/images/patek_nautilus_profile.jpg'
+          'assets/images/patek_nautilus_gold.jpg'
         ],
         specs: {
           'Thương hiệu': 'Patek Philippe (Genève)',
@@ -171,11 +191,11 @@
         currentPrice: 14900000000,
         stepPrice: 200000000,
         depositAmount: 2175000000, // 15%
-        status: 'LIVE',
+        status: 'WAITING',
         durationMinutes: 50,
         durationSeconds: 3000,
-        startTime: new Date(now - 8 * 60000).toISOString(),
-        endTime: new Date(now + 360 * 60000).toISOString(),
+        startTime: null,
+        endTime: null,
         featured: true,
         leaderUid: 'usr-bao-3390',
         leaderName: 'Trần Hoàng Bảo',
@@ -184,10 +204,11 @@
         sellerName: 'Phạm Ngọc Thắng',
         sellerPaddleId: '#PD-6651',
         participantsCount: 18,
+        likedBy: [],
+        baseLikes: 39,
+        likesCount: 39,
         images: [
-          'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=1200&q=85',
-          'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=85',
-          'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1200&q=85'
+          'https://images.unsplash.com/photo-1614162692292-7ac56d7f7f1e?auto=format&fit=crop&w=1200&q=85'
         ],
         specs: {
           'Động cơ': '4.0L Hút khí tự nhiên Boxer 6 xi-lanh',
@@ -217,11 +238,11 @@
         currentPrice: 1310000000,
         stepPrice: 30000000,
         depositAmount: 187500000, // 15%
-        status: 'LIVE',
+        status: 'WAITING',
         durationMinutes: 35,
         durationSeconds: 2100,
-        startTime: new Date(now - 10 * 60000).toISOString(),
-        endTime: new Date(now + 25 * 60000).toISOString(),
+        startTime: null,
+        endTime: null,
         featured: false,
         leaderUid: 'usr-tan-2048',
         leaderName: 'Phan Minh Tân',
@@ -229,25 +250,24 @@
         sellerId: 'usr-thang-6651',
         sellerName: 'Phạm Ngọc Thắng',
         sellerPaddleId: '#PD-6651',
-        participantsCount: 16,
+        participantsCount: 14,
+        likedBy: [],
+        baseLikes: 35,
+        likesCount: 35,
         images: [
-          'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?auto=format&fit=crop&w=1200&q=85',
-          'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=85',
-          'https://images.unsplash.com/photo-1509042239860-f550ce710b93?auto=format&fit=crop&w=1200&q=85'
+          'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=1200&q=85'
         ],
         specs: {
-          'Thương hiệu': 'Rolex (Genève)',
-          'Mã tham chiếu': '116506 Ice Blue Dial',
-          'Chất liệu': 'Bạch kim Platinum 950 nguyên khối',
-          'Bộ máy': 'Caliber 4130 Tự động bấm giờ Superlative',
-          'Đường kính': '40 mm',
-          'Tình trạng': 'Mới 100% Fullset 2024'
+          'Chất liệu': 'Platinum 950 Nguyên Khối',
+          'Mặt số': 'Ice Blue dập vân tia sunburst độc quyền',
+          'Bộ máy': 'Calibre 4130 Tự động Chronograph In-House',
+          'Năm sản xuất': '2023 • Geneva, Thụy Sĩ'
         },
         appraisal: {
-          inspector: 'Rolex Heritage Bureau Zurich',
-          score: '10/10',
+          inspector: "Christie's Watches Department",
+          score: '9.8/10',
           certNo: 'RLX-CH-582019',
-          provenance: 'Nhà phân phối ủy quyền Bucherer Luzern'
+          provenance: 'Bộ sưu tập tư nhân Zurich'
         }
       },
       {
@@ -258,62 +278,61 @@
         title: 'Ferrari F8 Tributo Rosso Corsa Speciale',
         category: 'hypercars',
         categoryName: 'Siêu xe & Mô tô hiếm',
-        shortDesc: 'Tuyệt phẩm động cơ V8 tăng áp kép mạnh mẽ nhất lịch sử Maranello, màu sơn đỏ huyền thoại Rosso Corsa và nội thất da Alcantara thủ công.',
+        shortDesc: 'Đỉnh cao động cơ V8 tăng áp kép đặt giữa mạnh nhất Maranello, sơn đỏ Rosso Corsa huyền thoại kết hợp gói khí động học S-Duct carbon.',
         startPrice: 11200000000,
         currentPrice: 11500000000,
         stepPrice: 150000000,
-        depositAmount: 1680000000, // 15%
-        status: 'LIVE',
-        durationMinutes: 55,
-        durationSeconds: 3300,
-        startTime: new Date(now - 7 * 60000).toISOString(),
-        endTime: new Date(now + 48 * 60000).toISOString(),
+        depositAmount: 1680000000,
+        status: 'WAITING',
+        durationMinutes: 40,
+        durationSeconds: 2400,
+        startTime: null,
+        endTime: null,
         featured: false,
-        leaderUid: 'usr-khoi-9912',
-        leaderName: 'Nguyễn Minh Khôi',
-        leaderPaddleId: '#PD-9912',
+        leaderUid: 'usr-long-5521',
+        leaderName: 'Hoàng Kim Long',
+        leaderPaddleId: '#PD-5521',
         sellerId: 'usr-thang-6651',
         sellerName: 'Phạm Ngọc Thắng',
         sellerPaddleId: '#PD-6651',
-        participantsCount: 28,
+        participantsCount: 11,
+        likedBy: [],
+        baseLikes: 32,
+        likesCount: 32,
         images: [
-          'https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=1200&q=85',
-          'https://images.unsplash.com/photo-1592198084033-aade902d1aae?auto=format&fit=crop&w=1200&q=85',
-          'https://images.unsplash.com/photo-1541348263662-e0c8de4259ba?auto=format&fit=crop&w=1200&q=85'
+          'https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=1200&q=85'
         ],
         specs: {
-          'Động cơ': '3.9L Twin-Turbo V8 Award-Winning',
+          'Động cơ': '3.9L Twin-Turbo V8',
           'Công suất': '720 Mã lực • 0-100 km/h: 2.9s',
-          'Màu sắc': 'Rosso Corsa • Mâm thể thao Forged Matt',
-          'Odometer': '1,450 km',
-          'Năm sản xuất': '2023 • Maranello, Ý',
-          'Tình trạng': 'Bảo dưỡng định kỳ chính hãng Ferrari 7-Year'
+          'Odometer': '580 km',
+          'Năm sản xuất': '2023 • Maranello, Ý'
         },
         appraisal: {
-          inspector: 'Ferrari Classiche Department Modena',
-          score: '9.8/10',
+          inspector: 'Ferrari Classiche Maranello Certified',
+          score: '9.9/10 Pristine',
           certNo: 'FE-IT-488900',
-          provenance: 'Bộ sưu tập tư nhân Monaco'
+          provenance: 'Chính chủ đặt hàng đợt 1 Ferrari S.p.A'
         }
       },
       {
         roomId: 'room-105',
         id: 'lot-105',
         lotNumber: '105',
-        roomPin: '632001',
+        roomPin: '771029',
         title: 'Máy Ảnh Cơ Vintage Leica M6 Titanium Edition 1992',
         category: 'tech',
-        categoryName: 'Công nghệ & Bản mẫu',
-        shortDesc: 'Phiên bản máy ảnh cơ rangefinder bạc mờ thủ công, kính ngắm quang học sắc nét, đi kèm ống kính tiêu cự 50mm f/1.4 tráng phủ đa lớp.',
-        startPrice: 380000000,
-        currentPrice: 400000000,
-        stepPrice: 10000000,
-        depositAmount: 57000000, // 15%
-        status: 'LIVE',
+        categoryName: 'Thiết bị Công nghệ hiếm',
+        shortDesc: 'Phiên bản kỷ niệm bọc da đà điểu tự nhiên, thân máy titan nguyên khối cơ khí chuẩn xác 100%, đi kèm ống kính Summilux-M 50mm f/1.4 Titanium.',
+        startPrice: 180000000,
+        currentPrice: 205000000,
+        stepPrice: 5000000,
+        depositAmount: 27000000,
+        status: 'WAITING',
         durationMinutes: 30,
         durationSeconds: 1800,
-        startTime: new Date(now - 10 * 60000).toISOString(),
-        endTime: new Date(now + 20 * 60000).toISOString(),
+        startTime: null,
+        endTime: null,
         featured: false,
         leaderUid: 'usr-bao-3390',
         leaderName: 'Trần Hoàng Bảo',
@@ -322,10 +341,11 @@
         sellerName: 'Phạm Ngọc Thắng',
         sellerPaddleId: '#PD-6651',
         participantsCount: 8,
+        likedBy: [],
+        baseLikes: 29,
+        likesCount: 29,
         images: [
-          'https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?auto=format&fit=crop&w=1200&q=85',
-          'https://images.unsplash.com/photo-1495707902641-75cac588d2e9?auto=format&fit=crop&w=1200&q=85',
-          'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1200&q=85'
+          'https://images.unsplash.com/photo-1516035069371-29a1b244cc32?auto=format&fit=crop&w=1000&q=85'
         ],
         specs: {
           'Loại máy': 'Mechanical Rangefinder 35mm',
@@ -346,66 +366,20 @@
         roomId: 'room-106',
         id: 'lot-106',
         lotNumber: '106',
-        roomPin: '774120',
+        roomPin: '339182',
         title: 'Claude Monet "L\'Aube Dorée" 1878 (Museum Oil on Canvas)',
         category: 'art',
-        categoryName: 'Nghệ thuật & Cổ vật',
-        shortDesc: 'Kiệt tác hội họa ấn tượng phong cảnh bình minh hồ Geneva thế kỷ 19, màu sắc nguyên bản tuyệt hảo với đầy đủ chứng thư xuất xứ.',
-        startPrice: 680000000,
-        currentPrice: 720000000,
-        stepPrice: 20000000,
-        depositAmount: 102000000, // 15%
-        status: 'LIVE',
+        categoryName: 'Tranh Nghệ thuật & Cổ vật',
+        shortDesc: 'Kiệt tác trường phái Ấn tượng miêu tả bình minh sông Seine, có chữ ký gốc của danh họa Claude Monet, đầy đủ hồ sơ lai lịch 146 năm.',
+        startPrice: 8500000000,
+        currentPrice: 8850000000,
+        stepPrice: 100000000,
+        depositAmount: 1275000000,
+        status: 'WAITING',
         durationMinutes: 60,
         durationSeconds: 3600,
-        startTime: new Date(now - 8 * 60000).toISOString(),
-        endTime: new Date(now + 52 * 60000).toISOString(),
-        featured: false,
-        leaderUid: 'usr-tan-2048',
-        leaderName: 'Phan Minh Tân',
-        leaderPaddleId: '#PD-2048',
-        sellerId: 'usr-thang-6651',
-        sellerName: 'Phạm Ngọc Thắng',
-        sellerPaddleId: '#PD-6651',
-        participantsCount: 14,
-        images: [
-          'assets/images/french_oil_painting.jpg',
-          'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1200&q=85',
-          'https://images.unsplash.com/photo-1582561424760-0321d75e81fa?auto=format&fit=crop&w=1200&q=85'
-        ],
-        specs: {
-          'Chất liệu': 'Sơn dầu trên toan nguyên bản',
-          'Kích thước': '85 x 115 cm (có khung mạ vàng cổ)',
-          'Niên đại': 'Cuối thế kỷ 19 (Circa 1878)',
-          'Tình trạng': 'Bảo tồn hoàn hảo, không qua phục chế sai lệch',
-          'Khung tranh': 'Khung gỗ sồi chạm trổ dát vàng lá nguyên bản',
-          'Chứng chỉ': 'Lưu trữ danh mục bảo tàng Mỹ thuật Geneva'
-        },
-        appraisal: {
-          inspector: "Musée d'Art et d'Histoire Genève",
-          score: '10/10 Museum Grade',
-          certNo: 'ART-CH-774120',
-          provenance: 'Di sản Gia tộc De Rham Thụy Sĩ'
-        }
-      },
-      {
-        roomId: 'room-107',
-        id: 'lot-107',
-        lotNumber: '107',
-        roomPin: '154070',
-        title: 'Audemars Piguet Royal Oak Gold Edition Chronometer',
-        category: 'watches',
-        categoryName: 'Đồng hồ Cơ Thụy Sĩ',
-        shortDesc: 'Thiết kế kinh điển của Gérald Genta với vành bát giác 8 ốc đinh tán, mặt số Grande Tapisserie vàng khối hoàn thiện thủ công tinh xảo.',
-        startPrice: 3150000000,
-        currentPrice: 3250000000,
-        stepPrice: 50000000,
-        depositAmount: 472500000, // 15%
-        status: 'LIVE',
-        durationMinutes: 40,
-        durationSeconds: 2400,
-        startTime: new Date(now - 9 * 60000).toISOString(),
-        endTime: new Date(now + 31 * 60000).toISOString(),
+        startTime: null,
+        endTime: null,
         featured: false,
         leaderUid: 'usr-khoi-9912',
         leaderName: 'Nguyễn Minh Khôi',
@@ -413,136 +387,179 @@
         sellerId: 'usr-thang-6651',
         sellerName: 'Phạm Ngọc Thắng',
         sellerPaddleId: '#PD-6651',
-        participantsCount: 12,
+        participantsCount: 9,
+        likedBy: [],
+        baseLikes: 27,
+        likesCount: 27,
         images: [
-          'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=1200&q=85',
-          'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=85',
-          'https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?auto=format&fit=crop&w=1200&q=85'
+          'assets/images/french_oil_painting.jpg'
         ],
         specs: {
-          'Thương hiệu': 'Audemars Piguet (Le Brassus)',
-          'Chất liệu': 'Vàng hồng 18K Rose Gold nguyên khối',
-          'Bộ máy': 'Calibre 4302 Tự động in-house 70h cót',
-          'Đường kính': '41 mm • Độ mỏng: 10.4 mm',
-          'Kính': 'Sapphire chống phản chiếu 2 mặt',
-          'Tình trạng': 'Mới 100% Fullset Thẻ NFC bảo hành'
+          'Họa sĩ': 'Claude Monet (1840 - 1926)',
+          'Kỹ thuật': 'Sơn dầu trên toan (Oil on canvas)',
+          'Kích thước': '65 x 81 cm (Chưa tính khung mạ vàng)',
+          'Năm sáng tác': '1878 • Paris, Pháp'
         },
         appraisal: {
-          inspector: 'Audemars Piguet Heritage Department',
-          score: '9.9/10',
-          certNo: 'AP-CH-154070',
-          provenance: 'Đại lý chính hãng Audemars Piguet Geneva'
+          inspector: "Wildenstein Plattner Institute (Paris)",
+          score: '10/10 Museum Quality',
+          certNo: 'ART-FR-339182',
+          provenance: 'Bộ sưu tập tư nhân Durand-Ruel Paris'
         }
       },
       {
-        roomId: 'room-108',
-        id: 'lot-108',
-        lotNumber: '108',
-        roomPin: '209441',
-        title: 'Mercedes-AMG GT Black Series Collector Edition',
-        category: 'hypercars',
-        categoryName: 'Siêu xe & Mô tô hiếm',
-        shortDesc: 'Vua vòng đua Nürburgring Nordschleife danh giá, động cơ V8 trục khuỷu phẳng flat-plane, cánh gió sợi carbon chủ động 2 tầng.',
-        startPrice: 9800000000,
-        currentPrice: 10100000000,
-        stepPrice: 150000000,
-        depositAmount: 1470000000, // 15%
-        status: 'LIVE',
-        durationMinutes: 50,
-        durationSeconds: 3000,
-        startTime: new Date(now - 5 * 60000).toISOString(),
-        endTime: new Date(now + 45 * 60000).toISOString(),
+        roomId: 'room-107',
+        id: 'lot-107',
+        lotNumber: '107',
+        roomPin: '662019',
+        title: 'Audemars Piguet Royal Oak Gold Edition Chronometer',
+        category: 'watches',
+        categoryName: 'Đồng hồ Cơ Thụy Sĩ',
+        shortDesc: 'Kiệt tác thể thao sang trọng vỏ vàng khối 18K, mặt số hoa văn Petite Tapisserie tinh xảo, bộ chuyển động tự động đỉnh cao Le Brassus.',
+        startPrice: 1950000000,
+        currentPrice: 2020000000,
+        stepPrice: 35000000,
+        depositAmount: 292500000,
+        status: 'WAITING',
+        durationMinutes: 30,
+        durationSeconds: 1800,
+        startTime: null,
+        endTime: null,
         featured: false,
-        leaderUid: 'usr-bao-3390',
-        leaderName: 'Trần Hoàng Bảo',
-        leaderPaddleId: '#PD-3390',
-        sellerId: 'usr-thang-6651',
-        sellerName: 'Phạm Ngọc Thắng',
-        sellerPaddleId: '#PD-6651',
-        participantsCount: 10,
-        images: [
-          'https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?auto=format&fit=crop&w=1200&q=85',
-          'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=85',
-          'https://images.unsplash.com/photo-1580273916550-e323be2ae537?auto=format&fit=crop&w=1200&q=85'
-        ],
-        specs: {
-          'Động cơ': '4.0L Bi-Turbo V8 Flat-Plane Crankshaft',
-          'Công suất': '730 Mã lực • 800 Nm mô-men xoắn',
-          'Khí động học': 'Cánh gió Carbon 2 tầng điều chỉnh cơ học',
-          'Odometer': '480 km',
-          'Năm sản xuất': '2023 • Affalterbach, Đức',
-          'Tình trạng': 'Bộ sưu tập gia tộc tư nhân bảo quản nhiệt độ chuẩn'
-        },
-        appraisal: {
-          inspector: 'Mercedes-Benz Classic Center Stuttgart',
-          score: '9.9/10 Mint',
-          certNo: 'MB-DE-209441',
-          provenance: 'Giao dịch qua Sotheby’s Sealed Munich'
-        }
-      }
-      ,
-      {
-        roomId: 'room-109',
-        id: 'lot-109',
-        lotNumber: '109',
-        roomPin: '392817',
-        title: 'Bình Gốm Cổ Men Lam Triều Minh Thế Kỷ 15 (Imperial Ming Dynasty)',
-        category: 'antiques',
-        categoryName: 'Đồ cổ & Cổ vật',
-        shortDesc: 'Tuyệt tác gốm sứ hoa lam niên đại Vĩnh Lạc đế thế kỷ 15, men lam hồi nhập khẩu Ba Tư, hoa văn rồng cuộn 5 móng đế vương nguyên bản 100%.',
-        startPrice: 1800000000,
-        currentPrice: 1950000000,
-        stepPrice: 50000000,
-        depositAmount: 270000000,
-        status: 'LIVE',
-        durationMinutes: 45,
-        durationSeconds: 2700,
-        startTime: new Date(now - 12 * 60000).toISOString(),
-        endTime: new Date(now + 33 * 60000).toISOString(),
-        featured: true,
         leaderUid: 'usr-tan-2048',
         leaderName: 'Phan Minh Tân',
         leaderPaddleId: '#PD-2048',
         sellerId: 'usr-thang-6651',
         sellerName: 'Phạm Ngọc Thắng',
         sellerPaddleId: '#PD-6651',
-        participantsCount: 6,
+        participantsCount: 15,
+        likedBy: [],
+        baseLikes: 25,
+        likesCount: 25,
         images: [
-          'https://images.unsplash.com/photo-1579783900882-c0d3dad7b119?auto=format&fit=crop&w=1200&q=85',
-          'https://images.unsplash.com/photo-1582561424760-0321d75e81fa?auto=format&fit=crop&w=1200&q=85'
+          'https://images.unsplash.com/photo-1524805444758-089113d48a6d?auto=format&fit=crop&w=1200&q=85'
         ],
         specs: {
-          'Niên đại': 'Thời Minh Vĩnh Lạc (Circa 1403-1424)',
-          'Chất liệu': 'Sứ cao lanh Cảnh Đức Trấn men hoa lam Hồi',
-          'Chiều cao': '38.5 cm • Đường kính miệng: 12 cm',
-          'Tình trạng': 'Hoàn hảo 100% không nứt mẻ qua kiểm định quang học',
-          'Bảo chứng': 'Viện Cổ vật Hoàng gia London & Sotheby\'s Hong Kong'
+          'Chất liệu': 'Vàng hồng 18K Rose Gold',
+          'Đường kính': '41 mm',
+          'Mặt số': 'Họa tiết Petite Tapisserie dập nổi thủ công',
+          'Năm sản xuất': '2023 • Le Brassus, Thụy Sĩ'
         },
         appraisal: {
-          inspector: 'Asian Ceramic Heritage Institute',
-          score: '10/10 Museum Grade',
-          certNo: 'ANT-MING-392817',
-          provenance: 'Bộ sưu tập Quý tộc Nam tước Guy de Rothschild'
+          inspector: 'Geneva Horological Inspection Service',
+          score: '9.9/10',
+          certNo: 'AP-CH-662019',
+          provenance: 'Đại lý ủy quyền chính thức Audemars Piguet Geneva'
+        }
+      },
+      {
+        roomId: 'room-108',
+        id: 'lot-108',
+        lotNumber: '108',
+        roomPin: '884012',
+        title: 'Mercedes-AMG GT Black Series Collector Edition',
+        category: 'hypercars',
+        categoryName: 'Siêu xe & Mô tô hiếm',
+        shortDesc: 'Kỷ lục gia Nürburgring của Mercedes-AMG, động cơ V8 trục khuỷu phẳng flat-plane mạnh nhất lịch sử thương hiệu ngôi sao ba cánh.',
+        startPrice: 16500000000,
+        currentPrice: 16800000000,
+        stepPrice: 200000000,
+        depositAmount: 2475000000,
+        status: 'WAITING',
+        durationMinutes: 45,
+        durationSeconds: 2700,
+        startTime: null,
+        endTime: null,
+        featured: false,
+        leaderUid: 'usr-long-5521',
+        leaderName: 'Hoàng Kim Long',
+        leaderPaddleId: '#PD-5521',
+        sellerId: 'usr-thang-6651',
+        sellerName: 'Phạm Ngọc Thắng',
+        sellerPaddleId: '#PD-6651',
+        participantsCount: 12,
+        likedBy: [],
+        baseLikes: 23,
+        likesCount: 23,
+        images: [
+          'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?auto=format&fit=crop&w=1200&q=85'
+        ],
+        specs: {
+          'Động cơ': '4.0L Bi-Turbo V8 Flat-Plane Crank',
+          'Công suất': '730 Mã lực • Mô-men xoắn 800 Nm',
+          'Odometer': '350 km',
+          'Năm sản xuất': '2022 • Affalterbach, Đức'
+        },
+        appraisal: {
+          inspector: 'AMG Performance Center Affalterbach',
+          score: '9.9/10',
+          certNo: 'MB-DE-884012',
+          provenance: 'Bộ sưu tập Siêu xe Bavaria'
+        }
+      },
+      {
+        roomId: 'room-109',
+        id: 'lot-109',
+        lotNumber: '109',
+        roomPin: '112093',
+        title: 'Bình Gốm Cổ Men Lam Triều Minh Thế Kỷ 15 (Imperial Ming Dynasty)',
+        category: 'art',
+        categoryName: 'Tranh Nghệ thuật & Cổ vật',
+        shortDesc: 'Cổ vật Cung đình Cảnh Đức Trấn thời Tuyên Đức (1426-1435), họa tiết mây rồng 5 móng vẽ men lam coban Sumali quý giá bậc nhất.',
+        startPrice: 6200000000,
+        currentPrice: 6500000000,
+        stepPrice: 100000000,
+        depositAmount: 930000000,
+        status: 'WAITING',
+        durationMinutes: 40,
+        durationSeconds: 2400,
+        startTime: null,
+        endTime: null,
+        featured: false,
+        leaderUid: 'usr-khoi-9912',
+        leaderName: 'Nguyễn Minh Khôi',
+        leaderPaddleId: '#PD-9912',
+        sellerId: 'usr-thang-6651',
+        sellerName: 'Phạm Ngọc Thắng',
+        sellerPaddleId: '#PD-6651',
+        participantsCount: 7,
+        likedBy: [],
+        baseLikes: 21,
+        likesCount: 21,
+        images: [
+          'https://images.unsplash.com/photo-1578749556568-bc2c40e68b61?auto=format&fit=crop&w=1200&q=85'
+        ],
+        specs: {
+          'Niên đại': 'Thời Minh Tuyên Đức (1426 - 1435)',
+          'Chất liệu': 'Gốm sứ tráng men lam cô-ban tự nhiên (Smalt Blue)',
+          'Chiều cao': '38.5 cm • Đường kính miệng: 14 cm',
+          'Tình trạng': 'Nguyên vẹn 100% không qua phục chế'
+        },
+        appraisal: {
+          inspector: 'Oxford Authentication Thermoluminescence Laboratory',
+          score: '10/10 Imperial Certified',
+          certNo: 'TL-OX-112093',
+          provenance: 'Bộ sưu tập Huệ Đức Đường Hương Cảng'
         }
       },
       {
         roomId: 'room-110',
         id: 'lot-110',
         lotNumber: '110',
-        roomPin: '772910',
+        roomPin: '250196',
         title: 'Ferrari 250 GTO 1962 Classic Legend Scaglietti',
         category: 'hypercars',
-        categoryName: 'Siêu xe & Xe cổ điển',
-        shortDesc: 'Huyền thoại thể thao đắt giá nhất lịch sử xe hơi thế giới, khung gầm nguyên bản số seri 3445GT, động cơ Colombo V12 huyền thoại.',
-        startPrice: 42000000000,
-        currentPrice: 42000000000,
+        categoryName: 'Siêu xe & Mô tô hiếm',
+        shortDesc: 'Bảo vật vĩ đại nhất lịch sử xe hơi thể thao toàn cầu, thân xe chế tác thủ công Scaglietti, khối động cơ Tipo 168/62 Colombo V12 nguyên bản.',
+        startPrice: 25000000000,
+        currentPrice: 25000000000,
         stepPrice: 500000000,
-        depositAmount: 6300000000,
+        depositAmount: 3750000000,
         status: 'WAITING',
         durationMinutes: 60,
         durationSeconds: 3600,
-        startTime: new Date(now + 24 * 3600000).toISOString(),
-        endTime: new Date(now + 25 * 3600000).toISOString(),
+        startTime: null,
+        endTime: null,
         featured: true,
         leaderUid: null,
         leaderName: null,
@@ -550,23 +567,24 @@
         sellerId: 'usr-thang-6651',
         sellerName: 'Phạm Ngọc Thắng',
         sellerPaddleId: '#PD-6651',
-        participantsCount: 28,
+        participantsCount: 3,
+        likedBy: [],
+        baseLikes: 19,
+        likesCount: 19,
         images: [
-          'https://images.unsplash.com/photo-1583121274602-3e2820c69888?auto=format&fit=crop&w=1200&q=85',
-          'https://images.unsplash.com/photo-1592198084033-aade902d1aae?auto=format&fit=crop&w=1200&q=85'
+          'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&w=1200&q=85'
         ],
         specs: {
-          'Động cơ': '3.0L Tipo 168 Comp/62 Colombo 60° V12',
-          'Công suất': '300 Mã lực @ 7,500 rpm',
-          'Năm sản xuất': '1962 • Maranello, Ý (1 trong 36 chiếc toàn cầu)',
-          'Hồ sơ đua': 'Vô địch Tour de France Automobile 1963',
-          'Tình trạng': 'Bảo tồn hoàn hảo chứng nhận Ferrari Classiche Red Book'
+          'Động cơ': '3.0L Colombo V12 Hút khí tự nhiên',
+          'Khung sườn': 'Chassis #3445GT Số khung động cơ trùng khớp',
+          'Năm sản xuất': '1962 • Maranello, Ý',
+          'Thành tích': 'Chiến thắng giải đua Tour de France Automobile 1964'
         },
         appraisal: {
-          inspector: 'Ferrari Classiche Department Modena',
-          score: '10/10 Certificata Authentica',
-          certNo: 'FE-RED-772910',
-          provenance: 'Di sản Gia tộc Maranello Heritage'
+          inspector: 'Ferrari Classiche Maranello Red Book Certified',
+          score: '10/10 Museum Legend',
+          certNo: 'F250-GTO-1962',
+          provenance: 'Bộ sưu tập Hoàng gia Monaco'
         }
       },
       {
@@ -582,11 +600,11 @@
         currentPrice: 850000000,
         stepPrice: 20000000,
         depositAmount: 127500000,
-        status: 'PENDING_APPROVAL',
+        status: 'WAITING',
         durationMinutes: 30,
         durationSeconds: 1800,
-        startTime: new Date().toISOString(),
-        endTime: new Date(now + 1800000).toISOString(),
+        startTime: null,
+        endTime: null,
         featured: false,
         leaderUid: null,
         leaderName: null,
@@ -594,10 +612,12 @@
         sellerId: 'usr-thang-6651',
         sellerName: 'Phạm Ngọc Thắng',
         sellerPaddleId: '#PD-6651',
-        participantsCount: 0,
+        participantsCount: 4,
+        likedBy: [],
+        baseLikes: 18,
+        likesCount: 18,
         images: [
-          'https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?auto=format&fit=crop&w=1200&q=85',
-          'https://images.unsplash.com/photo-1547996160-81dfa63595aa?auto=format&fit=crop&w=1200&q=85'
+          'https://images.unsplash.com/photo-1523170335258-f5ed11844a49?auto=format&fit=crop&w=1000&q=85'
         ],
         specs: {
           'Bộ máy': 'Caliber 324 S C Tự động',
@@ -606,9 +626,9 @@
           'Tình trạng': 'Mới 100% Fullset 2024'
         },
         appraisal: {
-          inspector: 'Chờ Chuyên Gia Geneva Thẩm Định',
-          score: 'Chờ duyệt',
-          certNo: 'PENDING-PP-648291',
+          inspector: 'Geneva Horology Bureau',
+          score: '10/10',
+          certNo: 'PP-5167A-648291',
           provenance: 'Bộ sưu tập Phạm Ngọc Thắng'
         }
       },
@@ -623,6 +643,7 @@
         shortDesc: 'Biểu tượng tối thượng của lịch sử đồng hồ cổ điển, mặt số Exotic trắng sữa kim phụ số học Art Deco đặc trưng.',
         startPrice: 7200000000,
         currentPrice: 8500000000,
+        finalPrice: 8500000000,
         stepPrice: 100000000,
         depositAmount: 1080000000,
         status: 'ENDED',
@@ -636,14 +657,16 @@
         leaderPaddleId: '#PD-6651',
         winnerUid: 'usr-thang-6651',
         winnerName: 'Phạm Ngọc Thắng',
-        winnerPaddle: '#PD-6651',
+        winnerPaddleId: '#PD-6651',
         sellerId: 'usr-bao-3390',
         sellerName: 'Trần Hoàng Bảo',
         sellerPaddleId: '#PD-3390',
         participantsCount: 16,
+        likedBy: [],
+        baseLikes: 58,
+        likesCount: 58,
         images: [
-          'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?auto=format&fit=crop&w=1200&q=85',
-          'https://images.unsplash.com/photo-1509048191080-d2984bad6ae5?auto=format&fit=crop&w=1200&q=85'
+          'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?auto=format&fit=crop&w=1200&q=85'
         ],
         specs: {
           'Thương hiệu': 'Rolex Cosmograph Daytona Ref. 6239',
@@ -656,6 +679,102 @@
           score: '10/10 Museum Historical Piece',
           certNo: 'PN-CH-192834',
           provenance: 'Bộ sưu tập Di sản Gia tộc De Rham'
+        }
+      },
+      {
+        roomId: 'room-113',
+        id: 'lot-113',
+        lotNumber: '113',
+        roomPin: '772910',
+        title: 'Rolls-Royce Phantom VIII Bespoke Celestial Edition',
+        category: 'hypercars',
+        categoryName: 'Siêu xe & Mô tô hiếm',
+        shortDesc: 'Đỉnh cao xa xỉ của ngành xe hơi thế giới, trần sao Starlight Headliner khảm kim cương thật, sơn ngoại thất Diamond Black hai tông màu.',
+        startPrice: 35000000000,
+        currentPrice: 38200000000,
+        finalPrice: 38200000000,
+        stepPrice: 500000000,
+        depositAmount: 5250000000,
+        status: 'ENDED',
+        durationMinutes: 60,
+        durationSeconds: 3600,
+        startTime: new Date(now - 14400000).toISOString(),
+        endTime: new Date(now - 7200000).toISOString(),
+        featured: false,
+        leaderUid: 'usr-tan-2048',
+        leaderName: 'Phan Minh Tân',
+        leaderPaddleId: '#PD-2048',
+        winnerUid: 'usr-tan-2048',
+        winnerName: 'Phan Minh Tân',
+        winnerPaddleId: '#PD-2048',
+        sellerId: 'usr-thang-6651',
+        sellerName: 'Phạm Ngọc Thắng',
+        sellerPaddleId: '#PD-6651',
+        participantsCount: 19,
+        likedBy: [],
+        baseLikes: 52,
+        likesCount: 52,
+        images: [
+          'https://images.unsplash.com/photo-1563720223185-11003d516935?auto=format&fit=crop&w=1200&q=85'
+        ],
+        specs: {
+          'Động cơ': '6.75L Twin-Turbo V12',
+          'Nội thất': 'Da bò đực Bavaria thêu tay chỉ vàng',
+          'Năm sản xuất': '2023 • Goodwood, Anh Quốc'
+        },
+        appraisal: {
+          inspector: 'Rolls-Royce Motor Cars Goodwood Bureau',
+          score: '10/10 Bespoke Pristine',
+          certNo: 'RR-UK-772910',
+          provenance: 'Giao dịch bảo mật khách hàng danh dự VIP'
+        }
+      },
+      {
+        roomId: 'room-114',
+        id: 'lot-114',
+        lotNumber: '114',
+        roomPin: '720019',
+        title: 'The Macallan 72 Years Old In Lalique Genesis Decanter',
+        category: 'art',
+        categoryName: 'Tranh Nghệ thuật & Cổ vật',
+        shortDesc: 'Chai whisky mạch nha đơn cất 72 năm lâu đời nhất thế giới đặt trong bình pha lê Lalique chế tác thủ công tinh xảo, số lượng giới hạn toàn cầu.',
+        startPrice: 2800000000,
+        currentPrice: 3100000000,
+        finalPrice: 3100000000,
+        stepPrice: 50000000,
+        depositAmount: 420000000,
+        status: 'ENDED',
+        durationMinutes: 45,
+        durationSeconds: 2700,
+        startTime: new Date(now - 21600000).toISOString(),
+        endTime: new Date(now - 10800000).toISOString(),
+        featured: false,
+        leaderUid: 'usr-bao-3390',
+        leaderName: 'Trần Hoàng Bảo',
+        leaderPaddleId: '#PD-3390',
+        winnerUid: 'usr-bao-3390',
+        winnerName: 'Trần Hoàng Bảo',
+        winnerPaddleId: '#PD-3390',
+        sellerId: 'usr-thang-6651',
+        sellerName: 'Phạm Ngọc Thắng',
+        sellerPaddleId: '#PD-6651',
+        participantsCount: 14,
+        likedBy: [],
+        baseLikes: 48,
+        likesCount: 48,
+        images: [
+          'https://images.unsplash.com/photo-1527281400683-1aae777175f8?auto=format&fit=crop&w=1200&q=85'
+        ],
+        specs: {
+          'Dung tích': '700 ml • Nồng độ cồn: 42.0% ABV',
+          'Bình đựng': 'Pha lê Lalique Crystal thủ công Pháp',
+          'Năm đóng chai': '2018 (Chưng cất từ những năm 1940)'
+        },
+        appraisal: {
+          inspector: 'International Rare Spirits Appraisal Board',
+          score: '10/10 Collector Grade A+',
+          certNo: 'MAC-72-LALIQUE',
+          provenance: 'Kho lưu trữ tư nhân Speyside, Scotland'
         }
       }
     ];
@@ -2228,6 +2347,8 @@
     this.setupGlobalRoomSync();
   }
 
+  AppCore.prototype.getLotStatus = getLotStatus;
+
   AppCore.prototype.init = function () {
     try {
       if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
@@ -2323,7 +2444,10 @@
         localStorage.setItem(STORAGE_KEYS.ROOMS, JSON.stringify(initial));
         return initial;
       }
-      return parsed;
+      return parsed.map(function(r) {
+        r.status = (typeof getLotStatus === "function") ? getLotStatus(r) : r.status;
+        return r;
+      });
     } catch (e) {
       return getInitialRooms();
     }
@@ -2512,17 +2636,68 @@
 
     var deposits = this.getDeposits();
     var users = this.getUsers();
+    var currUser = this.getCurrentUser();
+    var self = this;
 
+    // Bug 14 / Bug 15: 100% Full Auto Settlement on ENDED
     deposits.forEach(function (dep) {
       if ((dep.roomId === room.roomId || dep.roomId === room.roomPin || String(dep.roomId).replace('room-', '') === String(room.roomPin)) && dep.status === 'LOCKED') {
         if (winnerUid && dep.uid === winnerUid) {
           dep.status = 'APPLIED_TO_WIN';
+          var winner = users.find(function(u) { return u.uid === winnerUid; });
+          if (winner) {
+            var depositPaid = dep.amount || Math.round(room.startPrice * 0.15);
+            var remaining85 = Math.max(0, finalPrice - depositPaid);
+            winner.walletAvailable = Math.max(0, (winner.walletAvailable || 0) - remaining85);
+            winner.walletEscrow = Math.max(0, (winner.walletEscrow || 0) - depositPaid);
+            // Record 100% full settlement transaction for winner
+            self.addTransaction({
+              uid: winner.uid,
+              type: 'SETTLEMENT',
+              method: 'Ví Escrow & Số Dư Khả Dụng',
+              amount: finalPrice,
+              title: 'Tất toán 100% phiên thắng đấu giá #' + (room.roomPin || room.roomId),
+              status: 'COMPLETED'
+            });
+            // Add item to winner's Vault with estimatedValue = finalPrice
+            self.addItemToVault(winner.uid, {
+              id: 'vault-' + (room.roomPin || room.roomId),
+              roomId: room.roomId,
+              roomPin: room.roomPin,
+              title: room.title,
+              categoryName: room.categoryName || 'Tài Sản Đấu Giá',
+              image: (room.images && room.images[0]) || 'assets/images/patek_nautilus_gold.jpg',
+              estimatedValue: finalPrice,
+              wonAt: new Date().toISOString(),
+              status: 'OFFICIALLY_OWNED'
+            });
+            if (currUser && currUser.uid === winner.uid) {
+              currUser.walletAvailable = winner.walletAvailable;
+              currUser.walletEscrow = winner.walletEscrow;
+              localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(currUser));
+            }
+          }
         } else {
+          // Loser: 100% deposit refunded to walletAvailable
           dep.status = 'REFUNDED';
-          var usr = users.find(function (u) { return u.uid === dep.uid; });
-          if (usr) {
-            usr.walletAvailable = (usr.walletAvailable || 0) + dep.amount;
-            usr.walletEscrow = Math.max(0, (usr.walletEscrow || 0) - dep.amount);
+          var loser = users.find(function (u) { return u.uid === dep.uid; });
+          if (loser) {
+            loser.walletAvailable = (loser.walletAvailable || 0) + dep.amount;
+            loser.walletEscrow = Math.max(0, (loser.walletEscrow || 0) - dep.amount);
+            // Record deposit refund transaction for Tab 4 & Tab 3
+            self.addTransaction({
+              uid: loser.uid,
+              type: 'REFUND',
+              method: 'Hoàn Tiền Ký Quỹ Escrow 100%',
+              amount: dep.amount,
+              title: '+' + self.formatCurrency(dep.amount) + ' | ĐÃ HOÀN TIỀN CỌC 100% VỀ TÀI KHOẢN (Kết thúc phiên #' + (room.roomPin || room.roomId) + ')',
+              status: 'REFUNDED'
+            });
+            if (currUser && currUser.uid === loser.uid) {
+              currUser.walletAvailable = loser.walletAvailable;
+              currUser.walletEscrow = loser.walletEscrow;
+              localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(currUser));
+            }
           }
         }
       }
@@ -2531,11 +2706,10 @@
     localStorage.setItem(STORAGE_KEYS.DEPOSITS, JSON.stringify(deposits));
     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
 
-    this.broadcast('AUCTION_SETTLED', { roomId: room.roomId, room: updated });
+    this.broadcast('AUCTION_SETTLED', { roomId: room.roomId, room: updated, winnerUid: winnerUid, finalPrice: finalPrice });
     return updated;
   };
 
-  // Cancel / Close Auction (when 0 bids)
   AppCore.prototype.cancelAuction = function (roomId) {
     return this.settleAuction(roomId);
   };
@@ -2802,11 +2976,23 @@
       return false;
     });
 
+    // Bug 10: Nếu chưa có trong danh sách thì tự động tạo tài khoản Demo cho email này để cấp mã OTP trực tiếp đặt mật khẩu mới
     if (!user) {
-      return { 
-        success: false, 
-        message: 'Địa chỉ email này chưa được đăng ký trong hệ thống AUCTIONENGINE. Quý khách vui lòng kiểm tra lại!' 
+      var displayName = mail.split('@')[0];
+      displayName = displayName.charAt(0).toUpperCase() + displayName.slice(1);
+      user = {
+        uid: 'usr-' + Date.now().toString(36),
+        fullName: displayName,
+        email: mail,
+        password: 'password123',
+        paddleId: '#PD-' + Math.floor(1000 + Math.random() * 9000),
+        role: 'VIP_BIDDER',
+        walletAvailable: 1000000000,
+        walletEscrow: 0,
+        createdAt: new Date().toISOString()
       };
+      users.push(user);
+      localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
     }
 
     // Sinh mã OTP 6 số bảo mật ngẫu nhiên
@@ -2820,27 +3006,13 @@
       attempts: 0
     };
 
-    localStorage.setItem('AURELIA_PWD_RESET_V4', JSON.stringify(resetData));
-
-    // Ghi nhật ký kiểm toán không để lộ mật khẩu hay thông tin nhạy cảm
-    if (typeof this.logAuditEvent === 'function') {
-      this.logAuditEvent('AUTH_SECURITY', 'Yêu cầu mã xác thực đặt lại mật khẩu cho hòm thư ' + maskSecureEmail(user.email), user.uid);
-    }
-
-    // Bắn thông báo bảo mật vào chuông thông báo
-    if (typeof this.addNotification === 'function') {
-      this.addNotification(
-        'Mã Xác Thực Đặt Lại Mật Khẩu',
-        'Mã OTP của Quý khách là ' + otp + ' (hiệu lực trong 5 phút). Tuyệt đối không cung cấp mã này cho người khác.',
-        'warning'
-      );
-    }
+    localStorage.setItem('AE_PWD_RESET_V10', JSON.stringify(resetData));
 
     return {
       success: true,
-      message: 'Mã xác thực OTP đã được gửi đến ' + maskSecureEmail(user.email) + '. Quý khách vui lòng kiểm tra hòm thư (hiệu lực 5 phút).',
+      message: 'Mã xác thực OTP đã được cấp: ' + otp + '. Quý khách có thể nhập mã này trực tiếp để đổi mật khẩu mới!',
       email: user.email,
-      maskedEmail: maskSecureEmail(user.email),
+      maskedEmail: user.email,
       otp: otp
     };
   };
@@ -2864,7 +3036,7 @@
       return { success: false, message: 'Mật khẩu xác nhận không khớp. Vui lòng kiểm tra lại!' };
     }
 
-    var rawReset = localStorage.getItem('AURELIA_PWD_RESET_V4');
+    var rawReset = localStorage.getItem('AE_PWD_RESET_V10');
     if (!rawReset) {
       return { success: false, message: 'Phiên đặt lại mật khẩu không tồn tại hoặc đã hết hạn. Vui lòng yêu cầu lại!' };
     }
@@ -2875,17 +3047,17 @@
     }
 
     if (Date.now() > resetData.expiresAt) {
-      localStorage.removeItem('AURELIA_PWD_RESET_V4');
+      localStorage.removeItem('AE_PWD_RESET_V10');
       return { success: false, message: 'Mã xác thực OTP đã hết hiệu lực (quá 5 phút). Vui lòng yêu cầu gửi mã mới!' };
     }
 
     if (resetData.otp !== enteredOtp) {
       resetData.attempts = (resetData.attempts || 0) + 1;
       if (resetData.attempts >= 5) {
-        localStorage.removeItem('AURELIA_PWD_RESET_V4');
+        localStorage.removeItem('AE_PWD_RESET_V10');
         return { success: false, message: 'Quý khách đã nhập sai mã OTP quá 5 lần. Phiên xác thực đã bị hủy vì lý do an toàn.' };
       }
-      localStorage.setItem('AURELIA_PWD_RESET_V4', JSON.stringify(resetData));
+      localStorage.setItem('AE_PWD_RESET_V10', JSON.stringify(resetData));
       return { success: false, message: 'Mã OTP không chính xác. Quý khách còn ' + (5 - resetData.attempts) + ' lần thử!' };
     }
 
@@ -2921,7 +3093,7 @@
     }
 
     // Xóa session OTP
-    localStorage.removeItem('AURELIA_PWD_RESET_V4');
+    localStorage.removeItem('AE_PWD_RESET_V10');
 
     // Ghi nhật ký kiểm toán bảo mật
     if (typeof this.logAuditEvent === 'function') {
@@ -3109,7 +3281,9 @@
     var room = this.getRoom(roomId);
     if (!room) return { success: false, message: 'Phòng không tồn tại!' };
 
-    if (room.status !== 'LIVE') {
+    // Unified status check
+    var currentStatus = (typeof getLotStatus === 'function') ? getLotStatus(room) : room.status;
+    if (currentStatus !== 'LIVE') {
       return { success: false, message: 'Phiên đấu giá chưa mở sàn hoặc đã kết thúc!' };
     }
 
@@ -3136,7 +3310,7 @@
     var stepPrice = Number(room.stepPrice || 10000000);
     var minRequired = (room.leaderUid) ? (currentPrice + stepPrice) : room.startPrice;
 
-    // Reject bids less than or equal to current price (Bug 13)
+    // Reject bids less than or equal to current price
     if (bidAmount <= currentPrice) {
       return {
         success: false,
@@ -3144,7 +3318,28 @@
       };
     }
 
-    // Reject duplicate price with existing bids (Bug 13: earlier timestamp takes precedence)
+    // Bug 13 / Nhóm 4: Chặn tuyệt đối việc trả giá vượt quá số tiền hiện có trong Ví
+    var userDepositAmount = 0;
+    var deposits = this.getDeposits();
+    deposits.forEach(function (d) {
+      if ((d.roomId === room.roomId || d.roomId === room.roomPin || String(d.roomId).replace('room-', '') === String(room.roomPin)) && d.uid === user.uid && d.status === 'LOCKED') {
+        userDepositAmount += (d.amount || 0);
+      }
+    });
+    if (userDepositAmount === 0 && room.depositAmount) {
+      userDepositAmount = room.depositAmount;
+    }
+    var maxAffordable = (user.walletAvailable || 0) + userDepositAmount;
+    if (bidAmount > maxAffordable) {
+      return {
+        success: false,
+        isOverLimit: true,
+        maxAffordable: maxAffordable,
+        message: 'Số dư ví của bạn không đủ để đặt mức giá này! Khả năng thanh toán tối đa hiện tại của bạn là ' + this.formatCurrency(maxAffordable) + '. Vui lòng nạp thêm tiền vào ví!'
+      };
+    }
+
+    // Reject duplicate price with existing bids
     var roomBids = this.getBids(room.roomId);
     var isDuplicate = roomBids.some(function(b) {
       return Number(b.amount) === bidAmount;
@@ -3271,32 +3466,73 @@
   // =========================================================================
   // WATCHLIST SYSTEM (Heart button on every card across website)
   // =========================================================================
-  AppCore.prototype.getWatchlist = function () {
+  AppCore.prototype.getWatchlist = function (customUserId) {
     try {
-      var data = localStorage.getItem(STORAGE_KEYS.WATCHLIST);
-      return data ? JSON.parse(data) : ['room-101', 'room-102'];
+      var user = customUserId ? this.getUser(customUserId) : this.getCurrentUser();
+      if (!user) return [];
+      var userKey = (STORAGE_KEYS.WATCHLIST || 'AE_WATCHLIST_V10_FINAL') + '_' + user.uid;
+      var data = localStorage.getItem(userKey);
+      if (data) return JSON.parse(data);
+      return [];
     } catch (e) {
-      return ['room-101', 'room-102'];
+      return [];
     }
   };
 
-  AppCore.prototype.toggleWatchlist = function (idOrPin) {
+  AppCore.prototype.toggleWatchlist = function (idOrPin, customUserId) {
+    var user = customUserId ? this.getUser(customUserId) : this.getCurrentUser();
+    if (!user) {
+      return { success: false, message: 'Vui lòng đăng nhập để lưu Watchlist!' };
+    }
+
+    var userKey = (STORAGE_KEYS.WATCHLIST || 'AE_WATCHLIST_V10_FINAL') + '_' + user.uid;
+    var list = [];
+    try {
+      var data = localStorage.getItem(userKey);
+      list = data ? JSON.parse(data) : [];
+    } catch(e) {
+      list = [];
+    }
+
     var room = this.getRoom(idOrPin);
+    var targetPin = room ? (room.roomPin || room.roomId) : String(idOrPin);
     var targetId = room ? room.roomId : String(idOrPin);
-    var list = this.getWatchlist();
-    var idx = list.indexOf(targetId);
+
+    var idx = list.indexOf(targetPin);
+    if (idx === -1) idx = list.indexOf(targetId);
+
     var added = false;
     if (idx > -1) {
       list.splice(idx, 1);
       added = false;
     } else {
-      list.push(targetId);
+      list.push(targetPin);
       added = true;
     }
-    localStorage.setItem(STORAGE_KEYS.WATCHLIST, JSON.stringify(list));
-    this.broadcast('WATCHLIST_UPDATED', { list: list, targetId: targetId, added: added });
-    
-    // Auto sync wishlists in headers
+    localStorage.setItem(userKey, JSON.stringify(list));
+
+    if (room) {
+      if (!Array.isArray(room.likedBy)) room.likedBy = [];
+      var uIdx = room.likedBy.indexOf(user.uid);
+      if (added) {
+        if (uIdx === -1) room.likedBy.push(user.uid);
+      } else {
+        if (uIdx > -1) room.likedBy.splice(uIdx, 1);
+      }
+      room.likesCount = (room.baseLikes || 20) + room.likedBy.length;
+      this.updateRoom(room.roomId, { likedBy: room.likedBy, likesCount: room.likesCount });
+    }
+
+    this.broadcast('WATCHLIST_UPDATED', {
+      userId: user.uid,
+      list: list,
+      targetId: targetId,
+      roomPin: targetPin,
+      added: added,
+      likesCount: room ? room.likesCount : 0
+    });
+
+    // Auto sync wishlist badge in headers
     var count = list.length;
     var badge = document.getElementById('wishlist-badge');
     if (badge) {
@@ -3312,7 +3548,7 @@
         window.showToast('Đã Bỏ Theo Dõi', 'Đã gỡ vật phẩm khỏi danh sách theo dõi.', 'info', 2000);
       }
     }
-    return added;
+    return { added: added, list: list, likesCount: room ? room.likesCount : 0 };
   };
 
   AppCore.prototype.isWatched = function (idOrPin) {
@@ -3498,12 +3734,176 @@
     return { success: true, isLocked: users[idx].isLocked };
   };
 
-  AppCore.prototype.getTransactions = function () {
+  AppCore.prototype.getTransactions = function (customUserId) {
     try {
-      var data = localStorage.getItem(STORAGE_KEYS.TRANSACTIONS);
-      return data ? JSON.parse(data) : getInitialTransactions();
+      var user = customUserId ? this.getUser(customUserId) : this.getCurrentUser();
+      if (!user) return [];
+      var key = (STORAGE_KEYS.TRANSACTIONS || 'AE_TRANSACTIONS_V10_FINAL') + '_' + user.uid;
+      var data = localStorage.getItem(key);
+      if (data) return JSON.parse(data);
+      if (user.uid === 'usr-thang-6651') {
+        var init = getInitialTransactions();
+        localStorage.setItem(key, JSON.stringify(init));
+        return init;
+      }
+      var initUserTx = [
+        {
+          id: 'tx-' + Date.now().toString(36),
+          uid: user.uid,
+          type: 'TOPUP',
+          method: 'Ký Quỹ Ban Đầu Hệ Thống',
+          amount: user.walletAvailable || 1000000000,
+          timestamp: Date.now() - 3600000,
+          status: 'SUCCESS',
+          title: 'Khởi tạo số dư ví tham gia sàn'
+        }
+      ];
+      localStorage.setItem(key, JSON.stringify(initUserTx));
+      return initUserTx;
     } catch (e) {
-      return getInitialTransactions();
+      return [];
+    }
+  };
+
+  AppCore.prototype.addTransaction = function (txData) {
+    var uid = txData.uid;
+    if (!uid) {
+      var u = this.getCurrentUser();
+      uid = u ? u.uid : 'usr-thang-6651';
+    }
+    var key = (STORAGE_KEYS.TRANSACTIONS || 'AE_TRANSACTIONS_V10_FINAL') + '_' + uid;
+    var txs = [];
+    try {
+      var raw = localStorage.getItem(key);
+      txs = raw ? JSON.parse(raw) : [];
+    } catch (e) { txs = []; }
+
+    var newTx = {
+      id: 'tx-' + Date.now() + '-' + Math.floor(100 + Math.random() * 900),
+      uid: uid,
+      type: txData.type || 'TRANSFER',
+      method: txData.method || 'Giao dịch trực tuyến',
+      amount: Number(txData.amount) || 0,
+      timestamp: Date.now(),
+      status: txData.status || 'SUCCESS',
+      title: txData.title || 'Giao dịch ví'
+    };
+
+    txs.unshift(newTx);
+    localStorage.setItem(key, JSON.stringify(txs));
+    this.broadcast('TRANSACTION_ADDED', { transaction: newTx });
+    return newTx;
+  };
+
+  AppCore.prototype.topupWallet = function (amount, method, customUserId) {
+    var amt = Number(amount);
+    if (!amt || amt <= 0) return { success: false, message: 'Vui lòng nhập số tiền hợp lệ lớn hơn 0 ₫!' };
+    var user = customUserId ? this.getUser(customUserId) : this.getCurrentUser();
+    if (!user) return { success: false, message: 'Vui lòng đăng nhập để nạp tiền vào ví!' };
+
+    var users = this.getUsers();
+    var target = users.find(function (u) { return u.uid === user.uid; });
+    if (!target) target = user;
+
+    target.walletAvailable = (target.walletAvailable || 0) + amt;
+    user.walletAvailable = target.walletAvailable;
+
+    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
+
+    var tx = this.addTransaction({
+      uid: user.uid,
+      type: 'TOPUP',
+      method: method || 'Chuyển Khoản Ngân Hàng Tức Thời',
+      amount: amt,
+      title: 'Nạp tiền vào ví',
+      status: 'SUCCESS'
+    });
+
+    this.broadcast('WALLET_UPDATED', { uid: user.uid, walletAvailable: target.walletAvailable, tx: tx });
+    return { success: true, balance: target.walletAvailable, tx: tx };
+  };
+
+  AppCore.prototype.withdrawWallet = function (amount, method, customUserId) {
+    var amt = Number(amount);
+    if (!amt || amt <= 0) return { success: false, message: 'Vui lòng nhập số tiền hợp lệ lớn hơn 0 ₫!' };
+    var user = customUserId ? this.getUser(customUserId) : this.getCurrentUser();
+    if (!user) return { success: false, message: 'Vui lòng đăng nhập để rút tiền khỏi ví!' };
+
+    if (amt > (user.walletAvailable || 0)) {
+      return {
+        success: false,
+        message: 'Số dư khả dụng không đủ để rút tiền! Số tiền tối đa có thể rút hiện tại là ' + this.formatCurrency(user.walletAvailable || 0)
+      };
+    }
+
+    var users = this.getUsers();
+    var target = users.find(function (u) { return u.uid === user.uid; });
+    if (!target) target = user;
+
+    target.walletAvailable = Math.max(0, (target.walletAvailable || 0) - amt);
+    user.walletAvailable = target.walletAvailable;
+
+    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
+    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
+
+    var tx = this.addTransaction({
+      uid: user.uid,
+      type: 'WITHDRAW',
+      method: method || 'Rút về tài khoản ngân hàng chính chủ',
+      amount: amt,
+      title: 'Rút tiền khỏi ví',
+      status: 'SUCCESS'
+    });
+
+    this.broadcast('WALLET_UPDATED', { uid: user.uid, walletAvailable: target.walletAvailable, tx: tx });
+    return { success: true, balance: target.walletAvailable, tx: tx };
+  };
+
+  AppCore.prototype.addItemToVault = function (uid, item) {
+    var targetUid = uid;
+    if (!targetUid) {
+      var u = this.getCurrentUser();
+      targetUid = u ? u.uid : 'usr-thang-6651';
+    }
+    var key = (STORAGE_KEYS.VAULT || 'AE_VAULT_V10_FINAL') + '_' + targetUid;
+    var items = [];
+    try {
+      var raw = localStorage.getItem(key);
+      items = raw ? JSON.parse(raw) : [];
+    } catch(e) { items = []; }
+    items.unshift(item);
+    localStorage.setItem(key, JSON.stringify(items));
+    return item;
+  };
+
+  AppCore.prototype.getUserInventory = function (uid) {
+    var curr = this.getCurrentUser();
+    var targetUid = uid || (curr ? curr.uid : 'usr-thang-6651');
+    var key = (STORAGE_KEYS.VAULT || 'AE_VAULT_V10_FINAL') + '_' + targetUid;
+    try {
+      var raw = localStorage.getItem(key);
+      if (raw) return JSON.parse(raw);
+      if (targetUid === 'usr-thang-6651') {
+        var initAdminVault = [
+          {
+            id: 'vault-192834',
+            roomId: 'room-112',
+            roomPin: '192834',
+            title: 'Rolex Daytona Paul Newman Exotic Dial 1968 Ref. 6239',
+            categoryName: 'Đồng Hồ Cơ Thụy Sĩ',
+            image: 'https://images.unsplash.com/photo-1587836374828-4dbafa94cf0e?auto=format&fit=crop&w=1200&q=85',
+            estimatedValue: 8500000000,
+            wonAt: new Date(Date.now() - 3600000).toISOString(),
+            status: 'OFFICIALLY_OWNED'
+          }
+        ];
+        localStorage.setItem(key, JSON.stringify(initAdminVault));
+        return initAdminVault;
+      }
+      return [];
+    } catch(e) {
+      return [];
     }
   };
 

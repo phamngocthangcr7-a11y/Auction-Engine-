@@ -346,6 +346,55 @@ function renderModals() {
       </div>
     </div>
 
+    <!-- MODAL RÚT TIỀN (WITHDRAW MODAL - Bug 6 & Bug 7) -->
+    <div class="modal" id="modal-withdraw" aria-hidden="true" role="dialog">
+      <div class="modal__backdrop" onclick="window.closeModal('modal-withdraw')"></div>
+      <div class="modal__container" style="max-width: 480px;">
+        <div class="modal__header">
+          <div>
+            <div style="font-size: 0.62rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--text-muted); font-weight: 700;">Giao Dịch Tài Chính • Bảo Mật Escrow</div>
+            <h3 class="modal__title" style="margin-top: 2px;">Rút Tiền Khỏi Ví Về Tài Khoản</h3>
+          </div>
+          <button class="modal__close" onclick="window.closeModal('modal-withdraw')" aria-label="Đóng">&times;</button>
+        </div>
+        <div class="modal__body">
+          <div style="background: var(--bg-canvas); border: 1px solid var(--border-hairline); padding: 16px 20px; border-radius: var(--radius-sm); margin-bottom: var(--space-4);">
+            <div style="font-size: 0.68rem; text-transform: uppercase; color: var(--text-muted); font-weight: 700; letter-spacing: 0.05em;">Số dư khả dụng có thể rút</div>
+            <div id="modal-withdraw-avail-val" class="font-mono" style="font-size: 1.75rem; font-weight: 700; color: #059669; margin-top: 2px;">
+              0 ₫
+            </div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: var(--space-3);">
+            <label class="form-label" for="withdraw-custom-input">Nhập số tiền muốn rút (VNĐ)</label>
+            <input 
+              type="number" 
+              id="withdraw-custom-input" 
+              class="form-control font-mono" 
+              placeholder="Ví dụ: 500000000" 
+              style="font-size: 1.15rem; font-weight: 700;"
+            />
+            <div id="withdraw-preview-text" style="font-size: 0.75rem; color: #EF4444; margin-top: 6px; font-weight: 600; min-height: 18px;"></div>
+          </div>
+
+          <div class="form-group" style="margin-bottom: var(--space-4);">
+            <label class="form-label">Tài khoản ngân hàng thụ hưởng</label>
+            <input 
+              type="text" 
+              class="form-control" 
+              value="Vietcombank • 988651071071 (Phạm Ngọc Thắng)" 
+              readonly 
+              style="font-size: 0.85rem; background: var(--bg-subtle); color: var(--text-muted);"
+            />
+          </div>
+
+          <button type="button" id="btn-submit-withdraw-confirm" class="btn btn--primary btn--md" style="width: 100%; font-weight: 700; background: #DC2626; border-color: #DC2626; padding: 12px;">
+            Xác Nhận Rút Tiền Về Ngân Hàng
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- =======================================================================
          5. MODAL BIÊN BẢN XÁC NHẬN KẾT QUẢ ĐẤU GIÁ (OFFICIAL AUCTION RESULT MODAL)
          ======================================================================= -->
@@ -968,6 +1017,50 @@ function bindModalEvents() {
     });
   });
 
+
+  const btnWithdraw = document.getElementById('btn-submit-withdraw-confirm');
+  const withdrawInput = document.getElementById('withdraw-custom-input');
+  const withdrawPreview = document.getElementById('withdraw-preview-text');
+
+  if (withdrawInput && withdrawPreview) {
+    withdrawInput.addEventListener('input', () => {
+      const val = Number(withdrawInput.value);
+      const store = window.AureliaApp || window.AuctionStore;
+      if (val > 0 && store) {
+        withdrawPreview.textContent = `Số tiền sẽ rút: -${store.formatCurrency(val)}`;
+      } else {
+        withdrawPreview.textContent = '';
+      }
+    });
+  }
+
+  if (btnWithdraw) {
+    btnWithdraw.addEventListener('click', () => {
+      const amt = Number(withdrawInput ? withdrawInput.value : 0);
+      if (!amt || amt <= 0) {
+        if (window.showToast) window.showToast('Thiếu số tiền', 'Vui lòng nhập số tiền hợp lệ muốn rút!', 'warning');
+        else alert('Vui lòng nhập số tiền hợp lệ!');
+        return;
+      }
+      const store = window.AureliaApp || window.AuctionStore;
+      const res = store.withdrawWallet ? store.withdrawWallet(amt) : null;
+      if (res && res.success) {
+        window.closeModal('modal-withdraw');
+        if (window.showToast) {
+          window.showToast('Rút Tiền Thành Công', `Đã rút ${store.formatCurrency(amt)} về tài khoản. Số dư ví hiện tại: ${store.formatCurrency(res.balance)}`, 'success', 4000);
+        }
+        if (typeof window.renderDashboardContent === 'function') window.renderDashboardContent();
+        if (typeof window.renderHeader === 'function') window.renderHeader();
+      } else {
+        if (window.showToast) {
+          window.showToast('Rút Tiền Thất Bại', (res && res.message) || 'Số dư không đủ!', 'error', 4000);
+        } else {
+          alert((res && res.message) || 'Số dư không đủ');
+        }
+      }
+    });
+  }
+
   if (submitWalletTopupBtn) {
     submitWalletTopupBtn.addEventListener('click', () => {
       const amt = Number(walletCustomInput?.value);
@@ -1201,6 +1294,23 @@ window.logoutUser = function() {
   setTimeout(() => {
     window.location.href = 'welcome.html';
   }, 350);
+};
+
+
+window.openWithdrawModal = function() {
+  const store = window.AureliaApp || window.AuctionStore;
+  const user = store ? store.getCurrentUser() : null;
+  if (!user) {
+    if (window.openAuthModal) window.openAuthModal('login');
+    return;
+  }
+  const el = document.getElementById('modal-withdraw-avail-val');
+  if (el) el.textContent = store.formatCurrency(user.walletAvailable || 0);
+  const input = document.getElementById('withdraw-custom-input');
+  if (input) input.value = '';
+  const prev = document.getElementById('withdraw-preview-text');
+  if (prev) prev.textContent = '';
+  window.openModal('modal-withdraw');
 };
 
 window.openWalletModal = function() {
