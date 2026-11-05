@@ -1515,14 +1515,23 @@
     });
   };
 
-  AppCore.prototype.depositEscrow = function (roomId, customUser) {
+  AppCore.prototype.depositEscrow = function (roomId, customAmountOrUser, customUser) {
     var room = this.getRoom(roomId);
     if (!room) return { success: false, message: 'Phòng không tồn tại!' };
 
-    var user = customUser || this.getCurrentUser();
+    var user = null;
+    if (customAmountOrUser && typeof customAmountOrUser === 'object') {
+      user = customAmountOrUser;
+    } else if (customUser && typeof customUser === 'object') {
+      user = customUser;
+    } else {
+      user = this.getCurrentUser();
+    }
     if (!user) return { success: false, message: 'Vui lòng đăng nhập để nộp cọc!' };
 
-    var depositAmount = room.depositAmount || Math.round((room.startPrice || 0) * 0.15);
+    var depositAmount = (typeof customAmountOrUser === 'number' && customAmountOrUser > 0) 
+      ? customAmountOrUser 
+      : (room.depositAmount || Math.round((room.startPrice || 0) * 0.15));
 
     if (this.hasUserDeposited(room.roomId, user.uid)) {
       return { success: true, message: 'Quý khách đã nộp cọc cho phiên này rồi.' };

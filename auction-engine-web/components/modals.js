@@ -853,8 +853,32 @@ function bindModalEvents() {
           if (window.showToast) {
             window.showToast('Ký quỹ thành công', 'Đã tạm khóa 15% cọc bảo chứng và kích hoạt thẻ đấu giá!', 'success');
           }
+          // Realtime Relay: Broadcast NEW_DEPOSIT to all devices over MQTT
+          try {
+            var client = window.mqttClient;
+            var cleanPin = String(pendingDepositRoomId || '').replace(/[^0-9]/g, '');
+            var topic = window.mqttTopic || ('aurelia/auction/room/' + cleanPin);
+            if (client && client.connected && res.deposit) {
+              client.publish(topic, JSON.stringify({
+                type: 'NEW_DEPOSIT',
+                senderId: window.mqttClientId || ('ae_client_' + Date.now()),
+                roomId: pendingDepositRoomId,
+                deposit: res.deposit
+              }), { qos: 1 });
+            }
+          } catch(e) {
+            console.warn('[MQTT Deposit Broadcast Error]:', e);
+          }
           window.closeModal('modal-escrow-deposit');
-          setTimeout(() => window.location.reload(), 400);
+          if (typeof window.renderRoom === 'function') {
+            window.renderRoom();
+            if (typeof window.switchRoomTab === 'function') {
+              window.switchRoomTab('deposits');
+            }
+          }
+          if (typeof window.renderHeader === 'function') {
+            window.renderHeader();
+          }
         } else {
           if (res.insufficientFunds) {
             if (window.showToast) {

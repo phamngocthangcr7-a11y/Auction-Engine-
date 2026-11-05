@@ -1117,9 +1117,9 @@
           leaderUid: '',
           leaderName: '',
           leaderPaddleId: '',
-          sellerId: (sData && sData.sellerId) || 'usr-host-remote',
-          sellerName: (sData && sData.host) || 'Chủ Phòng AUCTIONENGINE',
-          sellerPaddleId: '#HOST-COMMUNITY',
+          sellerId: urlParams.get('sellerId') || (sData && sData.sellerId) || (currentUser ? currentUser.uid : 'usr-thang-6651'),
+          sellerName: urlParams.get('sellerName') || (sData && sData.host) || (currentUser ? currentUser.fullName : 'Phạm Ngọc Thắng'),
+          sellerPaddleId: urlParams.get('sellerPaddle') || (sData && sData.sellerPaddleId) || (currentUser ? currentUser.paddleId : '#PD-6651'),
           participantsCount: 1,
           images: (sData && sData.imgs && sData.imgs.length > 0) ? sData.imgs : [
             'assets/images/user_avatar.jpg'
@@ -1146,10 +1146,17 @@
 
       function broadcastRoomToPeers(roomObj) {
         if (mqttClient && mqttClient.connected && roomObj) {
+          var r = store.getRoom(roomObj.roomId) || roomObj;
+          var allDeps = store.getDeposits().filter(function(d) {
+            return d.roomId === r.roomId || d.roomId === r.roomPin || String(d.roomId).replace('room-', '') === String(r.roomPin);
+          });
+          var allBids = store.getBids(r.roomId);
           mqttClient.publish(mqttTopic, JSON.stringify({
             type: 'HOST_ROOM_BROADCAST',
             senderId: mqttClientId,
-            room: roomObj
+            room: r,
+            deposits: allDeps,
+            bids: allBids
           }), { retain: true, qos: 1 });
         }
       }
@@ -1166,6 +1173,9 @@
 
           mqttClient.on('connect', function() {
             console.log('[Realtime Relay] Kết nối broker EMQX thành công, kênh:', mqttTopic);
+            window.mqttClient = mqttClient;
+            window.mqttTopic = mqttTopic;
+            window.mqttClientId = mqttClientId;
             mqttClient.subscribe(mqttTopic, { qos: 1 }, function() {
               if (currentRoom) {
                 // Nếu mình là chủ phòng hoặc đã có dữ liệu phòng -> phát sóng lưu lại trên broker
@@ -1193,6 +1203,32 @@
                   store.upsertRoom(data.room);
                   currentRoom = data.room;
                   window.roomId = currentRoom.roomId;
+                  if (data.deposits && Array.isArray(data.deposits)) {
+                    var curDeps = store.getDeposits();
+                    var addedD = false;
+                    data.deposits.forEach(function(d) {
+                      if (!curDeps.some(function(cd) { return cd.id === d.id || (cd.uid === d.uid && (cd.roomId === d.roomId || cd.roomId === window.roomId)); })) {
+                        curDeps.push(d);
+                        addedD = true;
+                      }
+                    });
+                    if (addedD) {
+                      localStorage.setItem(STORAGE_KEYS.DEPOSITS, JSON.stringify(curDeps));
+                    }
+                  }
+                  if (data.bids && Array.isArray(data.bids)) {
+                    var curBids = store.getBids(window.roomId);
+                    var addedB = false;
+                    data.bids.forEach(function(b) {
+                      if (!curBids.some(function(cb) { return cb.id === b.id; })) {
+                        curBids.push(b);
+                        addedB = true;
+                      }
+                    });
+                    if (addedB) {
+                      localStorage.setItem(STORAGE_KEYS.BIDS, JSON.stringify(curBids));
+                    }
+                  }
                   var syncOverlay = document.getElementById('room-syncing-overlay');
                   if (syncOverlay) syncOverlay.style.display = 'none';
                   renderRoom();
@@ -1204,6 +1240,50 @@
                 // Máy khác vừa vào và xin dữ liệu phòng -> Chủ phòng phản hồi ngay
                 if (currentRoom) {
                   broadcastRoomToPeers(currentRoom);
+                }
+              } else if (data.type === 'NEW_DEPOSIT' && data.deposit) {
+                var allDeps = store.getDeposits();
+                var dep = data.deposit;
+                var exists = allDeps.some(function(d) {
+                  return d.id === dep.id || (d.uid === dep.uid && (d.roomId === dep.roomId || d.roomId === window.roomId || String(d.roomId).replace('room-', '') === String(roomParam)));
+                });
+                if (!exists) {
+                  allDeps.push(dep);
+                  localStorage.setItem(STORAGE_KEYS.DEPOSITS, JSON.stringify(allDeps));
+                }
+                var r = store.getRoom(window.roomId);
+                if (r) {
+                  var count = allDeps.filter(function(d) {
+                    return d.roomId === r.roomId || d.roomId === r.roomPin || String(d.roomId).replace('room-', '') === String(r.roomPin);
+                  }).length;
+                  store.updateRoom(window.roomId, {
+                    participantsCount: Math.max((r.participantsCount || 1), count)
+                  });
+                }
+                renderRoom();
+                if (soundSystem) soundSystem.playGavelStrike(1, 180);
+                if (window.showToast) {
+                  var bName = dep.fullName || dep.userName || 'Nhà sưu tầm';
+                  var pId = dep.paddleId || '---';
+                  window.showToast('Người tham gia ký quỹ mới', bName + ' (' + pId + ') vừa nộp cọc 15%!', 'info', 3500);
+                }
+              } else if (data.type === 'AUCTION_STARTED') {
+                store.updateRoom(window.roomId, {
+                  status: 'LIVE',
+                  startTime: data.startTime || (data.room && data.room.startTime) || new Date().toISOString(),
+                  endTime: data.endTime || (data.room && data.room.endTime) || new Date(Date.now() + 15 * 60000).toISOString()
+                });
+                renderRoom();
+                if (soundSystem) soundSystem.playGavelStrike(1, 250);
+                if (window.showToast) {
+                  window.showToast('Sàn Đấu Giá Đã Mở!', 'Chủ phòng đã phát lệnh mở sàn. Mời quý khách bắt đầu trả giá!', 'success', 3500);
+                }
+              } else if (data.type === 'AUCTION_SETTLED') {
+                store.updateRoom(window.roomId, { status: 'ENDED' });
+                renderRoom();
+                if (soundSystem) soundSystem.playGavelStrike(3, 300);
+                if (window.openAuctionResultModal) {
+                  window.openAuctionResultModal(data.settledRoom || data.room || store.getRoom(window.roomId));
                 }
               } else if (data.type === 'NEW_BID' && data.bid) {
                 var currentBids = store.getBids(window.roomId);
@@ -1396,7 +1476,12 @@
 
         var currentUser = store.getCurrentUser();
         var bids = store.getBids(room.roomId);
-        var deposits = store.getDeposits().filter(function(d) { return d.roomId === room.roomId; });
+        var deposits = store.getDeposits().filter(function(d) {
+          return d.roomId === room.roomId ||
+                 d.roomId === room.roomPin ||
+                 d.roomId === ('room-' + room.roomPin) ||
+                 String(d.roomId).replace('room-', '') === String(room.roomPin);
+        });
 
         // Breadcrumbs & Basic Info
         var crumbEl = document.getElementById('room-pin-crumb');
@@ -1532,7 +1617,16 @@
         panelLive.style.display = 'none';
         panelEnded.style.display = 'none';
 
-        var isHost = currentUser && (currentUser.uid === room.sellerId || currentUser.role === 'HOST');
+        var isHost = (currentUser && (
+          currentUser.uid === room.sellerId ||
+          currentUser.paddleId === room.sellerPaddleId ||
+          currentUser.role === 'admin' ||
+          currentUser.isAdmin ||
+          currentUser.role === 'HOST'
+        )) || 
+        (urlParams.get('created') === 'true') || 
+        (sessionStorage.getItem('AE_HOST_ROOM_' + room.roomPin) === 'true') ||
+        (localStorage.getItem('AE_HOST_ROOM_' + room.roomPin) === 'true');
         var hasDeposited = currentUser && deposits.some(function(d) { return d.uid === currentUser.uid && d.status === 'LOCKED'; });
 
         if (room.status === 'WAITING') {
@@ -1719,7 +1813,7 @@
 
           return '<tr>' +
             '<td class="font-mono" style="font-weight: 600;">' + (d.paddleId || '---') + '</td>' +
-            '<td>' + (d.fullName || 'Nhà Sưu Tầm') + '</td>' +
+            '<td>' + (d.fullName || d.userName || 'Nhà Sưu Tầm') + '</td>' +
             '<td style="text-align: right; font-family: var(--font-mono);">' + store.formatCurrency(d.amount) + '</td>' +
             '<td style="text-align: right; font-size: 0.72rem; font-weight: 600; color: ' + statusColor + ';">' + statusText + '</td>' +
           '</tr>';
@@ -1823,6 +1917,16 @@
         btnStart.addEventListener('click', function() {
           var updated = store.startAuction(window.roomId);
           if (updated) {
+            if (mqttClient && mqttClient.connected) {
+              mqttClient.publish(mqttTopic, JSON.stringify({
+                type: 'AUCTION_STARTED',
+                senderId: mqttClientId,
+                roomId: window.roomId,
+                room: updated,
+                startTime: updated.startTime,
+                endTime: updated.endTime
+              }), { retain: true, qos: 1 });
+            }
             if (soundSystem) soundSystem.playGavelStrike(1, 250);
             if (window.showToast) {
               window.showToast('Đã mở sàn đấu giá', 'Phiên đấu giá chính thức bắt đầu đếm ngược thời gian!', 'success');
@@ -1847,10 +1951,21 @@
           }
           if (confirm('Xác nhận gõ búa chốt phiên ngay lập tức với mức giá ' + store.formatCurrency(currentRoom.currentPrice) + '?')) {
             var settled = store.settleAuction(window.roomId);
-            if (soundSystem) soundSystem.playGavelStrike(3, 300);
-            renderRoom();
-            if (window.openAuctionResultModal) {
-              window.openAuctionResultModal(settled);
+            if (settled) {
+              if (mqttClient && mqttClient.connected) {
+                mqttClient.publish(mqttTopic, JSON.stringify({
+                  type: 'AUCTION_SETTLED',
+                  senderId: mqttClientId,
+                  roomId: window.roomId,
+                  settledRoom: settled,
+                  room: settled
+                }), { retain: true, qos: 1 });
+              }
+              if (soundSystem) soundSystem.playGavelStrike(3, 300);
+              renderRoom();
+              if (window.openAuctionResultModal) {
+                window.openAuctionResultModal(settled);
+              }
             }
           }
         });
@@ -2003,7 +2118,15 @@
           walletAvailable: 10000000000
         };
 
-        store.depositEscrow(window.roomId, currentRoom.depositAmount, candidate);
+        var res = store.depositEscrow(window.roomId, currentRoom.depositAmount, candidate);
+        if (res && res.deposit && mqttClient && mqttClient.connected) {
+          mqttClient.publish(mqttTopic, JSON.stringify({
+            type: 'NEW_DEPOSIT',
+            senderId: mqttClientId,
+            roomId: window.roomId,
+            deposit: res.deposit
+          }), { qos: 1 });
+        }
         if (window.showToast) {
           window.showToast('Đã nộp cọc thành công', 'Nhà sưu tầm ' + candidate.fullName + ' (' + candidate.paddleId + ') đã ký quỹ bảo chứng 15%.', 'success');
         }

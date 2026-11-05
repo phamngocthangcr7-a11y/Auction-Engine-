@@ -893,8 +893,14 @@
 
         if (result && result.success) {
           var roomPin = result.room.roomPin;
+          try {
+            sessionStorage.setItem('AE_HOST_ROOM_' + roomPin, 'true');
+            localStorage.setItem('AE_HOST_ROOM_' + roomPin, 'true');
+          } catch(e) {}
           var cleanTitleParam = encodeURIComponent(title.substring(0, 40));
-          var targetUrl = 'live-room.html?room=' + roomPin + '&t=' + cleanTitleParam + '&sp=' + startPrice + '&cat=' + catKey + '&created=true';
+          var sellerUid = user ? user.uid : 'usr-thang-6651';
+          var sellerPad = user ? user.paddleId : '#PD-6651';
+          var targetUrl = 'live-room.html?room=' + roomPin + '&t=' + cleanTitleParam + '&sp=' + startPrice + '&cat=' + catKey + '&created=true&sellerId=' + encodeURIComponent(sellerUid) + '&sellerPaddle=' + encodeURIComponent(sellerPad);
 
           // Broadcast to public MQTT broker with retain: true so any other phone or device immediately gets the room
           try {
@@ -905,7 +911,9 @@
                 c.publish(t, JSON.stringify({
                   type: 'HOST_ROOM_BROADCAST',
                   senderId: 'seller',
-                  room: result.room
+                  room: result.room,
+                  deposits: [],
+                  bids: []
                 }), { retain: true, qos: 1 }, function() {
                   setTimeout(function() { c.end(); }, 1500);
                 });
