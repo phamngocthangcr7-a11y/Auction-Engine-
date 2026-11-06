@@ -531,9 +531,14 @@
 
     // 2. Lấy URL redirect nếu có (VD: vào phòng cụ thể trước khi đăng nhập)
     function getRedirectUrl() {
+      const saved = sessionStorage.getItem('redirectAfterLogin');
+      if (saved) {
+        sessionStorage.removeItem('redirectAfterLogin');
+        return saved;
+      }
       const params = new URLSearchParams(window.location.search);
       const r = params.get('redirect');
-      if (r && !r.includes('login') && !r.includes('logout')) return r;
+      if (r && !r.includes('login') && !r.includes('logout')) return decodeURIComponent(r);
       return 'index.html';
     }
 

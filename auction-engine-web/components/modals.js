@@ -772,7 +772,13 @@ function bindModalEvents() {
           if (typeof window.renderHeader === 'function') window.renderHeader();
           setTimeout(() => {
             if (window.location.pathname.includes('login.html')) {
+              var savedDest = sessionStorage.getItem('redirectAfterLogin');
+            if (savedDest) {
+              sessionStorage.removeItem('redirectAfterLogin');
+              window.location.href = savedDest;
+            } else {
               window.location.href = 'index.html';
+            }
             } else {
               window.location.reload();
             }
@@ -808,7 +814,13 @@ function bindModalEvents() {
           if (typeof window.renderHeader === 'function') window.renderHeader();
           setTimeout(() => {
             if (window.location.pathname.includes('login.html')) {
+              var savedDest = sessionStorage.getItem('redirectAfterLogin');
+            if (savedDest) {
+              sessionStorage.removeItem('redirectAfterLogin');
+              window.location.href = savedDest;
+            } else {
               window.location.href = 'index.html';
+            }
             } else {
               window.location.reload();
             }

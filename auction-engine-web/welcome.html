@@ -916,7 +916,7 @@
     <!-- 4 Featured Cards Grid (Dynamic from Store - Bug 2) -->
     <div class="lots-grid" id="welcome-lots-grid">
       <!-- Populated dynamically via renderWelcomeLots() from real localStorage lots -->
-    </div>    </div>
+    </div>
   </section>
 
   <!-- Escrow Standards Section -->
@@ -1022,6 +1022,9 @@
       </div>
 
       <!-- 2 Tabs Rõ Ràng & Logic -->
+      <!-- Banner phòng đấu giá đích khi bấm từ thẻ phiên tiêu điểm -->
+      <div id="modal-target-room-banner" style="display: none; padding: 12px 20px 0 20px;"></div>
+
       <div class="modal-tabs">
         <button type="button" class="modal-tab-btn active" id="modal-tab-login" onclick="switchModalTab('login')">
           Đăng Nhập
@@ -1098,17 +1101,37 @@
     let pendingRedirect = null;
 
     function getTargetUrl() {
-      if (pendingRedirect) return pendingRedirect;
+      // 1. Ưu tiên đường dẫn đang chờ trong phiên bấm hiện tại
+      if (pendingRedirect) {
+        const dest = pendingRedirect;
+        pendingRedirect = null;
+        return dest;
+      }
+      // 2. Kiểm tra sessionStorage redirectAfterLogin (Bug 2)
+      const savedRedirect = sessionStorage.getItem('redirectAfterLogin');
+      if (savedRedirect) {
+        sessionStorage.removeItem('redirectAfterLogin');
+        return savedRedirect;
+      }
+      // 3. Kiểm tra tham số ?redirect= trên URL
       const params = new URLSearchParams(window.location.search);
       const redir = params.get('redirect');
       if (redir) return decodeURIComponent(redir);
+      // 4. Kiểm tra tham số ?room= trên URL
       const room = params.get('room');
       if (room) return 'live-room.html?room=' + encodeURIComponent(room);
+      // 5. Mặc định vào trang chủ sàn
       return 'index.html';
     }
 
     // Open & Close Auth Modal
-    function openAuthModal(defaultTab = 'login') {
+    function openAuthModal(defaultTab = 'login', keepRedirect = false) {
+      if (!keepRedirect) {
+        pendingRedirect = null;
+        sessionStorage.removeItem('redirectAfterLogin');
+        const banner = document.getElementById('modal-target-room-banner');
+        if (banner) banner.style.display = 'none';
+      }
       const modal = document.getElementById('auth-modal');
       if (modal) {
         modal.classList.add('open');
@@ -1123,6 +1146,8 @@
         modal.classList.remove('open');
         hideAlert();
       }
+      const banner = document.getElementById('modal-target-room-banner');
+      if (banner) banner.style.display = 'none';
     }
 
     // Switch Tabs in Modal (ONLY 2 TABS)
@@ -1257,12 +1282,40 @@
       const store = window.AureliaApp || window.AuctionStore;
       const user = store ? store.getCurrentUser() : null;
       const target = 'live-room.html?room=' + encodeURIComponent(pin);
+      
+      // Luôn ghi nhớ đích đến chính xác vào cả biến nhớ và sessionStorage
+      pendingRedirect = target;
+      sessionStorage.setItem('redirectAfterLogin', target);
+
       if (user) {
+        // Đã đăng nhập -> Chuyển thẳng tới phòng đấu giá ngay lập tức
         window.location.href = target;
       } else {
-        pendingRedirect = target;
-        sessionStorage.setItem('redirectAfterLogin', target);
-        openAuthModal('login');
+        // Chưa đăng nhập -> Hiển thị banner chỉ rõ phiên đang chọn và mở modal đăng nhập
+        const rooms = store ? store.getRooms() : [];
+        const lotObj = rooms.find(r => String(r.roomPin) === String(pin) || String(r.roomId) === String(pin));
+        const lotTitle = lotObj ? lotObj.title : ('Phiên Đấu Giá #' + pin);
+        
+        const banner = document.getElementById('modal-target-room-banner');
+        if (banner) {
+          banner.innerHTML = `
+            <div style="background: rgba(245, 158, 11, 0.1); border: 1px solid rgba(245, 158, 11, 0.35); border-radius: 8px; padding: 10px 14px; margin-bottom: 4px;">
+              <div style="display: flex; align-items: center; justify-content: space-between; gap: 8px;">
+                <div style="overflow: hidden;">
+                  <div style="font-size: 0.68rem; text-transform: uppercase; letter-spacing: 0.06em; color: #F59E0B; font-weight: 800;">
+                    Phiên Đang Chọn &bull; PIN #${pin}
+                  </div>
+                  <div style="font-size: 0.82rem; font-weight: 700; color: #FFFFFF; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 280px;">
+                    ${lotTitle}
+                  </div>
+                </div>
+                <span style="font-size: 0.7rem; color: #94A3B8; flex-shrink: 0;">Đăng nhập để vào phòng &rarr;</span>
+              </div>
+            </div>
+          `;
+          banner.style.display = 'block';
+        }
+        openAuthModal('login', true);
       }
     }
 
@@ -1357,14 +1410,20 @@
       updateWelcomeAuthState();
       const params = new URLSearchParams(window.location.search);
       const tab = params.get('tab');
-      if (tab === 'register') {
+      const redir = params.get('redirect');
+      const room = params.get('room');
+
+      if (redir) {
+        pendingRedirect = decodeURIComponent(redir);
+        sessionStorage.setItem('redirectAfterLogin', pendingRedirect);
+        openAuthModal('login', true);
+      } else if (room) {
+        pendingRedirect = 'live-room.html?room=' + encodeURIComponent(room);
+        sessionStorage.setItem('redirectAfterLogin', pendingRedirect);
+        openAuthModal('login');
+      } else if (tab === 'register') {
         openAuthModal('register');
       } else if (tab === 'login') {
-        openAuthModal('login');
-      }
-      const room = params.get('room');
-      if (room) {
-        pendingRedirect = 'live-room.html?room=' + encodeURIComponent(room);
         openAuthModal('login');
       }
     });
