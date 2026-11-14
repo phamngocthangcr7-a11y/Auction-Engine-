@@ -573,9 +573,14 @@ function renderModals() {
           </div>
         </div>
         <div class="modal__footer" style="padding: 14px 24px; display: flex; justify-content: space-between; align-items: center; background: var(--bg-subtle);">
-          <button type="button" class="btn btn-outline" onclick="window.markAllNotifsRead()" style="font-size: 0.78rem; padding: 6px 14px;">
-            Đánh Dấu Đã Đọc Tất Cả
-          </button>
+          <div style="display: flex; gap: 8px;">
+            <button type="button" class="btn btn-outline" onclick="window.markAllNotifsRead()" style="font-size: 0.78rem; padding: 6px 14px;">
+              Đánh Dấu Đã Đọc
+            </button>
+            <button type="button" class="btn btn-outline" onclick="window.clearAllNotifs()" style="font-size: 0.78rem; padding: 6px 14px; color: #EF4444; border-color: rgba(239, 68, 68, 0.3);">
+              Xóa Hết
+            </button>
+          </div>
           <button type="button" class="btn btn-primary" onclick="window.closeModal('modal-notifications')" style="font-size: 0.78rem; padding: 6px 16px;">
             Đóng
           </button>
@@ -684,8 +689,8 @@ function renderModals() {
                 <strong id="cert-winner-name" style="color: #0F172A;">Phạm Ngọc Thắng (#PD-6651)</strong>
               </div>
               <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 8px;">
-                <span style="color: #64748B;">Mã Số Sinh Viên / CCCD:</span>
-                <strong id="cert-winner-mssv" style="font-family: var(--font-mono); color: #0F172A;">6651071071</strong>
+                <span style="color: #64748B;">Mã Thẻ / Định Danh Hợp Lệ:</span>
+                <strong id="cert-winner-mssv" style="font-family: var(--font-mono); color: #0F172A;">#PD-6651 (Geneva KYC)</strong>
               </div>
               <div style="display: flex; justify-content: space-between; font-size: 0.95rem; border-top: 1px dashed #CBD5E1; padding-top: 8px; margin-top: 8px;">
                 <span style="font-weight: 700; color: #0F172A;">Giá Khớp Lệnh Gõ Búa:</span>
@@ -1611,23 +1616,49 @@ window.openNotificationsModal = function() {
   const listEl = document.getElementById('modal-notifs-list');
   if (store && listEl) {
     const notifs = store.getNotifications();
-    if (notifs.length === 0) {
-      listEl.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-muted);font-size:0.8rem;">Không có thông báo mới</div>';
+    if (!notifs || notifs.length === 0) {
+      listEl.innerHTML = `
+        <div style="padding: 32px 20px; text-align: center; color: var(--text-muted);">
+          <svg viewBox="0 0 24 24" style="width: 36px; height: 36px; stroke: #94A3B8; fill: none; margin: 0 auto 10px auto; display: block;"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"></path><path d="M13.73 21a2 2 0 0 1-3.46 0"></path></svg>
+          <div style="font-size: 0.88rem; font-weight: 600; color: var(--text-primary); margin-bottom: 4px;">Hiện chưa có thông báo mới</div>
+          <div style="font-size: 0.75rem; color: var(--text-secondary);">Mọi biến động nạp rút tiền, đặt cọc ký quỹ và phiên đấu giá sẽ được thông báo ngay tại đây.</div>
+        </div>
+      `;
     } else {
       listEl.innerHTML = notifs.map(n => {
-        const borderC = n.type === 'success' ? '#059669' : (n.type === 'error' ? '#DC2626' : (n.type === 'warning' ? '#D97706' : '#3B82F6'));
+        const borderC = n.type === 'success' ? '#10B981' : (n.type === 'error' ? '#EF4444' : (n.type === 'warning' ? '#F59E0B' : '#3B82F6'));
+        const iconSvg = n.type === 'success' 
+          ? '<circle cx="12" cy="12" r="10"></circle><polyline points="9 12 11 14 15 10"></polyline>'
+          : (n.type === 'error' 
+            ? '<circle cx="12" cy="12" r="10"></circle><line x1="15" y1="9" x2="9" y2="15"></line><line x1="9" y1="9" x2="15" y2="15"></line>'
+            : (n.type === 'warning'
+              ? '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line>'
+              : '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line>'));
         return `
-          <div style="background:var(--bg-page);border:1px solid var(--border-color);border-left:3px solid ${borderC};border-radius:6px;padding:10px 12px;position:relative;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:2px;">
-              <strong style="font-size:0.82rem;color:var(--text-primary);">${n.title}</strong>
-              <span style="font-size:0.68rem;color:var(--text-muted);">${n.time}</span>
+          <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-left: 4px solid ${borderC}; border-radius: 8px; padding: 12px 14px; display: flex; gap: 12px; align-items: flex-start; box-shadow: var(--shadow-sm); margin-bottom: 8px;">
+            <div style="color: ${borderC}; flex-shrink: 0; margin-top: 2px;">
+              <svg viewBox="0 0 24 24" style="width: 18px; height: 18px; stroke: currentColor; fill: none; stroke-width: 2;">${iconSvg}</svg>
             </div>
-            <div style="font-size:0.75rem;color:var(--text-secondary);line-height:1.4;">${n.message}</div>
+            <div style="flex: 1;">
+              <div style="display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 3px;">
+                <strong style="font-size: 0.85rem; color: var(--text-primary); font-weight: 700;">${n.title}</strong>
+                <span style="font-size: 0.68rem; color: var(--text-muted); font-family: var(--font-mono);">${n.time || 'Vừa xong'}</span>
+              </div>
+              <div style="font-size: 0.78rem; color: var(--text-secondary); line-height: 1.45;">${n.message}</div>
+            </div>
           </div>
         `;
       }).join('');
     }
   }
+
+  // Auto clear bell badge when opening modal
+  if (store && typeof store.markNotifsAsRead === 'function') {
+    store.markNotifsAsRead();
+    const badge = document.getElementById('notif-badge');
+    if (badge) badge.style.display = 'none';
+  }
+
   window.openModal('modal-notifications');
 };
 
@@ -1638,6 +1669,16 @@ window.markAllNotifsRead = function() {
     const badge = document.getElementById('notif-badge');
     if (badge) badge.style.display = 'none';
     if (window.showToast) window.showToast('Thành Công', 'Đã đánh dấu tất cả thông báo là đã đọc.', 'success', 2000);
+    window.openNotificationsModal();
+  }
+};
+
+window.clearAllNotifs = function() {
+  if (confirm('Bạn có chắc chắn muốn xóa tất cả thông báo không?')) {
+    localStorage.setItem('AE_NOTIFICATIONS_V10_FINAL', JSON.stringify([]));
+    const badge = document.getElementById('notif-badge');
+    if (badge) badge.style.display = 'none';
+    if (window.showToast) window.showToast('Đã Xóa', 'Đã xóa toàn bộ lịch sử thông báo.', 'info', 2000);
     window.openNotificationsModal();
   }
 };
@@ -1726,7 +1767,7 @@ window.openCertificateModal = function(roomId) {
     const elPin = document.getElementById('cert-lot-pin');
     if (elPin) elPin.textContent = 'LOT #' + (room.lotNumber || '112') + ' • PIN #' + (room.roomPin || '192834');
     const elWin = document.getElementById('cert-winner-name');
-    if (elWin) elWin.textContent = winnerName + ' • MSSV: 6651071071';
+    if (elWin) elWin.textContent = winnerName + ' • Thẻ #PD-6651 (Verified)';
     const elPrice = document.getElementById('cert-hammer-price');
     if (elPrice) elPrice.textContent = store.formatCurrency(hammer);
     const elDep = document.getElementById('cert-escrow-amount');

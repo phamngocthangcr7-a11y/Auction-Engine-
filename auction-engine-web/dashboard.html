@@ -279,10 +279,8 @@
             </div>
             <div class="dash-profile-meta" style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center;">
               <span>Thẻ Đấu Giá: <strong class="font-mono text-emerald" id="dash-user-paddle">#PD-6651</strong></span>
-              <span id="dash-user-mssv-wrap" style="display: none;">
-                <span class="meta-sep">&bull;</span>
-                <span>MSSV: <strong class="font-mono" id="dash-user-mssv">---</strong></span>
-              </span>
+              <span class="meta-sep">&bull;</span>
+              <span style="color: #F59E0B; font-weight: 700;">Thành Viên VIP Quốc Tế</span>
               <span class="meta-sep">&bull;</span>
               <span>Hạn mức tín nhiệm: <strong class="font-mono price-val text-emerald" id="dash-user-credit">50.000.000.000 ₫</strong></span>
             </div>
@@ -426,10 +424,7 @@
                     <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 6px;">Họ và Tên</label>
                     <input type="text" id="prof-input-name" class="form-control" value="Phạm Ngọc Thắng" required style="width: 100%; padding: 9px 12px; font-size: 0.88rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-page); color: var(--text-primary);" />
                   </div>
-                  <div class="form-group" id="prof-group-mssv" style="display: none;">
-                    <label style="font-size: 0.75rem; font-weight: 700; text-transform: uppercase; color: var(--text-muted); display: block; margin-bottom: 6px;">Mã Số Sinh Viên (MSSV)</label>
-                    <input type="text" id="prof-input-mssv" class="form-control font-mono" value="" readonly style="width: 100%; padding: 9px 12px; font-size: 0.88rem; border-radius: 6px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-muted);" />
-                  </div>
+
                 </div>
 
                 <div style="display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 16px; margin-bottom: 16px;">
@@ -737,16 +732,7 @@
         if (elName) elName.textContent = user.fullName || 'Thành Viên';
         var elPaddle = document.getElementById('dash-user-paddle');
         if (elPaddle) elPaddle.textContent = user.paddleId || '#PD-0000';
-        var elMssvWrap = document.getElementById('dash-user-mssv-wrap');
-        var elMssv = document.getElementById('dash-user-mssv');
-        if (elMssvWrap && elMssv) {
-          if (user.mssv) {
-            elMssvWrap.style.display = 'inline-flex';
-            elMssv.textContent = user.mssv;
-          } else {
-            elMssvWrap.style.display = 'none';
-          }
-        }
+
         var elAvatar = document.getElementById('dash-user-avatar');
         if (elAvatar) elAvatar.src = user.avatar || 'assets/images/user_avatar.jpg';
         var elRoleBadge = document.getElementById('dash-user-role-badge');
@@ -776,16 +762,7 @@
         if (inpPhone) inpPhone.value = user.phone || '0908 665 107';
         var inpAddr = document.getElementById('prof-input-address');
         if (inpAddr) inpAddr.value = user.address || 'Hồ Chí Minh, Việt Nam';
-        var grpMssv = document.getElementById('prof-group-mssv');
-        var inpMssv = document.getElementById('prof-input-mssv');
-        if (grpMssv && inpMssv) {
-          if (user.mssv) {
-            grpMssv.style.display = 'block';
-            inpMssv.value = user.mssv;
-          } else {
-            grpMssv.style.display = 'none';
-          }
-        }
+
 
         // Wallet balances
         var avail = user.walletAvailable || 0;
@@ -801,21 +778,31 @@
         var withdrawMax = document.getElementById('withdraw-max-val');
         if (withdrawMax) withdrawMax.textContent = store.formatCurrency(avail);
 
-        // 3. Top-up history
-        var txs = store.getTransactions ? store.getTransactions().filter(function(t) { return t.type === 'TOPUP' && (!t.uid || t.uid === user.uid); }) : [];
+        // 3. Top-up & Withdraw Cash Flow Ledger (Real Transactions)
+        var txs = store.getTransactions ? store.getTransactions().filter(function(t) { 
+          return (t.type === 'TOPUP' || t.type === 'WITHDRAW') && (!t.uid || t.uid === user.uid); 
+        }) : [];
         var topupTbody = document.getElementById('dash-topup-tbody');
         if (topupTbody) {
-          topupTbody.innerHTML = txs.map(function(t) {
-            return `
-              <tr style="border-bottom: 1px solid var(--border-color);">
-                <td style="padding: 12px 18px; font-family: var(--font-mono); font-weight: 700; color: var(--text-primary);">${t.id}</td>
-                <td style="padding: 12px 18px; color: var(--text-secondary);">${t.method}</td>
-                <td style="padding: 12px 18px; text-align: right; font-family: var(--font-mono); font-weight: 800; color: #059669;">+${store.formatCurrency(t.amount)}</td>
-                <td style="padding: 12px 18px; font-size: 0.78rem; color: var(--text-muted);">${new Date(t.timestamp).toLocaleString('vi-VN')}</td>
-                <td style="padding: 12px 18px; text-align: center;"><span class="badge badge--live" style="font-size: 0.65rem;">THÀNH CÔNG</span></td>
-              </tr>
-            `;
-          }).join('');
+          if (txs.length === 0) {
+            topupTbody.innerHTML = '<tr><td colspan="5" style="text-align:center;padding:24px;color:var(--text-muted);">Chưa có giao dịch nạp hoặc rút tiền nào.</td></tr>';
+          } else {
+            topupTbody.innerHTML = txs.map(function(t) {
+              var isWithdraw = t.type === 'WITHDRAW';
+              var sign = isWithdraw ? '-' : '+';
+              var color = isWithdraw ? '#EF4444' : '#10B981';
+              var methodText = t.method || (isWithdraw ? 'Rút về tài khoản ngân hàng chính chủ' : 'Chuyển khoản Ngân hàng (Vietcombank)');
+              return `
+                <tr style="border-bottom: 1px solid var(--border-color);">
+                  <td style="padding: 12px 18px; font-family: var(--font-mono); font-weight: 700; color: var(--text-primary);">${t.id}</td>
+                  <td style="padding: 12px 18px; color: var(--text-secondary);">${methodText}</td>
+                  <td style="padding: 12px 18px; text-align: right; font-family: var(--font-mono); font-weight: 800; color: ${color};">${sign}${store.formatCurrency(t.amount)}</td>
+                  <td style="padding: 12px 18px; font-size: 0.78rem; color: var(--text-muted);">${new Date(t.timestamp).toLocaleString('vi-VN')}</td>
+                  <td style="padding: 12px 18px; text-align: center;"><span class="badge" style="background: rgba(16, 185, 129, 0.15); color: #10B981; border: 1px solid rgba(16, 185, 129, 0.3); font-size: 0.65rem; font-weight: 700;">THÀNH CÔNG</span></td>
+                </tr>
+              `;
+            }).join('');
+          }
         }
 
         // 4. Đặt Cọc & Hoàn Tiền 100% (Bug 14 / Bug 15)
@@ -1147,24 +1134,44 @@
 
       window.confirmWithdraw = function() {
         var amt = Number(document.getElementById('withdraw-amount').value) || 0;
+        var bankName = document.getElementById('withdraw-bank').value || 'Vietcombank';
+        var bankAcc = document.getElementById('withdraw-account').value || '0071000665107';
         var user = store.getCurrentUser();
-        if (!user) return;
-        if (amt <= 0 || amt > user.walletAvailable) {
-          alert('Số tiền rút không hợp lệ hoặc vượt quá số dư khả dụng!');
+        if (!user) {
+          alert('Vui lòng đăng nhập để thực hiện rút tiền!');
           return;
         }
-        user.walletAvailable -= amt;
-        var users = store.getUsers();
-        var idx = users.findIndex(function(u) { return u.uid === user.uid; });
-        if (idx > -1) users[idx].walletAvailable = user.walletAvailable;
-        localStorage.setItem('AURELIA_USERS_V4', JSON.stringify(users));
-        localStorage.setItem('AURELIA_CURRENT_USER_V4', JSON.stringify(user));
+        if (!amt || amt <= 0) {
+          alert('Vui lòng nhập số tiền rút hợp lệ lớn hơn 0 ₫!');
+          return;
+        }
+        if (amt > (user.walletAvailable || 0)) {
+          alert('Số tiền rút vượt quá số dư ví khả dụng! Tối đa có thể rút: ' + store.formatCurrency(user.walletAvailable || 0));
+          return;
+        }
 
-        if (store.logAuditEvent) store.logAuditEvent('WITHDRAW', 'Rút tiền ' + store.formatCurrency(amt) + ' về ngân hàng', user.fullName);
-        if (store.addNotification) store.addNotification('Rút tiền thành công', 'Lệnh rút ' + store.formatCurrency(amt) + ' đã được chuyển đến tài khoản ngân hàng thành công.', 'info');
+        var res = store.withdrawWallet(amt, 'Rút về ' + bankName + ' (' + bankAcc + ')');
+        if (!res.success) {
+          alert(res.message || 'Rút tiền thất bại!');
+          return;
+        }
+
+        // Add real notification
+        if (typeof store.addNotification === 'function') {
+          store.addNotification(
+            'Rút tiền thành công',
+            'Lệnh rút ' + store.formatCurrency(amt) + ' về tài khoản ' + bankName + ' (Số TK: ' + bankAcc + ') đã được xử lý thành công.',
+            'success'
+          );
+        }
 
         window.closeModal('modal-withdraw');
-        if (window.showToast) window.showToast('Rút Tiền Thành Công', 'Đã chuyển ' + store.formatCurrency(amt) + ' về tài khoản ngân hàng của quý khách.', 'success', 3000);
+        if (window.showToast) {
+          window.showToast('Rút Tiền Thành Công', 'Đã chuyển ' + store.formatCurrency(amt) + ' về tài khoản ngân hàng của quý khách.', 'success', 3500);
+        }
+
+        // Immediately update Header wallet balance and dashboard UI
+        if (typeof renderHeader === 'function') renderHeader();
         updateDashboardData();
       };
 

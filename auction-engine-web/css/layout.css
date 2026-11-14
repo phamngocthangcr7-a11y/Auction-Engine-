@@ -91,11 +91,11 @@
    3. SITE HEADER: 2-TIER EDITORIAL BAR
    ========================================================================== */
 .utility-bar {
-  background-color: var(--bg-dark-utility, #0F172A);
+  background-color: var(--bg-dark-utility, #05070B);
   color: #E2E8F0;
   height: 36px;
   font-size: 0.74rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid rgba(245, 158, 11, 0.18);
   display: flex;
   align-items: center;
   z-index: calc(var(--z-sticky) + 1);

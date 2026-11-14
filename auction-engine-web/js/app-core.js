@@ -3154,25 +3154,16 @@
     };
   };
 
-  AppCore.prototype.topUpWallet = function (amount) {
-    var amt = Number(amount) || 2000000000;
-    var user = this.getCurrentUser();
-    if (!user) {
-      return { success: false, message: 'Quý khách chưa đăng nhập tài khoản!' };
+  AppCore.prototype.topUpWallet = function (amount, method, customUserId) {
+    var res = this.topupWallet(amount, method, customUserId);
+    if (res && res.success) {
+      var u = this.getCurrentUser();
+      if (u) {
+        u.success = true;
+        return u;
+      }
     }
-
-    user.walletAvailable = (user.walletAvailable || 0) + amt;
-
-    var users = this.getUsers();
-    var idx = users.findIndex(function (u) { return u.uid === user.uid; });
-    if (idx !== -1) {
-      users[idx] = user;
-      localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(users));
-    }
-    localStorage.setItem(STORAGE_KEYS.CURRENT_USER, JSON.stringify(user));
-    this.broadcast('WALLET_TOPPED_UP', { user: user, addedAmount: amt });
-    user.success = true;
-    return user;
+    return res;
   };
 
   AppCore.prototype.registerUser = function (fullName, email) {
@@ -3655,6 +3646,12 @@
     return true;
   };
 
+  AppCore.prototype.clearNotifications = function () {
+    localStorage.setItem(STORAGE_KEYS.NOTIFICATIONS, JSON.stringify([]));
+    this.broadcast('NOTIFICATIONS_READ', {});
+    return true;
+  };
+
   // =========================================================================
   // CATEGORIES SYSTEM
   // =========================================================================
@@ -3859,6 +3856,14 @@
       status: 'SUCCESS'
     });
 
+    if (typeof this.addNotification === 'function') {
+      this.addNotification(
+        'Nạp tiền ví thành công',
+        'Quý khách đã nạp thành công ' + this.formatCurrency(amt) + ' vào ví khả dụng (' + (method || 'Chuyển khoản Ngân hàng') + ').',
+        'success'
+      );
+    }
+
     this.broadcast('WALLET_UPDATED', { uid: user.uid, walletAvailable: target.walletAvailable, tx: tx });
     return { success: true, balance: target.walletAvailable, tx: tx };
   };
@@ -3894,6 +3899,14 @@
       title: 'Rút tiền khỏi ví',
       status: 'SUCCESS'
     });
+
+    if (typeof this.addNotification === 'function') {
+      this.addNotification(
+        'Rút tiền thành công',
+        'Lệnh rút ' + this.formatCurrency(amt) + ' về ' + (method || 'tài khoản ngân hàng chính chủ') + ' đã được xử lý thành công.',
+        'success'
+      );
+    }
 
     this.broadcast('WALLET_UPDATED', { uid: user.uid, walletAvailable: target.walletAvailable, tx: tx });
     return { success: true, balance: target.walletAvailable, tx: tx };

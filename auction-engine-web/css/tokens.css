@@ -78,20 +78,21 @@
    2. LUXURY DARK GALLERY THEME ([data-theme="dark"])
    ========================================================================== */
 [data-theme="dark"] {
-  --bg-page: #0B0F17;
-  --bg-surface: #111827;
-  --bg-subtle: #1F2937;
-  --bg-dark: #030712;
-  --text-primary: #F8FAFC;
-  --text-secondary: #CBD5E1;
+  --bg-page: #080A0F;
+  --bg-surface: #0E131E;
+  --bg-subtle: #141A28;
+  --bg-dark: #05070B;
+  --bg-dark-utility: #05070B;
+  --text-primary: #FFFFFF;
+  --text-secondary: #E2E8F0;
   --text-muted: #94A3B8;
-  --text-inverse: #0F172A;
-  --border-color: #1E293B;
-  --border-focus: #38BDF8;
-  --border-hairline: #1E293B;
+  --text-inverse: #080A0F;
+  --border-color: rgba(255, 255, 255, 0.09);
+  --border-focus: #F59E0B;
+  --border-hairline: rgba(255, 255, 255, 0.06);
 
-  --accent-navy: #38BDF8;
-  --accent-primary: #38BDF8;
+  --accent-navy: #D4AF37;
+  --accent-primary: #F59E0B;
   --accent-emerald: #10B981;
   --accent-bid: #10B981;
   --accent-amber: #F59E0B;
@@ -99,9 +100,9 @@
   --accent-crimson: #EF4444;
   --accent-danger: #EF4444;
 
-  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.4);
-  --shadow-card: 0 4px 16px rgba(0, 0, 0, 0.4);
-  --shadow-modal: 0 20px 40px rgba(0, 0, 0, 0.7);
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.5);
+  --shadow-card: 0 4px 20px rgba(0, 0, 0, 0.5);
+  --shadow-modal: 0 24px 60px rgba(0, 0, 0, 0.85);
 
   --bg-canvas: var(--bg-page);
   --color-border: var(--border-color);

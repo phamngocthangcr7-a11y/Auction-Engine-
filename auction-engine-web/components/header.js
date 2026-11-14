@@ -137,11 +137,10 @@ function renderHeader() {
             <span class="utility-sep">|</span>
 
             <!-- Current User Profile -->
-            <button type="button" class="utility-user-profile-btn" onclick="window.openAuthModal()" title="Hồ sơ tài khoản: ${userName} • MSSV: ${currentUser.mssv || '---'} • Thẻ ${paddleId}">
+            <button type="button" class="utility-user-profile-btn" onclick="window.openAuthModal()" title="Hồ sơ tài khoản: ${userName} • Thẻ ${paddleId}">
               <img src="${currentUser.avatar || 'assets/images/user_thang.jpg'}" alt="Avatar" style="width: 18px; height: 18px; border-radius: 50%; object-fit: cover; border: 1.5px solid #10B981; flex-shrink: 0;" onerror="this.style.display='none';" />
               <span class="utility-user-name">${userName}</span>
               <span class="utility-user-paddle">(<strong>${paddleId}</strong>)</span>
-              ${currentUser && currentUser.mssv ? `<span class="utility-user-mssv" style="color: #94A3B8;">&bull; MSSV: ${currentUser.mssv}</span>` : ''}
               ${currentUser && (currentUser.role === 'admin' || currentUser.isAdmin) ? `<span class="utility-user-admin" style="color: #34D399; font-weight: 700;">&bull; ADMIN</span>` : ''}
             </button>
 
@@ -257,17 +256,7 @@ function renderHeader() {
             <span>Tạo Phiên Mới</span>
           </a>
 
-          <!-- User Menu Button -->
-          <button 
-            type="button" 
-            id="btn-header-user-menu"
-            class="btn btn-outline header-user-btn" 
-            style="padding: 6px 10px; font-size: 0.78rem; display: inline-flex; align-items: center; gap: 5px;"
-            onclick="window.openAuthModal()"
-          >
-            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px;"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-            <span>${currentUser ? paddleId : 'Đăng Nhập'}</span>
-          </button>
+
 
           <!-- Mobile Hamburger Toggle Button -->
           <button 
@@ -318,7 +307,7 @@ function renderHeader() {
                   <span>${userName}</span>
                   ${currentUser.role === 'admin' || currentUser.isAdmin ? '<span style="font-size: 0.65rem; background: #059669; color: #FFF; padding: 1px 6px; border-radius: 4px; font-weight: 700;">ADMIN</span>' : ''}
                 </div>
-                <div style="font-size: 0.72rem; color: var(--accent-emerald); font-weight: 600; font-family: var(--font-mono);">${paddleId} &bull; ${currentUser.mssv || 'VIP'}</div>
+                <div style="font-size: 0.72rem; color: var(--accent-emerald); font-weight: 600; font-family: var(--font-mono);">${paddleId} &bull; VIP Member</div>
               </div>
             </div>
             <button type="button" onclick="window.logoutUser()" class="btn btn-outline" style="font-size: 0.7rem; padding: 4px 8px; color: #DC2626; border-color: rgba(220,38,38,0.3);">
@@ -488,18 +477,7 @@ window.openPinModal = function() {
   }
 };
 
-window.openNotificationsModal = function() {
-  if (typeof window.openModal === 'function') {
-    window.openModal('modal-notifications');
-    // Mark as read
-    const store = window.AureliaApp || window.AuctionStore;
-    if (store && typeof store.markNotifsAsRead === 'function') {
-      store.markNotifsAsRead();
-      const badge = document.getElementById('notif-badge');
-      if (badge) badge.style.display = 'none';
-    }
-  }
-};
+// openNotificationsModal handled by modals.js
 
 window.openWatchlistModal = function() {
   if (typeof window.openModal === 'function') {
