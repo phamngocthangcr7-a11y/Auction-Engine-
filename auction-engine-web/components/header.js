@@ -51,7 +51,6 @@ const AE_LOGO_CREST_SVG = `<svg class="ae-brand-emblem" width="38" height="38" v
  * 1. Trang Chủ (index.html)
  * 2. Khám Phá & Bộ Lọc (auctions.html)
  * 3. Tạo Phiên Bán (seller-studio.html)
- * 4. Bảng Xếp Hạng (index.html#leaderboard-section)
  * 5. Không Gian Cá Nhân (dashboard.html)
  * 6. Quản Trị (Admin) (admin.html)
  * Plus: Notification Bell & Watchlist Heart with live counters.
@@ -199,9 +198,7 @@ function renderHeader() {
             <a href="auctions.html" class="nav-link ${currentPath.includes('auctions') ? 'active' : ''}">
               Khám Phá & Bộ Lọc
             </a>
-                        <a href="index.html#leaderboard-section" class="nav-link">
-              Bảng Xếp Hạng
-            </a>
+            
             <a href="dashboard.html" class="nav-link ${currentPath.includes('dashboard') ? 'active' : ''}">
               Không Gian Cá Nhân
             </a>
@@ -373,10 +370,7 @@ function renderHeader() {
           <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
           <span>Tạo Phiên Bán</span>
         </a>
-        <a href="index.html#leaderboard-section" class="mobile-nav-item" onclick="window.closeMobileDrawer()">
-          <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
-          <span>Bảng Xếp Hạng</span>
-        </a>
+
         <a href="dashboard.html" class="mobile-nav-item ${currentPath.includes('dashboard') ? 'active' : ''}">
           <svg viewBox="0 0 24 24"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
           <span>Không Gian Cá Nhân</span>

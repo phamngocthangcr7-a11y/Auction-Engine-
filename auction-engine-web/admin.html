@@ -541,6 +541,7 @@
                       <button type="button" class="btn btn-outline" style="font-size: 0.72rem; padding: 4px 8px; color: #DC2626; border-color: rgba(220,38,38,0.3);" onclick="window.openAdminRejectModal('${r.roomId}')">Từ Chối</button>
                     ` : ''}
                     <a href="live-room.html?room=${r.roomPin || r.roomId}" class="btn btn-outline" style="font-size: 0.72rem; padding: 4px 8px;">Xem</a>
+                    <button type="button" class="btn btn-outline" style="font-size: 0.72rem; padding: 4px 8px; color: #DC2626; border-color: #DC2626; background: rgba(220,38,38,0.08); font-weight: 700;" onclick="window.adminDeleteRoom('${r.roomId}')" title="Xóa vĩnh viễn phiên đấu giá này">🗑️ Xóa</button>
                   </div>
                 </td>
               </tr>
@@ -649,6 +650,21 @@
               </tr>
             `;
           }).join('');
+        }
+      };
+
+      window.adminDeleteRoom = function(roomId) {
+        var room = store.getRoom(roomId);
+        var title = room ? room.title : roomId;
+        if (confirm('CẢNH BÁO QUẢN TRỊ VIÊN:\nBạn có chắc chắn muốn xóa vĩnh viễn phiên đấu giá "' + title + '" không?\nHành động này không thể hoàn tác!')) {
+          if (store.deleteRoom(roomId)) {
+            if (window.showToast) {
+              window.showToast('Đã Xóa Phiên', 'Phiên "' + title + '" đã được xóa khỏi hệ thống.', 'success');
+            } else {
+              alert('Đã xóa phiên "' + title + '" thành công!');
+            }
+            window.refreshAdminView();
+          }
         }
       };
 

@@ -2562,6 +2562,45 @@
     return rooms[idx];
   };
 
+  // Delete Room by Admin (Xóa vĩnh viễn phiên)
+  AppCore.prototype.deleteRoom = function (roomId) {
+    if (!roomId) return false;
+    var target = String(roomId).replace('#', '').trim().toLowerCase();
+    var rooms = this.getRooms();
+    var initialLen = rooms.length;
+    var deletedRoom = null;
+
+    var filtered = rooms.filter(function (r) {
+      var match = String(r.roomId).toLowerCase() === target ||
+                  String(r.id || '').toLowerCase() === target ||
+                  String(r.roomPin || '').toLowerCase() === target;
+      if (match) deletedRoom = r;
+      return !match;
+    });
+
+    if (filtered.length !== initialLen) {
+      localStorage.setItem(STORAGE_KEYS.ROOMS, JSON.stringify(filtered));
+      this.broadcast('ROOM_DELETED', { roomId: roomId, deletedRoom: deletedRoom });
+      try {
+        window.dispatchEvent(new CustomEvent('aurelia:rooms-updated', { detail: { rooms: filtered, deletedId: roomId } }));
+      } catch (e) {}
+
+      // Add audit log
+      var curr = this.getCurrentUser();
+      var actor = curr ? (curr.fullName + ' (' + (curr.paddleId || '#PD-6651') + ')') : 'Quản Trị Viên';
+      if (typeof this.addAuditLog === 'function') {
+        this.addAuditLog({
+          action: 'ROOM_DELETED',
+          title: 'Xóa phiên đấu giá',
+          desc: actor + ' đã xóa vĩnh viễn phiên ' + (deletedRoom ? deletedRoom.title : roomId),
+          timestamp: new Date().toISOString()
+        });
+      }
+      return true;
+    }
+    return false;
+  };
+
   // Start Auction by Host (Khai mạc)
   AppCore.prototype.startAuction = function (roomId, durationMinutes) {
     var room = this.getRoom(roomId);

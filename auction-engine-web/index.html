@@ -211,8 +211,8 @@
           <div class="hero-slide active hero-spotlight-grid" id="hero-slide-0" style="grid-template-columns: 1.15fr 0.85fr; gap: 32px; align-items: center;">
             <div style="display: flex; flex-direction: column; gap: 14px;">
               <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <span class="badge badge--live" style="font-weight: 700; padding: 4px 10px; border-radius: 4px; font-size: 0.72rem; letter-spacing: 0.05em;">
-                  ĐANG DIỄN RA (LIVE)
+                <span class="badge badge--waiting" style="font-weight: 700; padding: 4px 10px; border-radius: 4px; font-size: 0.72rem; letter-spacing: 0.05em; background: rgba(245, 158, 11, 0.15); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3);">
+                  ● PHÒNG CHỜ • SẮP MỞ
                 </span>
                 <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">LOT #101 &bull; PIN #839201</span>
                 <span style="font-size: 0.75rem; color: var(--text-muted);">&bull; 14 Nhà Sưu Tầm Đang Xem</span>
@@ -226,24 +226,24 @@
                 Tuyệt tác bấm giờ cơ học đỉnh cao chế tác Geneva, vỏ vàng hồng 18K nguyên khối, mặt số nâu ombre sọc ngang kinh điển. Đầy đủ chứng thư Geneva Seal và bảo chứng quốc tế từ nhà đấu giá AUCTIONENGINE.
               </p>
 
-              <!-- Metrics: Price & Countdown (Zero Wrapping) -->
+              <!-- Metrics: Price & Status -->
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 4px 0; background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 18px;">
                 <div>
-                  <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 2px;">Giá Đang Dẫn Đầu</div>
+                  <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 2px;">Giá Khởi Điểm</div>
                   <div class="font-mono text-emerald price-val" style="font-size: 1.5rem; font-weight: 800; line-height: 1.1;">2.500.000.000 ₫</div>
-                  <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">Dẫn đầu: <strong style="color: var(--text-primary);">Phan Minh Tân (#PD-2048)</strong></div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">Bảo chứng: <strong style="color: #059669;">Ký quỹ Escrow 15%</strong></div>
                 </div>
                 <div style="border-left: 1px solid var(--border-color); padding-left: 18px;">
-                  <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 2px;">Thời Gian Còn Lại</div>
-                  <div id="hero-clock-0" class="font-mono price-val text-amber" style="font-size: 1.5rem; font-weight: 800; line-height: 1.1;">37:45</div>
-                  <div style="font-size: 0.72rem; color: #059669; margin-top: 3px; font-weight: 600;">Anti-Sniping Bảo Vệ Active</div>
+                  <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 2px;">Trạng Thái Phiên</div>
+                  <div id="hero-clock-0" class="font-mono price-val text-amber" style="font-size: 1.25rem; font-weight: 800; line-height: 1.1;">CHỜ KHAI MẠC</div>
+                  <div style="font-size: 0.72rem; color: #059669; margin-top: 3px; font-weight: 600;">Anti-Sniping Bảo Vệ Sẵn Sàng</div>
                 </div>
               </div>
 
               <!-- Action Buttons -->
               <div style="display: flex; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap;">
                 <a href="live-room.html?room=839201" class="btn btn-primary" style="font-weight: 700; padding: 11px 22px; font-size: 0.88rem;">
-                  <span>Vào Phòng Đấu Giá Ngay</span>
+                  <span>Vào Phòng Chờ Ngay</span>
                   <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </a>
                 <button type="button" class="btn btn-outline" onclick="window.toggleHeroWatchlist('room-101', this)" style="padding: 11px 18px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;">
@@ -266,8 +266,8 @@
           <div class="hero-slide hero-spotlight-grid" id="hero-slide-1" style="grid-template-columns: 1.15fr 0.85fr; gap: 32px; align-items: center;">
             <div style="display: flex; flex-direction: column; gap: 14px;">
               <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <span class="badge badge--live" style="font-weight: 700; padding: 4px 10px; border-radius: 4px; font-size: 0.72rem; letter-spacing: 0.05em;">
-                  ĐANG DIỄN RA (LIVE)
+                <span class="badge badge--waiting" style="font-weight: 700; padding: 4px 10px; border-radius: 4px; font-size: 0.72rem; letter-spacing: 0.05em; background: rgba(245, 158, 11, 0.15); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3);">
+                  ● PHÒNG CHỜ • SẮP MỞ
                 </span>
                 <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">LOT #102 &bull; PIN #911300</span>
                 <span style="font-size: 0.75rem; color: var(--text-muted);">&bull; 26 Nhà Sưu Tầm Đang Xem</span>
@@ -284,13 +284,13 @@
               <!-- Metrics -->
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 4px 0; background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 18px;">
                 <div>
-                  <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 2px;">Giá Đang Dẫn Đầu</div>
+                  <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 2px;">Giá Khởi Điểm</div>
                   <div class="font-mono text-emerald price-val" style="font-size: 1.5rem; font-weight: 800; line-height: 1.1;">14.900.000.000 ₫</div>
-                  <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">Dẫn đầu: <strong style="color: var(--text-primary);">Trần Hoàng Bảo (#PD-3390)</strong></div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">Bảo chứng: <strong style="color: #059669;">Ký quỹ Escrow 15%</strong></div>
                 </div>
                 <div style="border-left: 1px solid var(--border-color); padding-left: 18px;">
-                  <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 2px;">Thời Gian Còn Lại</div>
-                  <div id="hero-clock-1" class="font-mono price-val text-amber" style="font-size: 1.5rem; font-weight: 800; line-height: 1.1;">41:15</div>
+                  <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 2px;">Trạng Thái Phiên</div>
+                  <div id="hero-clock-1" class="font-mono price-val text-amber" style="font-size: 1.25rem; font-weight: 800; line-height: 1.1;">CHỜ KHAI MẠC</div>
                   <div style="font-size: 0.72rem; color: #059669; margin-top: 3px; font-weight: 600;">Porsche Classic Stuttgart</div>
                 </div>
               </div>
@@ -298,7 +298,7 @@
               <!-- Action Buttons -->
               <div style="display: flex; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap;">
                 <a href="live-room.html?room=911300" class="btn btn-primary" style="font-weight: 700; padding: 11px 22px; font-size: 0.88rem;">
-                  <span>Vào Phòng Đấu Giá Ngay</span>
+                  <span>Vào Phòng Chờ Ngay</span>
                   <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </a>
                 <button type="button" class="btn btn-outline" onclick="window.toggleHeroWatchlist('room-102', this)" style="padding: 11px 18px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;">
@@ -320,8 +320,8 @@
           <div class="hero-slide hero-spotlight-grid" id="hero-slide-2" style="grid-template-columns: 1.15fr 0.85fr; gap: 32px; align-items: center;">
             <div style="display: flex; flex-direction: column; gap: 14px;">
               <div style="display: flex; align-items: center; gap: 10px; flex-wrap: wrap;">
-                <span class="badge badge--live" style="font-weight: 700; padding: 4px 10px; border-radius: 4px; font-size: 0.72rem; letter-spacing: 0.05em;">
-                  ĐANG DIỄN RA (LIVE)
+                <span class="badge badge--waiting" style="font-weight: 700; padding: 4px 10px; border-radius: 4px; font-size: 0.72rem; letter-spacing: 0.05em; background: rgba(245, 158, 11, 0.15); color: #F59E0B; border: 1px solid rgba(245, 158, 11, 0.3);">
+                  ● PHÒNG CHỜ • SẮP MỞ
                 </span>
                 <span style="font-family: var(--font-mono); font-size: 0.75rem; color: var(--text-muted); font-weight: 600;">LOT #106 &bull; PIN #774120</span>
                 <span style="font-size: 0.75rem; color: var(--text-muted);">&bull; 19 Nhà Sưu Tầm Đang Xem</span>
@@ -338,13 +338,13 @@
               <!-- Metrics -->
               <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 4px 0; background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 14px 18px;">
                 <div>
-                  <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 2px;">Giá Đang Dẫn Đầu</div>
+                  <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 2px;">Giá Khởi Điểm</div>
                   <div class="font-mono text-emerald price-val" style="font-size: 1.5rem; font-weight: 800; line-height: 1.1;">720.000.000 ₫</div>
-                  <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">Dẫn đầu: <strong style="color: var(--text-primary);">Phan Minh Tân (#PD-2048)</strong></div>
+                  <div style="font-size: 0.72rem; color: var(--text-muted); margin-top: 3px;">Bảo chứng: <strong style="color: #059669;">Ký quỹ Escrow 15%</strong></div>
                 </div>
                 <div style="border-left: 1px solid var(--border-color); padding-left: 18px;">
-                  <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 2px;">Thời Gian Còn Lại</div>
-                  <div id="hero-clock-2" class="font-mono price-val text-amber" style="font-size: 1.5rem; font-weight: 800; line-height: 1.1;">51:20</div>
+                  <div style="font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--text-muted); margin-bottom: 2px;">Trạng Thái Phiên</div>
+                  <div id="hero-clock-2" class="font-mono price-val text-amber" style="font-size: 1.25rem; font-weight: 800; line-height: 1.1;">CHỜ KHAI MẠC</div>
                   <div style="font-size: 0.72rem; color: #059669; margin-top: 3px; font-weight: 600;">Geneva Museum Provenance</div>
                 </div>
               </div>
@@ -352,7 +352,7 @@
               <!-- Action Buttons -->
               <div style="display: flex; align-items: center; gap: 12px; margin-top: 4px; flex-wrap: wrap;">
                 <a href="live-room.html?room=774120" class="btn btn-primary" style="font-weight: 700; padding: 11px 22px; font-size: 0.88rem;">
-                  <span>Vào Phòng Đấu Giá Ngay</span>
+                  <span>Vào Phòng Chờ Ngay</span>
                   <svg viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
                 </a>
                 <button type="button" class="btn btn-outline" onclick="window.toggleHeroWatchlist('room-106', this)" style="padding: 11px 18px; font-size: 0.88rem; display: inline-flex; align-items: center; gap: 6px;">
@@ -589,7 +589,7 @@
     <!-- =======================================================================
          5. MỤC 6 – BẢNG XẾP HẠNG SÀN ĐẤU GIÁ (LEADERBOARD & ANALYTICS)
          ======================================================================= -->
-    <section class="section" id="leaderboard-section" style="background: var(--bg-surface); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding-top: 48px; padding-bottom: 56px;" aria-label="Bảng xếp hạng sàn đấu giá">
+    <section class="section" id="leaderboard-section" style="display: none; background: var(--bg-surface); border-top: 1px solid var(--border-color); border-bottom: 1px solid var(--border-color); padding-top: 48px; padding-bottom: 56px;" aria-label="Bảng xếp hạng sàn đấu giá">
       <div class="container container--wide">
         
         <div class="section__header" style="text-align: center; justify-content: center; margin-bottom: 32px;">
@@ -761,18 +761,8 @@
         }
       };
 
-      // Auto ticking clocks in hero slides
-      var heroRemainingSeconds = [2265, 2475, 3080];
-      setInterval(function() {
-        for (var i = 0; i < 3; i++) {
-          if (heroRemainingSeconds[i] > 0) heroRemainingSeconds[i]--;
-          var m = Math.floor(heroRemainingSeconds[i] / 60);
-          var s = heroRemainingSeconds[i] % 60;
-          var str = (m < 10 ? '0' : '') + m + ':' + (s < 10 ? '0' : '') + s;
-          var el = document.getElementById('hero-clock-' + i);
-          if (el) el.textContent = str;
-        }
-      }, 1000);
+      // Hero slides show WAITING status (Chờ Khai Mạc)
+      // Clocks display static room status until opened by host
 
       // =======================================================================
       // MULTI-TIER FILTERING & SEARCH LOGIC
@@ -851,6 +841,8 @@
         if (empty) empty.style.display = 'none';
 
         var watchlist = store.getWatchlist();
+        var currentUser = store.getCurrentUser();
+        var isAdmin = currentUser && (currentUser.isAdmin === true || currentUser.role === 'admin' || currentUser.email === 'thang.pn@auctionengine.vn' || currentUser.paddleId === '#PD-6651');
 
         grid.innerHTML = rooms.map(function(r) {
           var isHearted = watchlist.indexOf(r.roomId) > -1 || watchlist.indexOf(r.roomPin) > -1;
@@ -873,6 +865,14 @@
               <button type="button" class="lot-card-heart-btn ${isHearted ? 'active' : ''}" onclick="window.toggleHeart('${r.roomId}', this)" title="Lưu vào danh sách theo dõi">
                 <svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path></svg>
               </button>
+
+              ${isAdmin ? `
+              <!-- Admin Quick Delete Room Button -->
+              <button type="button" onclick="event.preventDefault(); event.stopPropagation(); window.adminQuickDeleteRoom('${r.roomId}', '${(r.title || '').replace(/'/g, "\\'")}')" style="position: absolute; top: 12px; left: 12px; z-index: 10; background: rgba(220, 38, 38, 0.92); color: #FFF; border: 1px solid rgba(255,255,255,0.4); border-radius: 4px; padding: 4px 8px; font-size: 0.68rem; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 4px; box-shadow: 0 2px 6px rgba(0,0,0,0.4);" title="Xóa phiên này (Quyền Admin)">
+                <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+                <span>Xóa (Admin)</span>
+              </button>
+              ` : ''}
 
               <!-- Image with 210px locked height -->
               <div style="height:210px;width:100%;overflow:hidden;position:relative;background:#0F172A;">
@@ -921,6 +921,16 @@
       }
 
       // Real-time toggleHeart handler for instant sync (Bug 3 / Nhóm 3)
+      // Admin Quick Delete Room Handler
+      window.adminQuickDeleteRoom = function(roomId, title) {
+        if (!confirm('QUẢN TRỊ VIÊN:\nBạn có chắc chắn muốn xóa vĩnh viễn phiên đấu giá "' + (title || roomId) + '" khỏi hệ thống không?\nHành động này không thể hoàn tác!')) return;
+        if (store.deleteRoom(roomId)) {
+          alert('Đã xóa thành công phiên đấu giá "' + (title || roomId) + '" khỏi sàn!');
+          if (typeof window.applyHomeFilters === 'function') window.applyHomeFilters();
+          if (typeof renderLeaderboards === 'function') renderLeaderboards();
+        }
+      };
+
       window.toggleHeart = function(roomId, btn) {
         var user = store.getCurrentUser();
         if (!user) {
@@ -938,8 +948,20 @@
       function renderLeaderboards() {
         var allRooms = store.getRooms() || [];
 
+        // Check if any auction has actual bids (Logic: chỉ hiện BXH khi có phiên đã phát sinh trả giá)
+        var hasAnyBids = allRooms.some(function(r) {
+          var bCount = (r.bids && r.bids.length) || (r.history && r.history.length) || 0;
+          return bCount > 0;
+        });
+
+        var lbSec = document.getElementById('leaderboard-section');
+        if (lbSec) {
+          lbSec.style.display = hasAnyBids ? 'block' : 'none';
+        }
+        if (!hasAnyBids) return;
+
         // Cột 1 - Sôi Động Nhất (Top Bids / High Activity / Ended)
-        var col1 = document.getElementById('lb-top-bids');
+        var col1 = document.getElementById('lb-hottest-bids');
         if (col1) {
           var topBids = allRooms.slice().sort(function(a, b) {
             var aBids = (a.bids && a.bids.length) || (a.history && a.history.length) || 0;

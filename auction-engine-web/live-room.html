@@ -580,6 +580,10 @@
         </nav>
 
         <div class="flex items-center gap-2">
+          <button id="admin-delete-room-btn" type="button" class="btn btn-outline" style="display: none; color: #DC2626; border-color: rgba(220,38,38,0.4); background: rgba(220,38,38,0.08); font-size: 0.75rem; padding: 4px 10px; gap: 6px; font-weight: 700; align-items: center;" onclick="window.adminDeleteThisRoom()">
+            <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2;"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            <span>Xóa Phiên Này (Admin)</span>
+          </button>
           <span style="font-size: 0.72rem; color: var(--text-muted); font-weight: 500;">Sàn đấu giá bảo chứng Sotheby's &bull; Geneva Standard</span>
         </div>
       </div>
@@ -1515,6 +1519,17 @@
         else if (e.key === '-' || e.key === '_') window.zoomLightbox(-0.25);
       });
 
+      // Admin Delete This Room Handler
+      window.adminDeleteThisRoom = function() {
+        if (!currentRoom) return;
+        var title = currentRoom.title || currentRoom.roomId;
+        if (!confirm('QUẢN TRỊ VIÊN:\nBạn có chắc chắn muốn xóa vĩnh viễn phiên đấu giá "' + title + '" khỏi hệ thống không?\nHành động này không thể hoàn tác!')) return;
+        if (store.deleteRoom(currentRoom.roomId || currentRoom.roomPin)) {
+          alert('Đã xóa thành công phiên đấu giá "' + title + '" khỏi hệ thống!');
+          window.location.href = 'index.html';
+        }
+      };
+
       // 5. Render Room Data & State
       function renderRoom() {
         var room = store.getRoom(window.roomId);
@@ -1522,6 +1537,10 @@
         currentRoom = room;
 
         var currentUser = store.getCurrentUser();
+        var isAdmin = currentUser && (currentUser.isAdmin === true || currentUser.role === 'admin' || currentUser.email === 'thang.pn@auctionengine.vn' || currentUser.paddleId === '#PD-6651');
+        var delBtn = document.getElementById('admin-delete-room-btn');
+        if (delBtn) delBtn.style.display = isAdmin ? 'inline-flex' : 'none';
+
         var bids = store.getBids(room.roomId);
         var deposits = store.getDeposits().filter(function(d) {
           return d.roomId === room.roomId ||
