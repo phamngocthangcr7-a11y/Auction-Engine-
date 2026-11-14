@@ -70,11 +70,12 @@
       color: var(--text-primary);
     }
     .dash-menu-item.active {
-      background: var(--accent-navy);
-      color: #FFFFFF !important;
+      background: #202026;
+      color: #F59E0B !important;
+      border-left: 3px solid #F59E0B;
     }
     .dash-menu-item.active svg {
-      stroke: #FFFFFF !important;
+      stroke: #F59E0B !important;
     }
     .dash-menu-item svg {
       width: 16px;
@@ -264,7 +265,7 @@
             id="dash-user-avatar"
             src="assets/images/user_thang.jpg" 
             alt="Phạm Ngọc Thắng" 
-            style="width: 68px; height: 68px; border-radius: 50%; border: 2px solid #059669; object-fit: cover; box-shadow: 0 4px 12px rgba(5,150,105,0.25);"
+            style="width: 68px; height: 68px; border-radius: 50%; border: 2px solid #F59E0B; object-fit: cover; box-shadow: 0 4px 12px rgba(245,158,11,0.25);"
             onerror="this.onerror=null; this.src='assets/images/user_avatar.jpg';"
           />
           <div>
@@ -272,23 +273,23 @@
               <h1 id="dash-user-name" style="font-family: var(--font-serif); font-size: 1.55rem; font-weight: 800; color: var(--text-primary); margin: 0;">
                 Phạm Ngọc Thắng
               </h1>
-              <span id="dash-user-role-badge" class="badge badge--live" style="font-size: 0.68rem; font-weight: 700; background: #059669; color: #FFFFFF; display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 4px; white-space: normal; line-height: 1.35; max-width: 100%;">
+              <span id="dash-user-role-badge" class="badge badge--live" style="font-size: 0.68rem; font-weight: 700; background: #D97706; border: 1px solid #F59E0B; color: #FFFFFF; display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 4px; white-space: normal; line-height: 1.35; max-width: 100%;">
                 <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; stroke: #FFF; fill: none; stroke-width: 2.2; flex-shrink: 0;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
                 <span>QUẢN TRỊ VIÊN HỆ THỐNG (SUPER ADMIN) &bull; VIP COLLECTOR</span>
               </span>
             </div>
             <div class="dash-profile-meta" style="font-size: 0.82rem; color: var(--text-secondary); margin-top: 6px; display: flex; flex-wrap: wrap; gap: 6px 12px; align-items: center;">
-              <span>Thẻ Đấu Giá: <strong class="font-mono text-emerald" id="dash-user-paddle">#PD-6651</strong></span>
+              <span>Thẻ Đấu Giá: <strong class="font-mono" style="color: #F59E0B;" id="dash-user-paddle">#PD-6651</strong></span>
               <span class="meta-sep">&bull;</span>
               <span style="color: #F59E0B; font-weight: 700;">Thành Viên VIP Quốc Tế</span>
               <span class="meta-sep">&bull;</span>
-              <span>Hạn mức tín nhiệm: <strong class="font-mono price-val text-emerald" id="dash-user-credit">50.000.000.000 ₫</strong></span>
+              <span>Hạn mức tín nhiệm: <strong class="font-mono price-val" style="color: #F59E0B;" id="dash-user-credit">50.000.000.000 ₫</strong></span>
             </div>
           </div>
         </div>
 
         <div class="dash-profile-actions">
-          <a href="admin.html" id="dash-btn-admin" class="btn btn-outline btn-admin-portal" style="border-color: #059669; color: #059669; font-weight: 700; display: none; align-items: center; gap: 6px;" title="Chuyển sang bảng điều khiển quản trị sàn đấu giá">
+          <a href="admin.html" id="dash-btn-admin" class="btn btn-outline btn-admin-portal" style="border-color: #F59E0B; color: #F59E0B; font-weight: 700; display: none; align-items: center; gap: 6px;" title="Chuyển sang bảng điều khiển quản trị sàn đấu giá">
             <svg viewBox="0 0 24 24" style="width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2;"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
             <span>Vào Quản Trị (Admin Portal)</span>
           </a>
@@ -387,7 +388,7 @@
           <div class="dash-panel active" id="tab-profile">
             <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 28px; box-shadow: var(--shadow-card);">
               <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 16px; margin-bottom: 20px;">
-                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #059669; font-weight: 700; margin-bottom: 4px;">THÔNG TIN CÁ NHÂN & TÀI KHOẢN</div>
+                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #F59E0B; font-weight: 700; margin-bottom: 4px;">THÔNG TIN CÁ NHÂN & TÀI KHOẢN</div>
                 <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0 0 4px 0;">Hồ Sơ Thành Viên & Xác Thực Tài Khoản</h3>
                 <p style="font-size: 0.82rem; color: var(--text-secondary); margin: 0;">Thông tin cá nhân được bảo mật an toàn theo tiêu chuẩn AUCTIONENGINE.</p>
               </div>
@@ -463,7 +464,7 @@
                 <div style="background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 16px;">
                   <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 4px;">Tổng Tài Sản Ví</div>
                   <div class="font-mono price-val" id="wallet-val-total" style="font-size: 1.45rem; font-weight: 800; color: var(--text-primary);">25.360.000.000 ₫</div>
-                  <div style="font-size: 0.72rem; color: #059669; margin-top: 4px;">Bảo chứng bởi Quỹ Ký Quỹ Độc Lập Escrow</div>
+                  <div style="font-size: 0.72rem; color: #F59E0B; margin-top: 4px;">Bảo chứng bởi Quỹ Ký Quỹ Độc Lập Escrow</div>
                 </div>
                 <div style="background: var(--bg-page); border: 1px solid var(--border-color); border-radius: var(--radius-sm); padding: 16px; border-left: 3px solid #059669;">
                   <div style="font-size: 0.72rem; color: var(--text-muted); font-weight: 700; text-transform: uppercase; margin-bottom: 4px;">Số Dư Khả Dụng (Đặt Giá)</div>
@@ -496,7 +497,7 @@
           <div class="dash-panel" id="tab-topup-history">
             <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-card);">
               <div style="padding: 18px 24px; border-bottom: 1px solid var(--border-color);">
-                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #059669; font-weight: 700; margin-bottom: 2px;">Sổ Cái Dòng Tiền</div>
+                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #F59E0B; font-weight: 700; margin-bottom: 2px;">Sổ Cái Dòng Tiền</div>
                 <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0;">Lịch Sử Nạp & Rút Tiền Vào Ví (Cash Flow Ledger)</h3>
               </div>
               <div style="overflow-x: auto;">
@@ -524,7 +525,7 @@
           <div class="dash-panel" id="tab-escrow-history">
             <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); overflow: hidden; box-shadow: var(--shadow-card);">
               <div style="padding: 18px 24px; border-bottom: 1px solid var(--border-color);">
-                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #059669; font-weight: 700; margin-bottom: 2px;">Bảo Chứng Escrow 15%</div>
+                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #F59E0B; font-weight: 700; margin-bottom: 2px;">Bảo Chứng Escrow 15%</div>
                 <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0;">Lịch Sử Đặt Cọc Ký Quỹ & Hoàn Tiền</h3>
               </div>
               <div style="overflow-x: auto;">
@@ -552,7 +553,7 @@
           <div class="dash-panel" id="tab-active-auctions">
             <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
               <div>
-                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #059669; font-weight: 700; margin-bottom: 2px;">Đấu Giá Trực Tiếp</div>
+                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #F59E0B; font-weight: 700; margin-bottom: 2px;">Đấu Giá Trực Tiếp</div>
                 <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0 0 2px 0;">Các Phiên Bạn Đang Tham Gia Trả Giá</h3>
                 <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 0;">Theo dõi trạng thái dẫn đầu hoặc bị vượt giá thời gian thực.</p>
               </div>
@@ -593,7 +594,7 @@
                =================================================================== -->
           <div class="dash-panel" id="tab-won-lots">
             <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 14px; margin-bottom: 20px;">
-              <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #059669; font-weight: 700; margin-bottom: 2px;">Chứng Thực Quyền Sở Hữu</div>
+              <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #F59E0B; font-weight: 700; margin-bottom: 2px;">Chứng Thực Quyền Sở Hữu</div>
               <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0 0 2px 0;">Các Phiên Đấu Giá Bạn Đã Thắng Thầu</h3>
               <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 0;">Hoàn tất thanh toán số tiền còn lại và in Chứng Thư Bán Hàng & Chuyển Nhượng Sở Hữu chính thức.</p>
             </div>
@@ -608,7 +609,7 @@
           <div class="dash-panel" id="tab-vault">
             <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 14px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end;">
               <div>
-                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #059669; font-weight: 700; margin-bottom: 2px;">Lưu Ký Tài Sản Quý Giá</div>
+                <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #F59E0B; font-weight: 700; margin-bottom: 2px;">Lưu Ký Tài Sản Quý Giá</div>
                 <h3 style="font-size: 1.2rem; font-weight: 700; color: var(--text-primary); margin: 0 0 2px 0;">Kho Đồ Cá Nhân & Bộ Sưu Tập (Personal Vault)</h3>
                 <p style="font-size: 0.8rem; color: var(--text-secondary); margin: 0;">Các kiệt tác bạn sở hữu hợp pháp. Bấm 1-click để đưa lên sàn bán lại (Resell) bất kỳ lúc nào.</p>
               </div>
@@ -626,7 +627,7 @@
             <div style="background: var(--bg-surface); border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 24px; box-shadow: var(--shadow-card);">
               <div style="border-bottom: 1px solid var(--border-color); padding-bottom: 12px; margin-bottom: 16px; display: flex; justify-content: space-between; align-items: center;">
                 <div>
-                  <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #059669; font-weight: 700; margin-bottom: 2px;">Thẩm Định & Niêm Yết</div>
+                  <div style="font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.08em; color: #F59E0B; font-weight: 700; margin-bottom: 2px;">Thẩm Định & Niêm Yết</div>
                   <h3 style="font-size: 1.15rem; font-weight: 700; color: var(--text-primary); margin: 0;">Các Phiên Do Bạn Đăng Bán</h3>
                 </div>
                 <a href="seller-studio.html" class="btn btn-primary" style="font-size: 0.78rem;">+ Đăng Bán Phiên Mới</a>

@@ -78,20 +78,21 @@
    2. LUXURY DARK GALLERY THEME ([data-theme="dark"])
    ========================================================================== */
 [data-theme="dark"] {
-  --bg-page: #080A0F;
-  --bg-surface: #0E131E;
-  --bg-subtle: #141A28;
-  --bg-dark: #05070B;
-  --bg-dark-utility: #05070B;
+  --bg-page: #0A0A0C;
+  --bg-surface: #141417;
+  --bg-subtle: #1C1C22;
+  --bg-hover: #26262F;
+  --bg-dark: #070709;
+  --bg-dark-utility: #070709;
   --text-primary: #FFFFFF;
-  --text-secondary: #E2E8F0;
+  --text-secondary: #CBD5E1;
   --text-muted: #94A3B8;
-  --text-inverse: #080A0F;
-  --border-color: rgba(255, 255, 255, 0.09);
+  --text-inverse: #0A0A0C;
+  --border-color: rgba(255, 255, 255, 0.1);
   --border-focus: #F59E0B;
-  --border-hairline: rgba(255, 255, 255, 0.06);
+  --border-hairline: rgba(255, 255, 255, 0.07);
 
-  --accent-navy: #D4AF37;
+  --accent-navy: #F59E0B;
   --accent-primary: #F59E0B;
   --accent-emerald: #10B981;
   --accent-bid: #10B981;

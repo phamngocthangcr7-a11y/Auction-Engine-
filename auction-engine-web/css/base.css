@@ -133,13 +133,16 @@ a {
 }
 
 .btn-primary, .btn--primary {
-  background-color: #0F172A !important;
-  color: #FFFFFF !important;
-  border-color: #0F172A !important;
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important;
+  color: #000000 !important;
+  font-weight: 700 !important;
+  border: 1px solid #F59E0B !important;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.2) !important;
 }
 .btn-primary:hover:not(:disabled), .btn--primary:hover:not(:disabled) {
-  background-color: #1E293B !important;
-  color: #FFFFFF !important;
+  background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%) !important;
+  color: #000000 !important;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35) !important;
 }
 
 .btn-emerald, .btn--emerald, .btn--bid {
@@ -311,26 +314,31 @@ button:disabled, .btn:disabled, .btn--disabled {
 
 [data-theme="dark"] .btn-primary,
 [data-theme="dark"] .btn--primary {
-  background-color: #059669 !important;
-  border-color: #059669 !important;
-  color: #FFFFFF !important;
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important;
+  border: 1px solid #F59E0B !important;
+  color: #000000 !important;
+  font-weight: 700 !important;
+  box-shadow: 0 2px 8px rgba(245, 158, 11, 0.25) !important;
 }
 
 [data-theme="dark"] .btn-primary:hover,
 [data-theme="dark"] .btn--primary:hover {
-  background-color: #047857 !important;
+  background: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%) !important;
+  border-color: #FBBF24 !important;
+  color: #000000 !important;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.4) !important;
 }
 
 [data-theme="dark"] .lot-card__action-btn {
   background-color: var(--bg-subtle) !important;
-  color: #F8FAFC !important;
+  color: #FFFFFF !important;
   border-color: var(--border-color) !important;
 }
 
 [data-theme="dark"] .lot-card__action-btn:hover {
-  background-color: #059669 !important;
-  color: #FFFFFF !important;
-  border-color: #059669 !important;
+  background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%) !important;
+  color: #000000 !important;
+  border-color: #F59E0B !important;
 }
 
 [data-theme="dark"] .badge--ended {

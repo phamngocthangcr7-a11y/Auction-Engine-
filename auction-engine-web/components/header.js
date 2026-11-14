@@ -130,7 +130,7 @@ function renderHeader() {
           ${currentUser ? `
             <!-- Wallet Balance -->
             <button type="button" class="utility-wallet-btn" onclick="window.openWalletModal()" title="Ví ký quỹ: Bấm để nạp thêm hoặc kiểm tra số dư">
-              <svg viewBox="0 0 24 24" style="width: 13px; height: 13px; color: #34D399; flex-shrink: 0;"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
+              <svg viewBox="0 0 24 24" style="width: 13px; height: 13px; color: #F59E0B; flex-shrink: 0;"><rect x="2" y="5" width="20" height="14" rx="2"></rect><line x1="2" y1="10" x2="22" y2="10"></line></svg>
               <span><span class="utility-wallet-label">Ví: </span><strong style="color: #34D399; font-family: var(--font-mono); white-space: nowrap;">${formatMoney(walletAvailable)}</strong></span>
             </button>
 
@@ -138,10 +138,10 @@ function renderHeader() {
 
             <!-- Current User Profile -->
             <button type="button" class="utility-user-profile-btn" onclick="window.openAuthModal()" title="Hồ sơ tài khoản: ${userName} • Thẻ ${paddleId}">
-              <img src="${currentUser.avatar || 'assets/images/user_thang.jpg'}" alt="Avatar" style="width: 18px; height: 18px; border-radius: 50%; object-fit: cover; border: 1.5px solid #10B981; flex-shrink: 0;" onerror="this.style.display='none';" />
+              <img src="${currentUser.avatar || 'assets/images/user_thang.jpg'}" alt="Avatar" style="width: 18px; height: 18px; border-radius: 50%; object-fit: cover; border: 1.5px solid #F59E0B; flex-shrink: 0;" onerror="this.style.display='none';" />
               <span class="utility-user-name">${userName}</span>
               <span class="utility-user-paddle">(<strong>${paddleId}</strong>)</span>
-              ${currentUser && (currentUser.role === 'admin' || currentUser.isAdmin) ? `<span class="utility-user-admin" style="color: #34D399; font-weight: 700;">&bull; ADMIN</span>` : ''}
+              ${currentUser && (currentUser.role === 'admin' || currentUser.isAdmin) ? `<span class="utility-user-admin" style="color: #F59E0B; font-weight: 700;">&bull; ADMIN</span>` : ''}
             </button>
 
             <span class="utility-sep">|</span>
@@ -202,7 +202,7 @@ function renderHeader() {
               Không Gian Cá Nhân
             </a>
             ${(currentUser && (currentUser.role === 'admin' || currentUser.isAdmin || currentUser.uid === 'usr-thang-6651' || currentUser.paddleId === '#PD-6651')) ? `
-            <a href="admin.html" class="nav-link ${currentPath.includes('admin') ? 'active' : ''}" style="color: #059669; font-weight: 700;">
+            <a href="admin.html" class="nav-link ${currentPath.includes('admin') ? 'active' : ''}" style="color: #F59E0B; font-weight: 700;">
               Quản Trị (Admin)
             </a>
             ` : ''}
@@ -212,17 +212,21 @@ function renderHeader() {
         <!-- Right: Action Icons + Search + Create Room + User Button -->
         <div class="site-header__actions">
           
-          <!-- Quick Search Bar (Desktop) -->
-          <div class="site-header__search">
-            <form action="auctions.html" method="GET" style="margin: 0; position: relative;">
+          <!-- Quick Search Bar (Desktop) with Live Suggestions -->
+          <div class="site-header__search" style="position: relative;">
+            <form action="auctions.html" method="GET" style="margin: 0; position: relative;" id="header-search-form" autocomplete="off">
               <input 
                 type="text" 
+                id="header-search-input"
                 name="search" 
+                autocomplete="off"
                 class="form-control" 
                 placeholder="Tìm đồng hồ, xe, nghệ thuật..." 
-                style="padding: 7px 12px 7px 32px; font-size: 0.8rem; border-radius: var(--radius-sm); width: 190px; max-width: 190px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-primary);"
+                style="padding: 7px 12px 7px 32px; font-size: 0.8rem; border-radius: var(--radius-sm); width: 210px; max-width: 250px; border: 1px solid var(--border-color); background: var(--bg-subtle); color: var(--text-primary); transition: all 0.2s ease;"
               />
-              <svg style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: #64748B; pointer-events: none;" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <svg style="position: absolute; left: 10px; top: 50%; transform: translateY(-50%); width: 14px; height: 14px; color: #94A3B8; pointer-events: none;" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+              <!-- Live Suggestions Dropdown Popup -->
+              <div id="header-search-dropdown" class="header-search-dropdown" style="display: none;"></div>
             </form>
           </div>
 
@@ -283,7 +287,7 @@ function renderHeader() {
           ${AE_LOGO_CREST_SVG}
           <div style="display: flex; flex-direction: column;">
             <span style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text-primary);">AUCTION<span style="color: #F59E0B;">ENGINE</span></span>
-            <span style="font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: #059669; font-weight: 700;">SÀN ĐẤU GIÁ TRỰC TUYẾN</span>
+            <span style="font-size: 0.55rem; letter-spacing: 0.15em; text-transform: uppercase; color: #F59E0B; font-weight: 700;">SÀN ĐẤU GIÁ TRỰC TUYẾN</span>
           </div>
         </div>
         <button type="button" class="mobile-drawer__close" onclick="window.closeMobileDrawer()" aria-label="Đóng menu">
@@ -296,9 +300,9 @@ function renderHeader() {
         ${currentUser ? `
           <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
             <div style="display: flex; align-items: center; gap: 10px;">
-              <div style="width: 36px; height: 36px; border-radius: 50%; overflow: hidden; border: 2px solid #059669; flex-shrink: 0;">
+              <div style="width: 36px; height: 36px; border-radius: 50%; overflow: hidden; border: 2px solid #F59E0B; flex-shrink: 0;">
                 <img src="${currentUser.avatar || 'assets/images/user_thang.jpg'}" alt="${userName}" style="width: 100%; height: 100%; object-fit: cover;" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                <div style="width: 100%; height: 100%; background: #059669; color: #FFF; display: none; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem;">
+                <div style="width: 100%; height: 100%; background: #F59E0B; color: #000; font-weight: 800; display: none; align-items: center; justify-content: center; font-weight: 800; font-size: 0.85rem;">
                   ${userName.charAt(0)}
                 </div>
               </div>
@@ -307,7 +311,7 @@ function renderHeader() {
                   <span>${userName}</span>
                   ${currentUser.role === 'admin' || currentUser.isAdmin ? '<span style="font-size: 0.65rem; background: #059669; color: #FFF; padding: 1px 6px; border-radius: 4px; font-weight: 700;">ADMIN</span>' : ''}
                 </div>
-                <div style="font-size: 0.72rem; color: var(--accent-emerald); font-weight: 600; font-family: var(--font-mono);">${paddleId} &bull; VIP Member</div>
+                <div style="font-size: 0.72rem; color: #F59E0B; font-weight: 600; font-family: var(--font-mono);">${paddleId} &bull; VIP Member</div>
               </div>
             </div>
             <button type="button" onclick="window.logoutUser()" class="btn btn-outline" style="font-size: 0.7rem; padding: 4px 8px; color: #DC2626; border-color: rgba(220,38,38,0.3);">
@@ -316,7 +320,7 @@ function renderHeader() {
           </div>
           <div style="background: var(--bg-page); border: 1px solid var(--border-color); border-radius: 6px; padding: 8px 12px; display: flex; justify-content: space-between; align-items: center;">
             <span style="font-size: 0.72rem; color: var(--text-muted);">Ví khả dụng:</span>
-            <strong style="font-family: var(--font-mono); color: #059669; font-size: 0.88rem; white-space: nowrap;">${formatMoney(walletAvailable)}</strong>
+            <strong style="font-family: var(--font-mono); color: #F59E0B; font-size: 0.88rem; white-space: nowrap;">${formatMoney(walletAvailable)}</strong>
           </div>
         ` : `
           <div style="text-align: center; padding: 8px 0;">
@@ -365,8 +369,8 @@ function renderHeader() {
           <span>Không Gian Cá Nhân</span>
         </a>
         ${(currentUser && (currentUser.role === 'admin' || currentUser.isAdmin || currentUser.uid === 'usr-thang-6651' || currentUser.paddleId === '#PD-6651')) ? `
-        <a href="admin.html" class="mobile-nav-item ${currentPath.includes('admin') ? 'active' : ''}" style="color: #059669; font-weight: 700;">
-          <svg viewBox="0 0 24 24" style="stroke: #059669;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+        <a href="admin.html" class="mobile-nav-item ${currentPath.includes('admin') ? 'active' : ''}" style="color: #F59E0B; font-weight: 700;">
+          <svg viewBox="0 0 24 24" style="stroke: #F59E0B;"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
           <span>Quản Trị (Admin)</span>
         </a>
         ` : ''}
@@ -395,7 +399,9 @@ function renderHeader() {
 }
 
 function bindHeaderListeners() {
-  // Toggle theme for all buttons with .btn-toggle-theme
+    initHeaderSearchAutocomplete();
+
+// Toggle theme for all buttons with .btn-toggle-theme
   document.querySelectorAll('.btn-toggle-theme').forEach(btn => {
     btn.addEventListener('click', () => {
       const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
@@ -526,4 +532,157 @@ if (document.readyState === 'loading') {
   document.addEventListener('DOMContentLoaded', renderHeader);
 } else {
   renderHeader();
+}
+
+
+// =========================================================================
+// INTERACTIVE SEARCH AUTOCOMPLETE & LIVE SUGGESTIONS
+// =========================================================================
+function initHeaderSearchAutocomplete() {
+  const input = document.getElementById('header-search-input');
+  const dropdown = document.getElementById('header-search-dropdown');
+  const form = document.getElementById('header-search-form');
+  if (!input || !dropdown) return;
+
+  function removeVietnameseAccents(str) {
+    if (!str) return '';
+    return str
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/đ/g, 'd')
+      .replace(/Đ/g, 'D')
+      .toLowerCase()
+      .trim();
+  }
+
+  function escapeHtml(text) {
+    if (!text) return '';
+    return String(text)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;');
+  }
+
+  function highlightMatch(text, query) {
+    if (!query) return escapeHtml(text);
+    const escapedText = escapeHtml(text);
+    const qNorm = removeVietnameseAccents(query);
+    const tNorm = removeVietnameseAccents(text);
+    const idx = tNorm.indexOf(qNorm);
+    if (idx === -1) return escapedText;
+    const before = escapedText.substring(0, idx);
+    const match = escapedText.substring(idx, idx + query.length);
+    const after = escapedText.substring(idx + query.length);
+    return before + '<span style="color: #F59E0B; font-weight: 800; background: rgba(245, 158, 11, 0.15); padding: 0 2px; border-radius: 2px;">' + match + '</span>' + after;
+  }
+
+  function renderSuggestions(query) {
+    const rawQuery = (query || '').trim();
+    if (!rawQuery) {
+      dropdown.style.display = 'none';
+      dropdown.innerHTML = '';
+      return;
+    }
+
+    const normQuery = removeVietnameseAccents(rawQuery);
+    const store = window.AureliaApp || window.AuctionStore;
+    const rooms = (store && typeof store.getRooms === 'function') ? store.getRooms() : [];
+
+    const matches = rooms.filter(function(r) {
+      const titleNorm = removeVietnameseAccents(r.title || '');
+      const catNorm = removeVietnameseAccents(r.categoryName || r.category || '');
+      const descNorm = removeVietnameseAccents(r.shortDesc || '');
+      const pin = String(r.roomPin || r.roomId || '');
+      return titleNorm.includes(normQuery) || catNorm.includes(normQuery) || descNorm.includes(normQuery) || pin.includes(normQuery);
+    });
+
+    if (matches.length === 0) {
+      dropdown.innerHTML = `
+        <div class="header-search-dropdown__header">
+          <span>Gợi Ý Tìm Kiếm Sàn Đấu Giá</span>
+          <span style="font-size: 0.65rem; color: #94A3B8;">0 kết quả</span>
+        </div>
+        <div class="header-search-empty">
+          <svg viewBox="0 0 24 24" style="width: 28px; height: 28px; stroke: #94A3B8; fill: none; margin: 0 auto 8px auto; display: block;"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          <div style="font-size: 0.82rem; color: var(--text-secondary);">Không tìm thấy phiên đấu giá nào cho "<strong>${escapeHtml(rawQuery)}</strong>".</div>
+          <a href="auctions.html" style="color: #F59E0B; font-weight: 700; font-size: 0.78rem; display: inline-block; margin-top: 8px; text-decoration: none;">Xem tất cả phiên đang mở trên sàn &rarr;</a>
+        </div>
+      `;
+      dropdown.style.display = 'block';
+      return;
+    }
+
+    const topMatches = matches.slice(0, 5);
+    const itemsHtml = topMatches.map(function(r) {
+      const priceVal = r.currentPrice || r.startPrice || 0;
+      const priceFmt = (store && typeof store.formatCurrency === 'function')
+        ? store.formatCurrency(priceVal)
+        : priceVal.toLocaleString('vi-VN') + ' ₫';
+      const isLive = r.status === 'LIVE';
+      const statusLabel = isLive ? 'ĐANG LIVE' : 'CHỜ MỞ';
+      const statusBg = isLive ? 'rgba(16, 185, 129, 0.2)' : 'rgba(245, 158, 11, 0.2)';
+      const statusColor = isLive ? '#10B981' : '#F59E0B';
+      const img = r.image || 'assets/images/lot_watch_5711.jpg';
+      const targetUrl = 'live-room.html?room=' + encodeURIComponent(r.roomPin || r.roomId);
+
+      return `
+        <a href="${targetUrl}" class="header-search-item">
+          <img src="${img}" alt="${escapeHtml(r.title)}" class="header-search-item__thumb" onerror="this.src='assets/images/lot_watch_5711.jpg'" />
+          <div class="header-search-item__info">
+            <div class="header-search-item__title">${highlightMatch(r.title, rawQuery)}</div>
+            <div class="header-search-item__meta">
+              <span style="color: #94A3B8;">#PIN: <strong>${r.roomPin || '---'}</strong></span>
+              <span>&bull;</span>
+              <span class="header-search-item__price">${priceFmt}</span>
+              <span style="margin-left: auto; font-size: 0.62rem; font-weight: 700; padding: 2px 6px; border-radius: 3px; background: ${statusBg}; color: ${statusColor};">${statusLabel}</span>
+            </div>
+          </div>
+        </a>
+      `;
+    }).join('');
+
+    dropdown.innerHTML = `
+      <div class="header-search-dropdown__header">
+        <span>Gợi Ý Phiên Đấu Giá Phù Hợp</span>
+        <span style="font-size: 0.65rem; color: #F59E0B; font-family: var(--font-mono); font-weight: 700;">${matches.length} kết quả</span>
+      </div>
+      <div class="header-search-dropdown__list">
+        ${itemsHtml}
+      </div>
+      <div class="header-search-dropdown__footer">
+        <a href="auctions.html?search=${encodeURIComponent(rawQuery)}" class="header-search-dropdown__view-all">
+          <span>Xem tất cả ${matches.length} kết quả cho "<strong>${escapeHtml(rawQuery)}</strong>"</span>
+          <svg viewBox="0 0 24 24" style="width: 12px; height: 12px; stroke: currentColor; fill: none; stroke-width: 2.5;"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+        </a>
+      </div>
+    `;
+    dropdown.style.display = 'block';
+  }
+
+  let debounceTimer = null;
+  input.addEventListener('input', function() {
+    clearTimeout(debounceTimer);
+    debounceTimer = setTimeout(function() {
+      renderSuggestions(input.value);
+    }, 120);
+  });
+
+  input.addEventListener('focus', function() {
+    if (input.value.trim().length > 0) {
+      renderSuggestions(input.value);
+    }
+  });
+
+  document.addEventListener('click', function(e) {
+    if (form && !form.contains(e.target)) {
+      dropdown.style.display = 'none';
+    }
+  });
+
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') {
+      dropdown.style.display = 'none';
+    }
+  });
 }
